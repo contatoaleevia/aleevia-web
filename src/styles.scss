@@ -1,0 +1,12 @@
+/* You can add global styles to this file, and also import other style files */
+
+@use 'bootstrap/scss/bootstrap';
+@use 'bootstrap-icons/font/bootstrap-icons.css' as bootstrap-icons;
+
+/* Importing Google Fonts - Nunito */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700&display=swap');
+
+/* Global styles */
+body {
+  font-family: 'Nunito', sans-serif;
+}

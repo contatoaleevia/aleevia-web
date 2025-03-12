@@ -1,0 +1,81 @@
+@use "sass:color";
+
+// Cores principais
+$primary: #4880FF;
+$primary-hover: color.scale($primary, $lightness: -10%);
+$primary-active: color.scale($primary, $lightness: -15%);
+$secondary: #6c757d;
+$success: #28a745;
+$info: #17a2b8;
+$warning: #ffc107;
+$danger: #dc3545;
+$light: #f8f9fa;
+$dark: #343a40;
+
+// Tons de cinza
+$white: #ffffff;
+$gray-100: #f8f9fa;
+$gray-200: #e9ecef;
+$gray-300: #dee2e6;
+$gray-400: #ced4da;
+$gray-500: #adb5bd;
+$gray-600: #6c757d;
+$gray-700: #495057;
+$gray-800: #343a40;
+$gray-900: #212529;
+$black: #000000;
+
+// Cores específicas
+$placeholder-color: #A6A6A6;
+$text-muted-60: rgba(32, 34, 36, 0.6);
+$text-muted-80: rgba(32, 34, 36, 0.8);
+$input-focus-border: #86b7fe;
+$input-focus-shadow: rgba(13, 110, 253, 0.25);
+
+// Espaçamento
+$spacer: 1rem;
+$spacers: (
+  0: 0,
+  1: $spacer * 0.25,  // 0.25rem
+  2: $spacer * 0.5,   // 0.5rem
+  3: $spacer,         // 1rem
+  4: $spacer * 1.5,   // 1.5rem
+  5: $spacer * 3,     // 3rem
+);
+
+// Tipografia
+$font-family-base: 'Nunito', 'Helvetica Neue', Arial, sans-serif;
+$font-size-base: 1rem;
+$font-size-sm: $font-size-base * 0.875;
+$font-size-lg: $font-size-base * 1.25;
+$font-weight-light: 300;
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// Bordas
+$border-radius-sm: 0.25rem;
+$border-radius: 0.375rem;
+$border-radius-lg: 0.5rem;
+$border-radius-xl: 1rem;
+$border-width: 1px;
+
+// Sombras
+$box-shadow-sm: 0 0.125rem 0.25rem rgba($black, 0.075);
+$box-shadow: 0 0.5rem 1rem rgba($black, 0.15);
+$box-shadow-lg: 0 1rem 3rem rgba($black, 0.175);
+$focus-ring-width: 0.25rem;
+
+// Transições
+$transition-base: all 0.2s ease-in-out;
+$transition-fade: opacity 0.15s linear;
+
+// Z-index
+$zindex-dropdown: 1000;
+$zindex-sticky: 1020;
+$zindex-fixed: 1030;
+$zindex-modal-backdrop: 1040;
+$zindex-modal: 1050;
+$zindex-popover: 1060;
+$zindex-tooltip: 1070; 

@@ -1,0 +1,33 @@
+@use '../../styles/variables' as vars;
+
+.form-control {
+  background-color: vars.$gray-100;
+  border: vars.$border-width solid vars.$gray-400;
+  border-radius: vars.$border-radius;
+  padding: 0.75rem 1rem;
+  font-size: vars.$font-size-base;
+  color: vars.$gray-600;
+  transition: vars.$transition-base;
+  
+  &:focus {
+    border-color: vars.$input-focus-border;
+    box-shadow: 0 0 0 vars.$focus-ring-width vars.$input-focus-shadow;
+    outline: 0;
+  }
+  
+  &:disabled, &[readonly] {
+    background-color: vars.$gray-200;
+    opacity: 1;
+  }
+  
+  &::placeholder {
+    color: vars.$placeholder-color;
+    opacity: 1;
+  }
+}
+
+.form-label {
+  margin-bottom: 0.5rem;
+  font-weight: vars.$font-weight-medium;
+  color: vars.$gray-900;
+}

@@ -1,0 +1,107 @@
+@use '../../styles/variables' as vars;
+@use "sass:color";
+
+.btn {
+  font-weight: vars.$font-weight-medium;
+  vertical-align: middle;
+  border: vars.$border-width solid transparent;
+  padding: vars.$spacer vars.$spacer * 1.5;
+  font-size: vars.$font-size-base;
+  line-height: 1.5;
+  border-radius: vars.$border-radius;
+  transition: vars.$transition-base;
+  cursor: pointer;
+  
+  &:focus {
+    outline: 0;
+    box-shadow: 0 0 0 vars.$focus-ring-width rgba(vars.$primary, 0.25);
+  }
+  
+  &:disabled, &.disabled {
+    opacity: 0.65;
+  }
+}
+
+.btn-primary {
+  background-color: vars.$primary;
+  border-color: vars.$primary;
+  
+  &:hover, &:focus, &:active {
+    background-color: vars.$primary-hover;
+    border-color: vars.$primary-hover;
+  }
+}
+
+.btn-secondary {
+  color: vars.$gray-900;
+  background-color: vars.$gray-200;
+  border-color: vars.$gray-300;
+  
+  &:hover {
+    color: vars.$gray-900;
+    background-color: color.scale(vars.$gray-200, $lightness: -5%);
+    border-color: color.scale(vars.$gray-300, $lightness: -5%);
+  }
+  
+  &:active {
+    color: vars.$gray-900;
+    background-color: color.scale(vars.$gray-200, $lightness: -10%);
+    border-color: color.scale(vars.$gray-300, $lightness: -10%);
+  }
+}
+
+.btn-outline-primary {
+  color: vars.$primary;
+  border-color: vars.$primary;
+  
+  &:hover, &:focus {
+    background-color: vars.$primary;
+    border-color: vars.$primary;
+  }
+  
+  &:active {
+    background-color: vars.$primary-hover;
+    border-color: vars.$primary-hover;
+  }
+}
+
+.btn-link {
+  color: vars.$primary;
+  text-decoration: none;
+  
+  &:hover, &:focus {
+    color: vars.$primary-hover;
+    text-decoration: underline;
+  }
+  
+  &:active {
+    color: vars.$primary-active;
+  }
+}
+
+.btn-sm {
+  padding: vars.$spacer * 0.375 vars.$spacer * 0.75;
+  font-size: vars.$font-size-sm;
+  border-radius: vars.$border-radius-sm;
+}
+
+.btn-md {
+  padding: vars.$spacer * 0.75 vars.$spacer * 1.5;
+  font-size: vars.$font-size-base;
+  border-radius: vars.$border-radius;
+}
+
+.btn-lg {
+  padding: vars.$spacer vars.$spacer * 2;
+  font-size: vars.$font-size-lg;
+  border-radius: vars.$border-radius-lg;
+}
+
+.btn-full-width {
+  display: flex;
+  width: 100%;
+}
+
+.spinner-border {
+  margin-left: vars.$spacer * 0.5;
+}

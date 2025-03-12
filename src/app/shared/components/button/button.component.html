@@ -1,0 +1,26 @@
+<button 
+  class="btn {{ type === 'primary' ? 'btn-primary' : 
+              type === 'secondary' ? 'btn-secondary' : 
+              type === 'outline' ? 'btn-outline-primary' : 
+              'btn-link' }} 
+         {{ size === 'sm' ? 'btn-sm' : 
+            size === 'lg' ? 'btn-lg' : '' }} 
+         {{ fullWidth ? 'w-100' : '' }}
+         d-inline-flex align-items-center justify-content-center
+         fw-medium text-center text-nowrap
+         border rounded
+         transition"
+  [disabled]="disabled || loading"
+  [attr.aria-label]="ariaLabel"
+  (click)="onClick($event)"
+  [ngStyle]="{'cursor': disabled || loading ? 'not-allowed' : 'pointer'}"
+>
+  <div class="d-flex align-items-center justify-content-center">
+    <i *ngIf="icon && iconPosition === 'left'" class="bi bi-{{ icon }} me-2"></i>
+    <span><ng-content></ng-content></span>
+    <i *ngIf="icon && iconPosition === 'right'" class="bi bi-{{ icon }} ms-2"></i>
+    <div *ngIf="loading" class="spinner-border spinner-border-sm ms-2" role="status">
+      <span class="visually-hidden">Carregando...</span>
+    </div>
+  </div>
+</button>

@@ -1,0 +1,10 @@
+@use '../../shared/styles/variables' as vars;
+
+.text-secondary-60 {
+  color: vars.$text-muted-60 !important;
+}
+
+a.text-secondary-60:hover {
+  color: vars.$text-muted-80 !important;
+  text-decoration: underline !important;
+}
