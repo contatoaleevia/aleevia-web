@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -16,17 +16,16 @@ import { LoginRequest } from '../models/auth.model';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit {
+  private readonly fb = inject(FormBuilder);
+  private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+
   loginForm!: FormGroup;
   isLoading = false;
   errorMessage = '';
   returnUrl: string = '/dashboard';
-
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
-    private route: ActivatedRoute
-  ) { }
+  cpfCnpjMask: string = '000.000.000-00||00.000.000/0000-00';
 
   ngOnInit(): void {
     this.initForm();
@@ -54,8 +53,10 @@ export class LoginComponent implements OnInit {
     this.isLoading = true;
     this.errorMessage = '';
 
+    const cpfCnpj = this.loginForm.value.cpfCnpj.replace(/\D/g, '');
+
     const loginRequest: LoginRequest = {
-      cpf: this.loginForm.value.cpfCnpj,
+      cpf: cpfCnpj,
       password: this.loginForm.value.password,
       rememberMe: this.loginForm.value.rememberMe
     };

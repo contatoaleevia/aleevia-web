@@ -1,5 +1,13 @@
 @use '../../shared/styles/variables' as vars;
 
+.login-container {
+  background-image: url('/assets/images/login-background.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+}
+
 .text-secondary-60 {
   color: vars.$text-muted-60 !important;
 }
