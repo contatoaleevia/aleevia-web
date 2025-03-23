@@ -70,6 +70,22 @@
                 Entrar
               </app-button>
             </form>
+
+            <div class="d-flex align-items-center my-4">
+              <div class="border-bottom flex-grow-1"></div>
+              <div class="px-3 text-muted">ou</div>
+              <div class="border-bottom flex-grow-1"></div>
+            </div>
+
+            <app-button
+              type="outline"
+              [fullWidth]="true"
+              (click)="loginWithGoogle()"
+              class="d-flex align-items-center justify-content-center gap-2"
+            >
+              <img src="assets/images/google-icon.svg" alt="Google" width="20" height="20">
+              Entrar com Google
+            </app-button>
           </div>
         </div>
         <div class="col-md-6 d-flex align-items-center justify-content-center p-4 p-lg-5 bg-white">

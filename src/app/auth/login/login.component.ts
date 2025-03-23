@@ -31,6 +31,12 @@ export class LoginComponent implements OnInit {
     this.initForm();
 
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
+    
+    // Verificar se há erro do callback do Google
+    const error = this.route.snapshot.queryParams['error'];
+    if (error) {
+      this.errorMessage = error;
+    }
 
     if (this.authService.isAuthenticated()) {
       this.router.navigate([this.returnUrl]);
@@ -75,5 +81,9 @@ export class LoginComponent implements OnInit {
 
   forgotPassword(): void {
     console.log('Esqueceu a senha');
+  }
+
+  loginWithGoogle(): void {
+    this.authService.loginWithGoogle();
   }
 }
