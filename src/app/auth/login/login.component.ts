@@ -32,7 +32,6 @@ export class LoginComponent implements OnInit {
 
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
     
-    // Verificar se há erro do callback do Google
     const error = this.route.snapshot.queryParams['error'];
     if (error) {
       this.errorMessage = error;

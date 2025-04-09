@@ -1,16 +1,70 @@
 <div class="form-group">
-  <label *ngIf="label" [for]="id" class="form-label">{{ label }}</label>
-  <input
-    [type]="type"
-    [id]="id"
-    class="form-control {{ class }}"
-    [placeholder]="placeholder"
-    [value]="value"
-    [disabled]="isDisabled || disabled"
-    [readonly]="readonly"
-    [required]="required"
-    [mask]="mask"
-    (input)="onInputChange($event)"
-    (blur)="onTouched()"
-  />
+  <label *ngIf="label" [for]="id" class="form-label">
+    {{ label }}
+    <span *ngIf="required" class="text-danger">*</span>
+  </label>
+  <ng-content></ng-content>
+  
+  <ng-container *ngIf="isRegularInput">
+    <div class="input-group">
+      <input
+        [type]="type === 'password' && showPassword ? 'text' : type"
+        [id]="id"
+        class="form-control {{ class }}"
+        [placeholder]="placeholder"
+        [(ngModel)]="internalValue"
+        [disabled]="isDisabled || disabled"
+        [readonly]="readonly"
+        [required]="required"
+        [mask]="mask"
+        [ngStyle]="inputStyle"
+        (focus)="onFocus()"
+        (blur)="onBlur()"
+        (input)="updateValue($event)"
+      />
+      <button *ngIf="type === 'password'" type="button" class="btn btn-outline-secondary" (click)="togglePasswordVisibility()">
+        <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+      </button>
+    </div>
+  </ng-container>
+  
+  <ng-container *ngIf="isSelectInput">
+    <select
+      [id]="id"
+      class="form-select {{ class }}"
+      [(ngModel)]="internalValue"
+      [disabled]="isDisabled || disabled"
+      [required]="required"
+      [ngStyle]="inputStyle"
+      (focus)="onFocus()"
+      (blur)="onBlur()"
+      (change)="selectOption($event)"
+    >
+      <option value="" disabled selected>{{ placeholder }}</option>
+      <option *ngFor="let option of options" [value]="option[optionValue]">
+        {{ option[optionLabel] }}
+      </option>
+    </select>
+  </ng-container>
+  
+  <ng-container *ngIf="isTextarea">
+    <textarea
+      [id]="id"
+      class="form-control {{ class }}"
+      [placeholder]="placeholder"
+      [(ngModel)]="internalValue"
+      [disabled]="isDisabled || disabled"
+      [readonly]="readonly"
+      [required]="required"
+      [rows]="rows"
+      [ngStyle]="inputStyle"
+      (focus)="onFocus()"
+      (blur)="onBlur()"
+      (input)="updateValue($event)"
+    ></textarea>
+  </ng-container>
+  
+  <div *ngIf="errorMessage" class="text-danger small mt-1">
+    {{ errorMessage }}
+  </div>
 </div>

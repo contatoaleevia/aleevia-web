@@ -1,0 +1,33 @@
+<form [formGroup]="formGroup">
+  <ng-content></ng-content>
+
+  <div class="form-actions d-flex justify-content-end mt-4" *ngIf="showSubmitButton">
+    <div
+      [ngClass]="{
+        'justify-content-between': showPreviousButton,
+        'justify-content-end': !showPreviousButton
+      }"
+      class="d-flex align-items-center w-100"
+    >
+      <app-button
+        *ngIf="showPreviousButton"
+        type="outline"
+        [isPrevious]="true"
+        (clicked)="onPrevious()"
+        size="md"
+      >
+        Voltar
+      </app-button>
+      <app-button
+        *ngIf="isNextButton"
+        type="primary"
+        [isNext]="true"
+        [disabled]="!isFormValid"
+        (click)="onSubmit()"
+        size="md"
+      >
+        {{ submitButtonText }}
+      </app-button>
+    </div>
+  </div>
+</form>
