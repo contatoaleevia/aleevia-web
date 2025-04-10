@@ -10,7 +10,7 @@ import { PersonalInfoForm, ProfessionalInfoForm, SocialInfoForm, SecurityForm } 
 import { ProfessionsService } from '../../shared/services/professions.service';
 import { UserService } from '../../shared/services/user.service';
 import { Profession, Specialty, Subspecialty, ProfessionsResponse } from '../../shared/models/profession.model';
-import { User, UserUpdateResponse, FileUploadResponse } from '../../shared/models/user.model';
+import { User, FileUploadResponse, UserUpdateRequest, UserUpdateApiResponse } from '../../shared/models/user.model';
 import { GENDER_OPTIONS, ERROR_MESSAGES, STEP_TITLES } from './constants/first-access.constants';
 
 @Component({
@@ -29,8 +29,10 @@ export class FirstAccessComponent implements OnInit {
 
   showModal = true;
   currentStep = 1;
-  totalSteps = 4;
+  totalSteps = 5;
   profilePictureUrl: string | null = null;
+  tempProfilePictureUrl: string | null = null;
+  isUploading = false;
   professions: Profession[] = [];
   specialties: Specialty[] = [];
   subspecialties: Subspecialty[] = [];
@@ -249,22 +251,25 @@ export class FirstAccessComponent implements OnInit {
     }
   }
 
-  onFormSubmit(formData: PersonalInfoForm | ProfessionalInfoForm | SocialInfoForm | SecurityForm): void {
-    const currentForm = this.getCurrentFormGroup();
-    if (currentForm.valid) {
-      if (this.currentStep < this.totalSteps) {
-        this.nextStep();
-      } else {
-        this.onSubmit();
-      }
-    }
-  }
-
   nextStep(): void {
     const currentForm = this.getCurrentFormGroup();
     if (currentForm.valid && this.currentStep < this.totalSteps) {
+      const formData = this.formatFormData(currentForm.getRawValue());
       this.currentStep++;
-      this.cdr.detectChanges();
+
+      if(this.currentStep > 4) {
+        this.showModal = false;
+      }
+      
+      this.userService.updateUser(formData).subscribe({
+        next: (response: UserUpdateApiResponse) => {
+          localStorage.setItem('currentUser', JSON.stringify(response.user));
+          this.cdr.detectChanges();
+        },
+        error: (error) => {
+          console.error('Erro ao atualizar usuário:', error);
+        }
+      });
     }
   }
 
@@ -283,16 +288,21 @@ export class FirstAccessComponent implements OnInit {
     input.onchange = (event: Event) => {
       const file = (event.target as HTMLInputElement).files?.[0];
       if (file) {
+        this.isUploading = true;
         const formData = new FormData();
         formData.append('file', file);
         
         this.userService.uploadFile(formData).subscribe({
           next: (response: FileUploadResponse) => {
+            this.tempProfilePictureUrl = response.url;
             this.profilePictureUrl = response.url;
-            this.updateLocalStorageUser({ picture_url: response.url });
+            this.isUploading = false;
+            this.cdr.detectChanges();
           },
           error: (error) => {
             console.error('Erro ao fazer upload da imagem:', error);
+            this.isUploading = false;
+            this.cdr.detectChanges();
           }
         });
       }
@@ -301,38 +311,7 @@ export class FirstAccessComponent implements OnInit {
     input.click();
   }
 
-  onSubmit(): void {
-    const formData = {
-      ...this.formatFormData(this.personalInfoForm.getRawValue()),
-      ...this.formatFormData(this.professionalInfoForm.getRawValue()),
-      ...this.formatFormData(this.socialInfoForm.getRawValue()),
-      ...this.formatFormData(this.securityForm.getRawValue())
-    };
-
-    this.userService.updateUser(formData).subscribe({
-      next: (response: UserUpdateResponse) => {
-        this.updateLocalStorageUser(response);
-      },
-      error: (error) => {
-        console.error('Erro ao atualizar usuário:', error);
-      }
-    });
-  }
-
-  private updateLocalStorageUser(updates: Partial<UserUpdateResponse>): void {
-    const storedUser = localStorage.getItem('currentUser');
-    if (storedUser) {
-      try {
-        const user = JSON.parse(storedUser);
-        const updatedUser = { ...user, ...updates };
-        localStorage.setItem('currentUser', JSON.stringify(updatedUser));
-      } catch (e) {
-        console.error('Erro ao atualizar usuário no localStorage:', e);
-      }
-    }
-  }
-
-  private formatFormData(formData: PersonalInfoForm | ProfessionalInfoForm | SocialInfoForm | SecurityForm): Partial<UserUpdateResponse> {
+  private formatFormData(formData: PersonalInfoForm | ProfessionalInfoForm | SocialInfoForm | SecurityForm): UserUpdateRequest {
     if (this.currentStep === 1) {
       const personalData = formData as PersonalInfoForm;
       return {
@@ -348,8 +327,8 @@ export class FirstAccessComponent implements OnInit {
       const professionalData = formData as ProfessionalInfoForm;
       return {
         profession_id: professionalData.profession,
-        doctor_specialty_id: professionalData.specialty,
-        doctor_subspecialty_id: professionalData.subspecialties,
+        specialty_id: professionalData.specialty,
+        subspecialty_id: professionalData.subspecialties,
         crm_state: professionalData.councilState,
         crm_number: professionalData.councilNumber,
         cnpj: professionalData.cnpj,
@@ -361,11 +340,17 @@ export class FirstAccessComponent implements OnInit {
       return {
         website: socialData.website,
         instagram: socialData.instagram,
-        bio: socialData.about
+        bio: socialData.about,
+        picture_url: this.tempProfilePictureUrl || null
       };
     }
     if (this.currentStep === 4) {
-      return {};
+      const securityData = formData as SecurityForm;
+      return {
+        password: securityData.password,
+        password_confirmation: securityData.confirmPassword,
+        pre_registered: true
+      };
     }
     return {};
   }

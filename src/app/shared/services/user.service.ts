@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from '../../core/services/api.service';
 
@@ -6,7 +6,7 @@ import { ApiService } from '../../core/services/api.service';
   providedIn: 'root'
 })
 export class UserService {
-  constructor(private apiService: ApiService) {}
+  private readonly apiService = inject(ApiService);
 
   updateUser(data: any): Observable<any> {
     return this.apiService.put('/doctor/', data);
@@ -14,6 +14,6 @@ export class UserService {
   
   uploadFile(formData: FormData): Observable<any> {
     formData.append('acl', 'private');
-    return this.apiService.post('/files/upload/', formData);
+    return this.apiService.post('/files/upload', formData);
   }
 } 

@@ -1,4 +1,4 @@
-export interface User {
+export interface BaseUser {
   id: string;
   full_name: string;
   preferred_name: string;
@@ -8,7 +8,11 @@ export interface User {
   email_verified: boolean;
   picture_url: string | null;
   cpf: string;
-  birth_date?: string;
+  gender?: string;
+  pre_registered: boolean;
+}
+
+export interface Address {
   address?: string;
   city?: string;
   state?: string;
@@ -16,45 +20,38 @@ export interface User {
   number?: string;
   complement?: string;
   neighborhood?: string;
-  gender?: string;
+}
+
+export interface ProfessionalInfo {
+  profession?: string;
+  profession_id?: string;
+  specialty?: string;
+  specialty_id?: string;
+  subspecialty?: string;
+  subspecialty_id?: string;
   crm_state?: string;
   crm_number?: string;
   cnpj?: string;
   legal_name?: string;
+  feegow_token?: string;
+}
+
+export interface SocialInfo {
   website?: string;
   instagram?: string;
   bio?: string;
-  specialty_id?: string;
-  specialty?: string;
-  subspecialty_id?: string;
-  profession_id?: string;
-  doctor_specialty_id?: string;
-  doctor_subspecialty_id?: string;
-  profile?: Profile;
 }
 
-export interface Profile {
-  id: string;
-  gender: string | null;
-  profession: string | null;
-  insurance: string;
-  insurance_id: string;
-  plan: string | null;
-  plan_id: string | null;
-  biological_sex: string | null;
-  weight: number | null;
-  height: number | null;
-  blood_type: string | null;
-  organ_donor: boolean | null;
-  drinks_alcohol: boolean | null;
-  drinking_frequency: string | null;
-  smokes: boolean | null;
-  smoking_frequency: string | null;
-  exercises: boolean | null;
-  exercise_frequency: string | null;
+export interface User extends BaseUser, Address, ProfessionalInfo, SocialInfo {
+  birth_date?: string;
 }
 
-export interface UserUpdateResponse {
+export interface UserUpdateRequest extends Partial<BaseUser>, Partial<Address>, Partial<ProfessionalInfo>, Partial<SocialInfo> {
+  password?: string;
+  password_confirmation?: string;
+}
+
+export interface UserUpdateResponse extends BaseUser, ProfessionalInfo, SocialInfo {
   id: string;
   cpf: string;
   full_name: string;
@@ -63,9 +60,12 @@ export interface UserUpdateResponse {
   gender: string;
   preferred_name: string;
   picture_url: string | null;
+  profession: string;
   profession_id: string;
-  doctor_specialty_id: string;
-  doctor_subspecialty_id: string;
+  specialty: string;
+  specialty_id: string;
+  subspecialty: string;
+  subspecialty_id: string;
   crm_state: string;
   crm_number: string;
   cnpj: string;
@@ -73,6 +73,11 @@ export interface UserUpdateResponse {
   website: string;
   instagram: string;
   bio: string;
+}
+
+export interface UserUpdateApiResponse {
+  message: string;
+  user: UserUpdateResponse;
 }
 
 export interface FileUploadResponse {

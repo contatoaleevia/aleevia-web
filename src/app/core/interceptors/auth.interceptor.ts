@@ -14,11 +14,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   console.log('Auth Interceptor - Token:', token ? 'Present' : 'Missing');
   
   if (token) {
-    req = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`
-      }
-    });
+    const headers = req.headers.set('Authorization', `Bearer ${token}`);
+    req = req.clone({ headers });
   }
   
   return next(req).pipe(
