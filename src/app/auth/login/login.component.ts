@@ -32,7 +32,6 @@ export class LoginComponent implements OnInit {
 
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
     
-    // Verificar se há erro do callback do Google
     const error = this.route.snapshot.queryParams['error'];
     if (error) {
       this.errorMessage = error;
@@ -47,7 +46,7 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.fb.group({
       cpfCnpj: ['', [Validators.required]],
       password: ['', [Validators.required]],
-      rememberMe: [false]
+      fromApp: [false]
     });
   }
 
@@ -60,11 +59,12 @@ export class LoginComponent implements OnInit {
     this.errorMessage = '';
 
     const cpfCnpj = this.loginForm.value.cpfCnpj.replace(/\D/g, '');
+    const fromApp = this.loginForm.value.fromApp;
 
     const loginRequest: LoginRequest = {
       cpf: cpfCnpj,
       password: this.loginForm.value.password,
-      rememberMe: this.loginForm.value.rememberMe
+      fromApp: fromApp
     };
 
     this.authService.login(loginRequest)

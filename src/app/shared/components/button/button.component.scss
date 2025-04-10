@@ -32,6 +32,30 @@
   }
 }
 
+.next-button {
+  background: vars.$primary !important;
+  border-color: vars.$primary !important;
+  box-shadow: 0px 3px 12px 0px rgba(74, 58, 255, 0.18) !important;
+  padding: 0.5rem 1.5rem !important;
+  
+  &:hover {
+    background: color.scale(vars.$primary, $lightness: -5%) !important;
+    border-color: color.scale(vars.$primary, $lightness: -5%) !important;
+  }
+}
+
+.previous-button {
+  padding: 0.5rem 1.5rem !important;
+  border-color: vars.$gray-900 !important;
+  color: vars.$gray-900 !important;
+  
+  &:hover {
+    background-color: rgba(vars.$gray-900, 0.05) !important;
+    border-color: vars.$gray-900 !important;
+    color: vars.$gray-900 !important;
+  }
+}
+
 .btn-secondary {
   color: vars.$gray-900;
   background-color: vars.$gray-200;
@@ -57,6 +81,7 @@
   &:hover, &:focus {
     background-color: vars.$primary;
     border-color: vars.$primary;
+    color: vars.$white;
   }
   
   &:active {

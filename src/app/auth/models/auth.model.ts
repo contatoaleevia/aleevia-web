@@ -1,19 +1,14 @@
+import { User } from '../../shared/models/user.model';
+
 export interface LoginRequest {
   cpf: string;
   password: string;
-  rememberMe?: boolean;
+  fromApp?: boolean;
 }
 
 export interface LoginResponse {
-  token: string;
+  access_token: string;
+  token_type: string;
+  expires_in: number;
   user: User;
 }
-
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  cpf?: string;
-  role?: string;
-  picture?: string;
-} 

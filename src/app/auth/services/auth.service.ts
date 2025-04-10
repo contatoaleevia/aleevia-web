@@ -2,7 +2,8 @@ import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { LoginRequest, LoginResponse, User } from '../models/auth.model';
+import { LoginRequest, LoginResponse } from '../models/auth.model';
+import { User } from '../../shared/models/user.model';
 import { ApiService } from '../../core/services/api.service';
 import { environment } from '../../../environments/environment';
 import { isPlatformBrowser } from '@angular/common';
@@ -17,7 +18,7 @@ export class AuthService {
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
-  private currentUserSubject = new BehaviorSubject<User | null>(null);
+  private currentUserSubject = new BehaviorSubject<User>({} as User);
   public currentUser$ = this.currentUserSubject.asObservable();
 
   private readonly platformId = inject(PLATFORM_ID);
@@ -33,8 +34,17 @@ export class AuthService {
 
   private checkAuthStatus(): void {
     try {
-      const user = this.currentUserSubject.value;
-      const token = this.getToken();
+      const token = localStorage.getItem('token');
+      const userJson = localStorage.getItem('currentUser');
+      
+      let user: User | null = null;
+      if (userJson) {
+        try {
+          user = JSON.parse(userJson);
+        } catch (e) {
+          console.error('Erro ao fazer parse do usuário:', e);
+        }
+      }
       
       if (token && user) {
         this.setAuthState(user, token);
@@ -51,11 +61,11 @@ export class AuthService {
     const formData = new FormData();
     formData.append('username', cpf);
     formData.append('password', credentials.password);
-    
+    formData.append('fromApp', credentials.fromApp ? 'true' : 'false');
     return this.apiService.post<LoginResponse>('/login', formData).pipe(
       tap(response => {
-        if (response && response.token) {
-          this.setAuthState(response.user, response.token);
+        if (response && response.access_token) {
+          this.setAuthState(response.user, response.access_token);
         }
       }),
       catchError(error => {
@@ -71,55 +81,49 @@ export class AuthService {
     }
   }
 
-  handleGoogleCallback(token: string, user: User | null): void {
-    console.log('=== AuthService - handleGoogleCallback ===');
-    console.log('Token recebido:', token);
-    console.log('Usuário recebido:', user);
-
-    if (!token) {
-      console.error('Token inválido recebido no AuthService');
-      return;
-    }
-
-    if (!user) {
-      console.error('Usuário inválido recebido no AuthService');
+  handleGoogleCallback(token: string, user: Partial<User>): void {
+    if (!token || !user) {
+      console.error('Token ou usuário inválido recebido no AuthService');
       return;
     }
 
     try {
       this.setAuthState(user, token);
-      console.log('Estado de autenticação atualizado com sucesso');
-      console.log('Token atual:', this.tokenSubject.value);
-      console.log('Usuário atual:', this.currentUserSubject.value);
-      console.log('Estado de autenticação:', this.isAuthenticatedSubject.value);
     } catch (error) {
       console.error('Erro ao atualizar estado de autenticação:', error);
       throw error;
     }
   }
 
-  private setAuthState(user: User, token: string): void {
-    console.log('AuthService - Atualizando estado de autenticação');
+  private setAuthState(user: Partial<User>, token: string): void {
     this.tokenSubject.next(token);
     this.isAuthenticatedSubject.next(true);
-    this.currentUserSubject.next(user);
-    console.log('AuthService - Estado atual:', {
-      token: this.tokenSubject.value,
-      isAuthenticated: this.isAuthenticatedSubject.value,
-      user: this.currentUserSubject.value
-    });
+    this.currentUserSubject.next(user as User);
+    
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('token', token);
+      localStorage.setItem('currentUser', JSON.stringify(user));
+    }
   }
 
   logout(): void {
     this.tokenSubject.next(null);
     this.isAuthenticatedSubject.next(false);
-    this.currentUserSubject.next(null);
+    this.currentUserSubject.next({} as User);
+    
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('currentUser');
+    }
     
     this.router.navigate(['/login']);
   }
 
   getToken(): string {
-    return this.tokenSubject.value!;
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage.getItem('token') || this.tokenSubject.value || '';
+    }
+    return this.tokenSubject.value || '';
   }
 
   isAuthenticated(): boolean {
@@ -127,12 +131,26 @@ export class AuthService {
   }
 
   getCurrentUser(): Observable<User> {
-    return this.apiService.get<User>('/users/me').pipe(
-      tap(user => {
-        if (user) {
+    return this.currentUser$;
+  }
+  
+  get currentUser(): User | null {
+    if (isPlatformBrowser(this.platformId)) {
+      if (this.currentUserSubject.value) {
+        return this.currentUserSubject.value;
+      }
+      
+      const userJson = localStorage.getItem('currentUser');
+      if (userJson) {
+        try {
+          const user = JSON.parse(userJson);
           this.currentUserSubject.next(user);
+          return user;
+        } catch (e) {
+          console.error('Erro ao fazer parse do usuário:', e);
         }
-      })
-    );
+      }
+    }
+    return this.currentUserSubject.value;
   }
 } 

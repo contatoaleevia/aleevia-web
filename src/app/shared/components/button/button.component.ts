@@ -17,9 +17,12 @@ export class ButtonComponent {
   @Input() disabled: boolean = false;
   @Input() fullWidth: boolean = false;
   @Input() loading: boolean = false;
-  @Input() icon: string = '';
+  @Input() icon: boolean = true;
   @Input() iconPosition: 'left' | 'right' = 'left';
   @Input() ariaLabel: string = '';
+  @Input() isNext: boolean = false;
+  @Input() isPrevious: boolean = false;
+  @Input() customClasses: string = '';
   @Output() clicked = new EventEmitter<MouseEvent>();
 
   onClick(event: MouseEvent): void {

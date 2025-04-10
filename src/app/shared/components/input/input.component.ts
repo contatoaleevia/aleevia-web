@@ -1,4 +1,4 @@
-import { Component, Input, forwardRef } from '@angular/core';
+import { AfterViewInit, Component, Input, forwardRef, OnInit, OnChanges, SimpleChanges, ChangeDetectorRef, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskDirective } from 'ngx-mask';
@@ -17,7 +17,7 @@ import { NgxMaskDirective } from 'ngx-mask';
     }
   ]
 })
-export class InputComponent implements ControlValueAccessor {
+export class InputComponent implements ControlValueAccessor, OnInit, OnChanges, AfterViewInit {
   @Input() placeholder: string = '';
   @Input() type: string = 'text';
   @Input() mask: string = '';
@@ -28,34 +28,124 @@ export class InputComponent implements ControlValueAccessor {
   @Input() required: boolean = false;
   @Input() class: string = '';
   @Input() maxLength: number | null = null;
-
-  value: string = '';
-  isDisabled: boolean = false;
+  @Input() value: string | boolean = '';
+  @Input() bgColor: string = '';
+  @Input() options: any[] = [];
+  @Input() optionLabel: string = 'name';
+  @Input() optionValue: string = 'id';
+  @Input() inputType: 'text' | 'select' | 'textarea' | 'checkbox' = 'text';
+  @Input() rows: number = 4;
+  @Input() errorMessage: string | null = null;
+  @Input() checkboxLabel: string = '';
+  @Output() onChange = new EventEmitter<any>();
   
-  onChange: any = () => {};
-  onTouched: any = () => {};
+  internalValue: string | boolean = '';
+  isDisabled: boolean = false;
+  isFocused: boolean = false;
+  showPassword: boolean = false;
+  
+  private onChangeCallback: (_: any) => void = () => {};
+  private onTouchedCallback: () => void = () => {};
+  
+  constructor(
+    private cdr: ChangeDetectorRef,
+  ) {}
+  
+  get isTextarea(): boolean {
+    return this.inputType === 'textarea';
+  }
+  
+  get isSelectInput(): boolean {
+    return this.inputType === 'select';
+  }
+  
+  get isRegularInput(): boolean {
+    return !this.isSelectInput && !this.isTextarea && !this.isCheckbox;
+  }
+
+  get isCheckbox(): boolean {
+    return this.inputType === 'checkbox';
+  }
+
+  ngOnInit(): void {
+    this.updateInternalValue();
+  }
+  
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['value'] && changes['value'].currentValue !== undefined) {
+      this.internalValue = changes['value'].currentValue;
+      this.cdr.detectChanges();
+    }
+    
+    if (changes['options'] && changes['options'].currentValue) {
+      this.cdr.detectChanges();
+    }
+  }
+  
+  ngAfterViewInit(): void {
+    if (this.value) {
+      this.internalValue = this.value;
+      this.cdr.detectChanges();
+    }
+  }
+  
+  private updateInternalValue(): void {
+    if (this.value !== undefined && this.value !== null) {
+      this.internalValue = this.value;
+    }
+  }
 
   writeValue(value: any): void {
-    if (value !== undefined) {
-      this.value = value;
+    if (value !== undefined && value !== null) {
+      this.internalValue = value;
+      this.cdr.detectChanges();
     }
   }
 
   registerOnChange(fn: any): void {
-    this.onChange = fn;
+    this.onChangeCallback = fn;
   }
 
   registerOnTouched(fn: any): void {
-    this.onTouched = fn;
+    this.onTouchedCallback = fn;
   }
 
   setDisabledState(isDisabled: boolean): void {
     this.isDisabled = isDisabled;
   }
+  
+  get inputStyle() {
+    if (this.isDisabled || this.disabled) {
+      return { 'background-color': '#e9ecef' };
+    }
+    return this.bgColor ? { 'background-color': this.bgColor } : {};
+  }
 
-  onInputChange(event: any): void {
+  onFocus(): void {
+    this.isFocused = true;
+    this.onTouchedCallback();
+  }
+
+  onBlur(): void {
+    this.isFocused = false;
+    this.onTouchedCallback();
+  }
+
+  updateValue(event: any): void {
+    const value = this.isCheckbox ? event.target.checked : event.target.value;
+    this.internalValue = value;
+    this.onChangeCallback(value);
+    this.onChange.emit(value);
+  }
+
+  selectOption(event: any): void {
     const value = event.target.value;
-    this.value = value;
-    this.onChange(value);
+    this.internalValue = value;
+    this.onChangeCallback(value);
+    this.onChange.emit(value);
+  }
+
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
   }
 }

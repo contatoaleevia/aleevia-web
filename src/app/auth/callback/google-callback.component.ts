@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, PLATFORM_ID, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { User } from '../models/auth.model';
+import { User } from '../../shared/models/user.model';
 import { timer } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 
@@ -36,7 +36,6 @@ export class GoogleCallbackComponent implements OnInit {
       console.error('Token não encontrado nos parâmetros');
       console.error('Parâmetros disponíveis:', params);
       
-      // Aguarda 1 segundo antes de redirecionar
       timer(1000).subscribe(() => {
         this.router.navigate(['/login'], { 
           queryParams: { error: 'Token não encontrado' } 
@@ -48,12 +47,11 @@ export class GoogleCallbackComponent implements OnInit {
     try {
       console.log('Token encontrado:', token);
       
-      // Construir objeto do usuário com os dados retornados
-      const user: User = {
+      const user: Partial<User> = {
         id: params['user_id'],
-        name: params['name'],
+        full_name: params['name'],
         email: params['email'],
-        picture: params['picture']
+        picture_url: params['picture']
       };
 
       console.log('Dados do usuário construídos:', user);
@@ -61,7 +59,6 @@ export class GoogleCallbackComponent implements OnInit {
       this.authService.handleGoogleCallback(token, user);
       console.log('Login processado com sucesso');
       
-      // Aguarda 1 segundo antes de redirecionar
       timer(1000).subscribe(() => {
         console.log('Redirecionando para dashboard...');
         this.router.navigate(['/dashboard']);
@@ -70,7 +67,6 @@ export class GoogleCallbackComponent implements OnInit {
       console.error('Erro detalhado:', error);
       console.error('Stack trace:', error instanceof Error ? error.stack : 'No stack trace');
       
-      // Aguarda 1 segundo antes de redirecionar
       timer(1000).subscribe(() => {
         this.router.navigate(['/login'], { 
           queryParams: { error: 'Erro ao processar autenticação do Google' } 
