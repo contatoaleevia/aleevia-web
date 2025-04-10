@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, PLATFORM_ID, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
-import { User } from '../models/auth.model';
+import { User } from '../../shared/models/user.model';
 import { timer } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
 

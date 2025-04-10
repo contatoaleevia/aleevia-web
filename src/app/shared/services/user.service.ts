@@ -1,23 +1,19 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { ApiService } from '../../core/services/api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = `${environment.apiUrl}/doctor/`;
-  private filesUrl = `${environment.apiUrl}/files/`;
-
-  constructor(private http: HttpClient) {}
+  constructor(private apiService: ApiService) {}
 
   updateUser(data: any): Observable<any> {
-    return this.http.put(this.apiUrl, data);
+    return this.apiService.put('/doctor/', data);
   }
   
   uploadFile(formData: FormData): Observable<any> {
     formData.append('acl', 'private');
-    return this.http.post(`${this.filesUrl}upload`, formData);
+    return this.apiService.post('/files/upload/', formData);
   }
 } 

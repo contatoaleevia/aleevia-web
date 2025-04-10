@@ -63,6 +63,23 @@
       (input)="updateValue($event)"
     ></textarea>
   </ng-container>
+
+  <ng-container *ngIf="isCheckbox">
+    <div class="form-check">
+      <input
+        type="checkbox"
+        [id]="id"
+        class="form-check-input {{ class }}"
+        [(ngModel)]="internalValue"
+        [disabled]="isDisabled || disabled"
+        [required]="required"
+        (change)="updateValue($event)"
+      />
+      <label class="form-check-label small text-secondary-60" [for]="id">
+        {{ checkboxLabel }}
+      </label>
+    </div>
+  </ng-container>
   
   <div *ngIf="errorMessage" class="text-danger small mt-1">
     {{ errorMessage }}

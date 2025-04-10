@@ -2,7 +2,8 @@ import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { LoginRequest, LoginResponse, User } from '../models/auth.model';
+import { LoginRequest, LoginResponse } from '../models/auth.model';
+import { User } from '../../shared/models/user.model';
 import { ApiService } from '../../core/services/api.service';
 import { environment } from '../../../environments/environment';
 import { isPlatformBrowser } from '@angular/common';
@@ -60,7 +61,7 @@ export class AuthService {
     const formData = new FormData();
     formData.append('username', cpf);
     formData.append('password', credentials.password);
-    
+    formData.append('fromApp', credentials.fromApp ? 'true' : 'false');
     return this.apiService.post<LoginResponse>('/login', formData).pipe(
       tap(response => {
         if (response && response.access_token) {

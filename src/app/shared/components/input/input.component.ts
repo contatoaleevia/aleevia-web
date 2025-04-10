@@ -28,17 +28,18 @@ export class InputComponent implements ControlValueAccessor, OnInit, OnChanges, 
   @Input() required: boolean = false;
   @Input() class: string = '';
   @Input() maxLength: number | null = null;
-  @Input() value: string = '';
+  @Input() value: string | boolean = '';
   @Input() bgColor: string = '';
   @Input() options: any[] = [];
   @Input() optionLabel: string = 'name';
   @Input() optionValue: string = 'id';
-  @Input() inputType: 'text' | 'select' | 'textarea' = 'text';
+  @Input() inputType: 'text' | 'select' | 'textarea' | 'checkbox' = 'text';
   @Input() rows: number = 4;
   @Input() errorMessage: string | null = null;
+  @Input() checkboxLabel: string = '';
   @Output() onChange = new EventEmitter<any>();
   
-  internalValue: string = '';
+  internalValue: string | boolean = '';
   isDisabled: boolean = false;
   isFocused: boolean = false;
   showPassword: boolean = false;
@@ -59,7 +60,11 @@ export class InputComponent implements ControlValueAccessor, OnInit, OnChanges, 
   }
   
   get isRegularInput(): boolean {
-    return !this.isSelectInput && !this.isTextarea;
+    return !this.isSelectInput && !this.isTextarea && !this.isCheckbox;
+  }
+
+  get isCheckbox(): boolean {
+    return this.inputType === 'checkbox';
   }
 
   ngOnInit(): void {
@@ -127,7 +132,7 @@ export class InputComponent implements ControlValueAccessor, OnInit, OnChanges, 
   }
 
   updateValue(event: any): void {
-    const value = event.target.value;
+    const value = this.isCheckbox ? event.target.checked : event.target.value;
     this.internalValue = value;
     this.onChangeCallback(value);
     this.onChange.emit(value);

@@ -1,18 +1,15 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
-import { Subspecialty, Specialty, ProfessionsResponse } from '../models/profession.model';
+import { ProfessionsResponse } from '../models/profession.model';
+import { ApiService } from '../../core/services/api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProfessionsService {
-  private apiUrl = `${environment.apiUrl}/doctor/professions`;
-
-  constructor(private http: HttpClient) {}
+  private readonly apiService = inject(ApiService);
 
   getProfessions(): Observable<ProfessionsResponse> {
-    return this.http.get<ProfessionsResponse>(this.apiUrl);
+    return this.apiService.get<ProfessionsResponse>('/doctor/professions');
   }
 } 

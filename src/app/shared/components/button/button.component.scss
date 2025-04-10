@@ -81,6 +81,7 @@
   &:hover, &:focus {
     background-color: vars.$primary;
     border-color: vars.$primary;
+    color: vars.$white;
   }
   
   &:active {
