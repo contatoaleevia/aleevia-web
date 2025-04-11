@@ -7,7 +7,16 @@ import { AuthService } from '../../auth/services/auth.service';
 import { ProfessionsService } from '../../shared/services/professions.service';
 import { UserService } from '../../shared/services/user.service';
 
-import { PersonalInfoForm, ProfessionalInfoForm, SocialInfoForm, SecurityForm } from './models/first-access.model';
+import { 
+  PersonalInfoForm, 
+  ProfessionalInfoForm, 
+  SocialInfoForm, 
+  SecurityForm,
+  PersonalInfoFormControls,
+  ProfessionalInfoFormControls,
+  SocialInfoFormControls,
+  SecurityFormControls
+} from './models/first-access.model';
 import { Profession, Specialty, Subspecialty, ProfessionsResponse } from '../../shared/models/profession.model';
 import { User, FileUploadResponse, UserUpdateRequest, UserUpdateApiResponse } from '../../shared/models/user.model';
 
@@ -46,17 +55,17 @@ export class FirstAccessComponent implements OnInit {
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly userService = inject(UserService);
 
-  personalInfoForm!: FormGroup;
-  professionalInfoForm!: FormGroup;
-  socialInfoForm!: FormGroup;
-  securityForm!: FormGroup;
+  personalInfoForm!: FormGroup<PersonalInfoFormControls>;
+  professionalInfoForm!: FormGroup<ProfessionalInfoFormControls>;
+  socialInfoForm!: FormGroup<SocialInfoFormControls>;
+  securityForm!: FormGroup<SecurityFormControls>;
 
   private userCpfSubject = new BehaviorSubject<string>('');
   userCpf$ = this.userCpfSubject.asObservable();
 
-  showModal = true;
-  currentStep = 1;
-  isUploading = false;
+  showModal: boolean = true;
+  currentStep: number = 1;
+  isUploading: boolean = false;
   profilePictureUrl: string | null = null;
   tempProfilePictureUrl: string | null = null;
 
@@ -65,8 +74,8 @@ export class FirstAccessComponent implements OnInit {
   specialties: Specialty[] = [];
   subspecialties: Subspecialty[] = [];
 
-  errorMessages = ERROR_MESSAGES;
-  stepTitles = STEP_TITLES;
+  errorMessages: { [key: string]: string } = ERROR_MESSAGES;
+  stepTitles: { [key: number]: string } = STEP_TITLES;
 
   ngOnInit(): void {
     this.initForms();
