@@ -1,8 +1,6 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { InputComponent } from '../../shared/components/input/input.component';
-import { FormComponent } from '../../shared/components/form/form.component';
 import { AuthService } from '../../auth/services/auth.service';
 import { BehaviorSubject } from 'rxjs';
 import { brazilianStates } from '../../shared/data/brazilian-states';
@@ -11,12 +9,27 @@ import { ProfessionsService } from '../../shared/services/professions.service';
 import { UserService } from '../../shared/services/user.service';
 import { Profession, Specialty, Subspecialty, ProfessionsResponse } from '../../shared/models/profession.model';
 import { User, FileUploadResponse, UserUpdateRequest, UserUpdateApiResponse } from '../../shared/models/user.model';
-import { GENDER_OPTIONS, ERROR_MESSAGES, STEP_TITLES } from './constants/first-access.constants';
+import { ERROR_MESSAGES, STEP_TITLES } from './constants/first-access.constants';
+import { StepperComponent } from './components/stepper/stepper.component';
+import { PersonalInfoComponent } from './components/steps/personal-info/personal-info.component';
+import { ProfessionalInfoComponent } from './components/steps/professional-info/professional-info.component';
+import { SocialInfoComponent } from './components/steps/social-info/social-info.component';
+import { SecurityInfoComponent } from './components/steps/security-info/security-info.component';
+import { SuccessModalComponent } from './components/steps/success-modal/success-modal.component';
 
 @Component({
   selector: 'app-first-access',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, InputComponent, FormComponent],
+  imports: [
+    CommonModule, 
+    ReactiveFormsModule, 
+    StepperComponent,
+    PersonalInfoComponent,
+    ProfessionalInfoComponent,
+    SocialInfoComponent,
+    SecurityInfoComponent,
+    SuccessModalComponent
+  ],
   templateUrl: './first-access.component.html',
   styleUrl: './first-access.component.scss'
 })
@@ -36,10 +49,9 @@ export class FirstAccessComponent implements OnInit {
   professions: Profession[] = [];
   specialties: Specialty[] = [];
   subspecialties: Subspecialty[] = [];
-  brazilianStates = brazilianStates;
-  genderOptions = GENDER_OPTIONS;
   errorMessages = ERROR_MESSAGES;
-
+  stepTitles = STEP_TITLES;
+  currentUser: User = {} as User;
   personalInfoForm!: FormGroup;
   professionalInfoForm!: FormGroup;
   socialInfoForm!: FormGroup;
@@ -117,9 +129,9 @@ export class FirstAccessComponent implements OnInit {
   }
 
   private loadUserData(): void {
-    const currentUser = this.authService.currentUser;
-    if (currentUser) {
-      this.loadUserDataFromUser(currentUser);
+    this.currentUser = this.authService.currentUser!;
+    if (this.currentUser) {
+      this.loadUserDataFromUser(this.currentUser);
     } else {
       this.loadUserDataFromLocalStorage();
     }
@@ -136,7 +148,6 @@ export class FirstAccessComponent implements OnInit {
       }
     }
   }
-
   private loadUserDataFromUser(user: User): void {
     this.profilePictureUrl = user.picture_url || null;
     
@@ -232,10 +243,6 @@ export class FirstAccessComponent implements OnInit {
     }
   }
 
-  getStepTitle(step: number): string {
-    return STEP_TITLES[step as keyof typeof STEP_TITLES] || '';
-  }
-
   getCurrentFormGroup(): FormGroup {
     switch (this.currentStep) {
       case 1:
@@ -256,10 +263,6 @@ export class FirstAccessComponent implements OnInit {
     if (currentForm.valid && this.currentStep < this.totalSteps) {
       const formData = this.formatFormData(currentForm.getRawValue());
       this.currentStep++;
-
-      if(this.currentStep > 4) {
-        this.showModal = false;
-      }
       
       this.userService.updateUser(formData).subscribe({
         next: (response: UserUpdateApiResponse) => {
@@ -325,6 +328,7 @@ export class FirstAccessComponent implements OnInit {
     }
     if (this.currentStep === 2) {
       const professionalData = formData as ProfessionalInfoForm;
+      console.log(professionalData);
       return {
         profession_id: professionalData.profession,
         specialty_id: professionalData.specialty,
@@ -349,9 +353,17 @@ export class FirstAccessComponent implements OnInit {
       return {
         password: securityData.password,
         password_confirmation: securityData.confirmPassword,
-        pre_registered: true
+        // pre_registered: true
       };
     }
     return {};
+  }
+
+  onConfigureSchedule() {
+    console.log('Configuring schedule...');
+  }
+
+  onGoToDashboard() {
+    console.log('Navigating to dashboard...');
   }
 }

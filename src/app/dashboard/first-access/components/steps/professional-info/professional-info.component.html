@@ -1,0 +1,103 @@
+<app-form 
+  [formGroup]="formGroup" 
+  [errorMessages]="errorMessages"
+  [submitButtonText]="'Próximo'"
+  (formSubmit)="formSubmit.emit()"
+  [isNextButton]="true"
+  [showPreviousButton]="true"
+  (previous)="previous.emit()"
+  #professionalInfoFormComponent>
+  
+  <h4 class="fw-bold">Dados profissionais</h4>
+  <p class="text-muted mb-4">Agora conta um pouco sobre sua trajetória profissional!</p>
+  
+  <div class="mb-4">
+    <div class="row gy-3">
+      <div class="col-md-6">
+        <app-input 
+          label="Profissão" 
+          inputType="select"
+          [options]="professions"
+          optionLabel="name"
+          optionValue="id"
+          formControlName="profession"
+          (onChange)="onProfessionChange($event)"
+          bgColor="white"
+          [errorMessage]="professionalInfoFormComponent.getErrorMessage('profession')">
+        </app-input>
+      </div>
+      <div class="col-md-6">
+        <app-input 
+          label="Especialidade" 
+          inputType="select"
+          [options]="specialties"
+          optionLabel="name"
+          optionValue="id"
+          formControlName="specialty"
+          (onChange)="onSpecialtyChange($event)"
+          bgColor="white"
+          [errorMessage]="professionalInfoFormComponent.getErrorMessage('specialty')">
+        </app-input>
+      </div>
+    </div>
+    
+    <div class="row gy-3 mt-1">
+      <div class="col-md-6">
+        <app-input 
+          label="Sub-especialidades" 
+          inputType="select"
+          [options]="subspecialties"
+          optionLabel="name"
+          optionValue="id"
+          formControlName="subspecialties"
+          bgColor="white"
+          [errorMessage]="professionalInfoFormComponent.getErrorMessage('subspecialties')">
+        </app-input>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Conselho de classe <span class="text-secondary">(CRM, CREFITO, CRO,CRP...)</span></label>
+        <div class="row g-2">
+          <div class="col-5">
+            <app-input 
+              placeholder="Estado"
+              inputType="select"
+              [options]="brazilianStates"
+              optionValue="value"
+              optionLabel="label"
+              formControlName="councilState"
+              bgColor="white"
+              [errorMessage]="professionalInfoFormComponent.getErrorMessage('councilState')">
+            </app-input>
+          </div>
+          <div class="col">
+            <app-input 
+              formControlName="councilNumber"
+              bgColor="white"
+              [errorMessage]="professionalInfoFormComponent.getErrorMessage('councilNumber')">
+            </app-input>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="row gy-3 mt-1">
+      <div class="col-md-6">
+        <app-input 
+          label="CNPJ" 
+          mask="00.000.000/0000-00"
+          formControlName="cnpj"
+          bgColor="white"
+          [errorMessage]="professionalInfoFormComponent.getErrorMessage('cnpj')">
+        </app-input>
+      </div>
+      <div class="col-md-6">
+        <app-input 
+          label="Nome fantasia" 
+          formControlName="companyName"
+          bgColor="white"
+          [errorMessage]="professionalInfoFormComponent.getErrorMessage('companyName')">
+        </app-input>
+      </div>
+    </div>
+  </div>
+</app-form>
