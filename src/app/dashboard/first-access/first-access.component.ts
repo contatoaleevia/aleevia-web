@@ -56,7 +56,6 @@ export class FirstAccessComponent implements OnInit {
 
   showModal = true;
   currentStep = 1;
-  totalSteps = 5;
   isUploading = false;
   profilePictureUrl: string | null = null;
   tempProfilePictureUrl: string | null = null;
@@ -180,7 +179,7 @@ export class FirstAccessComponent implements OnInit {
 
   nextStep(): void {
     const currentForm = this.getCurrentFormGroup();
-    if (currentForm.valid && this.currentStep < this.totalSteps) {
+    if (currentForm.valid && this.currentStep < 5) {
       const formData = this.formatFormData(currentForm.getRawValue());
       this.currentStep++;
       

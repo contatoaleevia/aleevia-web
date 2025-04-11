@@ -10,7 +10,6 @@ import { CommonModule } from '@angular/common';
 })
 export class StepperComponent {
   @Input() currentStep: number = 1;
-  @Input() totalSteps: number = 4;
   @Input() stepTitles: { [key: number]: string } = {};
 
   getStepTitle(step: number): string {
