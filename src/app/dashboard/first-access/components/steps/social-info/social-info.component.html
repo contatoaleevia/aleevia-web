@@ -13,17 +13,17 @@
   
   <div class="mb-4">
     <div class="d-flex justify-content-center mb-4">
-      <div class="position-relative" style="cursor: pointer;" (click)="changeProfileImage.emit()">
-        <div class="rounded-circle bg-light d-flex align-items-center justify-content-center" style="width: 100px; height: 100px; overflow: hidden;">
-          <img *ngIf="!isUploading" [src]="profilePictureUrl || 'assets/images/default-avatar.png'" alt="Profile Avatar" class="img-fluid" style="object-fit: cover; width: 100%; height: 100%;">
+      <div class="position-relative cursor-pointer" (click)="changeProfileImage.emit()">
+        <div class="rounded-circle bg-light d-flex align-items-center justify-content-center w-100 h-100 overflow-hidden">
+          <img *ngIf="!isUploading" [src]="profilePictureUrl || 'assets/images/default-avatar.png'" alt="Profile Avatar" class="img-fluid w-100 h-100 object-fit-cover">
           <div *ngIf="isUploading" class="d-flex align-items-center justify-content-center w-100 h-100">
             <div class="spinner-border text-primary" role="status">
               <span class="visually-hidden">Carregando...</span>
             </div>
           </div>
         </div>
-        <div class="btn btn-primary rounded-circle position-absolute bottom-0 end-0 d-flex align-items-center justify-content-center" style="width: 30px; height: 30px; padding: 0; pointer-events: none;">
-          <img src="assets/images/edit-pen-icon.png" alt="Edit Profile" style="width: 12px; height: 12px;">
+        <div class="pen btn btn-primary rounded-circle position-absolute bottom-0 end-0 d-flex align-items-center justify-content-center">
+          <img class="pen-icon" src="assets/images/edit-pen-icon.png" alt="Edit Profile">
         </div>
       </div>
     </div>
