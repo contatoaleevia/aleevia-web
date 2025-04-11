@@ -1,10 +1,10 @@
 import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { InputComponent } from '../../../../../shared/components/input/input.component';
-import { FormComponent } from '../../../../../shared/components/form/form.component';
-import { brazilianStates } from '../../../../../shared/data/brazilian-states';
-import { Profession, Specialty, Subspecialty } from '../../../../../shared/models/profession.model';
+import { InputComponent } from '@shared/components/input/input.component';
+import { FormComponent } from '@shared/components/form/form.component';
+import { brazilianStates } from '@shared/data/brazilian-states';
+import { Profession, Specialty, Subspecialty } from '@shared/models/profession.model';
 
 @Component({
   selector: 'app-professional-info',

@@ -2,10 +2,10 @@ import { inject } from '@angular/core';
 import { ResolveFn, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
-import { User } from '../models/auth.model';
-import { AuthService } from '../services/auth.service';
+import { User } from '@shared/models/user.model';
+import { AuthService } from '@auth/services/auth.service';
 
-export const userResolver: ResolveFn<User | null> = (route, state) => {
+export const userResolver: ResolveFn<User | null> = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
   

@@ -1,5 +1,5 @@
-import { PersonalInfoForm, ProfessionalInfoForm, SocialInfoForm, SecurityForm } from '../models/first-access.model';
-import { UserUpdateRequest } from '../../../shared/models/user.model';
+import { PersonalInfoForm, ProfessionalInfoForm, SocialInfoForm, SecurityForm } from '@dashboard/first-access/models/first-access.model';
+import { UserUpdateRequest } from '@shared/models/user.model';
 
 export class FormDataFormatter {
   static formatFormData(

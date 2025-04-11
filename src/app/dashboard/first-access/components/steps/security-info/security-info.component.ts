@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { InputComponent } from '../../../../../shared/components/input/input.component';
-import { FormComponent } from '../../../../../shared/components/form/form.component';
+import { InputComponent } from '@shared/components/input/input.component';
+import { FormComponent } from '@shared/components/form/form.component';
 
 @Component({
   selector: 'app-security-info',

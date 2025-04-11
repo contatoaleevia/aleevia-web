@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { finalize } from 'rxjs';
-import { InputComponent } from '../../shared/components/input/input.component';
-import { ButtonComponent } from '../../shared/components/button/button.component';
-import { AuthService } from '../services/auth.service';
-import { LoginRequest } from '../models/auth.model';
+import { InputComponent } from '@shared/components/input/input.component';
+import { ButtonComponent } from '@shared/components/button/button.component';
+import { AuthService } from '@auth/services/auth.service';
+import { LoginRequest } from '@auth/models/auth.model';
 
 @Component({
   selector: 'app-login',

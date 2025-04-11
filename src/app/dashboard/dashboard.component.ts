@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { FirstAccessComponent } from './first-access/first-access.component';
+import { FirstAccessComponent } from '@dashboard/first-access/first-access.component';
 import { CommonModule } from '@angular/common';
-import { User } from '../shared/models/user.model';
+import { User } from '@shared/models/user.model';
 
 @Component({
   selector: 'app-dashboard',

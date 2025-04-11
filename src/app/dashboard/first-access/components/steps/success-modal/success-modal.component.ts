@@ -1,6 +1,6 @@
 import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { User } from '../../../../../shared/models/user.model';
+import { User } from '@shared/models/user.model';
 import confetti from 'canvas-confetti';
 
 @Component({

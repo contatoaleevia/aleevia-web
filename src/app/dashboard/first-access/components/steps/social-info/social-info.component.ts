@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { InputComponent } from '../../../../../shared/components/input/input.component';
-import { FormComponent } from '../../../../../shared/components/form/form.component';
+import { InputComponent } from '@shared/components/input/input.component';
+import { FormComponent } from '@shared/components/form/form.component';
 
 @Component({
   selector: 'app-social-info',
@@ -18,6 +18,6 @@ export class SocialInfoComponent {
   @Input() isUploading: boolean = false;
   @Output() formSubmit = new EventEmitter<void>();
   @Output() previous = new EventEmitter<void>();
-  @Output() profileImageChange = new EventEmitter<void>();
+  @Output() changeProfileImage = new EventEmitter<void>();
   @ViewChild('socialInfoFormComponent') socialInfoFormComponent!: FormComponent;
 }

@@ -3,9 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 
-import { AuthService } from '../../auth/services/auth.service';
-import { ProfessionsService } from '../../shared/services/professions.service';
-import { UserService } from '../../shared/services/user.service';
+import { AuthService } from '@auth/services/auth.service';
+import { ProfessionsService } from '@shared/services/professions.service';
+import { UserService } from '@shared/services/user.service';
+import { Profession, Specialty, Subspecialty, ProfessionsResponse } from '@shared/models/profession.model';
+import { User, FileUploadResponse, UserUpdateRequest, UserUpdateApiResponse } from '@shared/models/user.model';
 
 import { 
   PersonalInfoForm, 
@@ -16,21 +18,19 @@ import {
   ProfessionalInfoFormControls,
   SocialInfoFormControls,
   SecurityFormControls
-} from './models/first-access.model';
-import { Profession, Specialty, Subspecialty, ProfessionsResponse } from '../../shared/models/profession.model';
-import { User, FileUploadResponse, UserUpdateRequest, UserUpdateApiResponse } from '../../shared/models/user.model';
+} from '@dashboard/first-access/models/first-access.model';
 
-import { ERROR_MESSAGES, STEP_TITLES } from './constants/first-access.constants';
+import { ERROR_MESSAGES, STEP_TITLES } from '@dashboard/first-access/constants/first-access.constants';
 
-import { StepperComponent } from './components/stepper/stepper.component';
-import { PersonalInfoComponent } from './components/steps/personal-info/personal-info.component';
-import { ProfessionalInfoComponent } from './components/steps/professional-info/professional-info.component';
-import { SocialInfoComponent } from './components/steps/social-info/social-info.component';
-import { SecurityInfoComponent } from './components/steps/security-info/security-info.component';
-import { SuccessModalComponent } from './components/steps/success-modal/success-modal.component';
+import { StepperComponent } from '@dashboard/first-access/components/stepper/stepper.component';
+import { PersonalInfoComponent } from '@dashboard/first-access/components/steps/personal-info/personal-info.component';
+import { ProfessionalInfoComponent } from '@dashboard/first-access/components/steps/professional-info/professional-info.component';
+import { SocialInfoComponent } from '@dashboard/first-access/components/steps/social-info/social-info.component';
+import { SecurityInfoComponent } from '@dashboard/first-access/components/steps/security-info/security-info.component';
+import { SuccessModalComponent } from '@dashboard/first-access/components/steps/success-modal/success-modal.component';
 
-import { FormInitializers } from './utils/form-initializers';
-import { FormDataFormatter } from './utils/form-data-formatter';
+import { FormInitializers } from '@dashboard/first-access/utils/form-initializers';
+import { FormDataFormatter } from '@dashboard/first-access/utils/form-data-formatter';
 
 @Component({
   selector: 'app-first-access',

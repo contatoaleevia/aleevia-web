@@ -1,5 +1,5 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { FormValidators } from '../../../shared/validators/form.validators';
+import { FormValidators } from '@shared/validators/form.validators';
 
 export class FormInitializers {
   static initPersonalInfoForm(fb: FormBuilder, currentUserCpf?: string): FormGroup {
