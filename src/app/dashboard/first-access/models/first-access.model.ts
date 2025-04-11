@@ -67,4 +67,5 @@ export interface SocialInfoFormControls {
 export interface SecurityFormControls {
   password: AbstractControl<string>;
   confirmPassword: AbstractControl<string>;
+  pre_register: AbstractControl<boolean>;
 } 
