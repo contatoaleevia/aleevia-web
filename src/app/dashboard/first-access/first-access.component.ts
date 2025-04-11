@@ -1,9 +1,8 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../auth/services/auth.service';
 import { BehaviorSubject } from 'rxjs';
-import { brazilianStates } from '../../shared/data/brazilian-states';
 import { PersonalInfoForm, ProfessionalInfoForm, SocialInfoForm, SecurityForm } from './models/first-access.model';
 import { ProfessionsService } from '../../shared/services/professions.service';
 import { UserService } from '../../shared/services/user.service';
@@ -16,6 +15,7 @@ import { ProfessionalInfoComponent } from './components/steps/professional-info/
 import { SocialInfoComponent } from './components/steps/social-info/social-info.component';
 import { SecurityInfoComponent } from './components/steps/security-info/security-info.component';
 import { SuccessModalComponent } from './components/steps/success-modal/success-modal.component';
+import { FormValidators } from '../../shared/validators/form.validators';
 
 @Component({
   selector: 'app-first-access',
@@ -52,6 +52,7 @@ export class FirstAccessComponent implements OnInit {
   errorMessages = ERROR_MESSAGES;
   stepTitles = STEP_TITLES;
   currentUser: User = {} as User;
+
   personalInfoForm!: FormGroup;
   professionalInfoForm!: FormGroup;
   socialInfoForm!: FormGroup;
@@ -74,7 +75,7 @@ export class FirstAccessComponent implements OnInit {
 
   private initPersonalInfoForm(): void {
     this.personalInfoForm = this.fb.group({
-      cpf: [{ value: '', disabled: false }, [Validators.required, this.cpfMaskValidator]],
+      cpf: [{ value: '', disabled: false }, [Validators.required, FormValidators.cpfMaskValidator]],
       full_name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', Validators.required],
@@ -113,19 +114,7 @@ export class FirstAccessComponent implements OnInit {
     this.securityForm = this.fb.group({
       password: ['', [Validators.required, Validators.minLength(8)]],
       confirmPassword: ['', Validators.required]
-    }, { validators: this.passwordMatchValidator });
-  }
-
-  private passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
-    const password = control.get('password')?.value;
-    const confirmPassword = control.get('confirmPassword')?.value;
-    return password === confirmPassword ? null : { mismatch: true };
-  }
-
-  private cpfMaskValidator(control: AbstractControl): ValidationErrors | null {
-    const cpf = control.value;
-    const cpfPattern = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
-    return cpfPattern.test(cpf) ? null : { invalidCpf: true };
+    }, { validators: FormValidators.passwordMatchValidator });
   }
 
   private loadUserData(): void {
