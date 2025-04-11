@@ -36,6 +36,7 @@ export interface SocialInfoForm {
 export interface SecurityForm {
   password: string;
   confirmPassword: string;
+  pre_register: boolean;
 }
 
 export interface PersonalInfoFormControls {
