@@ -1,0 +1,9 @@
+<div class="text-center">
+  <h2 class="fw-bold">Bem vindo ao time Aleevia, {{currentUser.preferred_name}}!</h2>
+  <img src="assets/images/high-five-success.png" alt="Success" class="my-4">
+  <p class="text-muted">Agora é só começar a organizar sua rotina do seu jeito.<br>Escolha como quer começar:</p>
+  <div class="d-flex justify-content-center mt-4">
+    <button class="btn btn-primary me-2" (click)="configureSchedule.emit()">Configurar agenda</button>
+    <button class="btn btn-outline-primary" (click)="goToDashboard.emit()">Ir para a Dashboard</button>
+  </div>
+</div>

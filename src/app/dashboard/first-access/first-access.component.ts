@@ -1,22 +1,50 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { InputComponent } from '../../shared/components/input/input.component';
-import { FormComponent } from '../../shared/components/form/form.component';
-import { AuthService } from '../../auth/services/auth.service';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { brazilianStates } from '../../shared/data/brazilian-states';
-import { PersonalInfoForm, ProfessionalInfoForm, SocialInfoForm, SecurityForm } from './models/first-access.model';
-import { ProfessionsService } from '../../shared/services/professions.service';
-import { UserService } from '../../shared/services/user.service';
-import { Profession, Specialty, Subspecialty, ProfessionsResponse } from '../../shared/models/profession.model';
-import { User, FileUploadResponse, UserUpdateRequest, UserUpdateApiResponse } from '../../shared/models/user.model';
-import { GENDER_OPTIONS, ERROR_MESSAGES, STEP_TITLES } from './constants/first-access.constants';
+
+import { AuthService } from '@auth/services/auth.service';
+import { ProfessionsService } from '@shared/services/professions.service';
+import { UserService } from '@shared/services/user.service';
+import { Profession, Specialty, Subspecialty, ProfessionsResponse } from '@shared/models/profession.model';
+import { User, FileUploadResponse, UserUpdateRequest, UserUpdateApiResponse } from '@shared/models/user.model';
+
+import { 
+  PersonalInfoForm, 
+  ProfessionalInfoForm, 
+  SocialInfoForm, 
+  SecurityForm,
+  PersonalInfoFormControls,
+  ProfessionalInfoFormControls,
+  SocialInfoFormControls,
+  SecurityFormControls
+} from '@dashboard/first-access/models/first-access.model';
+
+import { ERROR_MESSAGES, STEP_TITLES } from '@dashboard/first-access/constants/first-access.constants';
+
+import { StepperComponent } from '@dashboard/first-access/components/stepper/stepper.component';
+import { PersonalInfoComponent } from '@dashboard/first-access/components/steps/personal-info/personal-info.component';
+import { ProfessionalInfoComponent } from '@dashboard/first-access/components/steps/professional-info/professional-info.component';
+import { SocialInfoComponent } from '@dashboard/first-access/components/steps/social-info/social-info.component';
+import { SecurityInfoComponent } from '@dashboard/first-access/components/steps/security-info/security-info.component';
+import { SuccessModalComponent } from '@dashboard/first-access/components/steps/success-modal/success-modal.component';
+
+import { FormInitializers } from '@dashboard/first-access/utils/form-initializers';
+import { FormDataFormatter } from '@dashboard/first-access/utils/form-data-formatter';
 
 @Component({
   selector: 'app-first-access',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, InputComponent, FormComponent],
+  imports: [
+    CommonModule, 
+    ReactiveFormsModule, 
+    StepperComponent,
+    PersonalInfoComponent,
+    ProfessionalInfoComponent,
+    SocialInfoComponent,
+    SecurityInfoComponent,
+    SuccessModalComponent
+  ],
   templateUrl: './first-access.component.html',
   styleUrl: './first-access.component.scss'
 })
@@ -27,25 +55,27 @@ export class FirstAccessComponent implements OnInit {
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly userService = inject(UserService);
 
-  showModal = true;
-  currentStep = 1;
-  profilePictureUrl: string | null = null;
-  tempProfilePictureUrl: string | null = null;
-  isUploading = false;
-  professions: Profession[] = [];
-  specialties: Specialty[] = [];
-  subspecialties: Subspecialty[] = [];
-  brazilianStates = brazilianStates;
-  genderOptions = GENDER_OPTIONS;
-  errorMessages = ERROR_MESSAGES;
-
-  personalInfoForm!: FormGroup;
-  professionalInfoForm!: FormGroup;
-  socialInfoForm!: FormGroup;
-  securityForm!: FormGroup;
+  personalInfoForm!: FormGroup<PersonalInfoFormControls>;
+  professionalInfoForm!: FormGroup<ProfessionalInfoFormControls>;
+  socialInfoForm!: FormGroup<SocialInfoFormControls>;
+  securityForm!: FormGroup<SecurityFormControls>;
 
   private userCpfSubject = new BehaviorSubject<string>('');
   userCpf$ = this.userCpfSubject.asObservable();
+
+  showModal: boolean = true;
+  currentStep: number = 1;
+  isUploading: boolean = false;
+  profilePictureUrl: string | null = null;
+  tempProfilePictureUrl: string | null = null;
+
+  currentUser: User = {} as User;
+  professions: Profession[] = [];
+  specialties: Specialty[] = [];
+  subspecialties: Subspecialty[] = [];
+
+  errorMessages: { [key: string]: string } = ERROR_MESSAGES;
+  stepTitles: { [key: number]: string } = STEP_TITLES;
 
   ngOnInit(): void {
     this.initForms();
@@ -53,72 +83,16 @@ export class FirstAccessComponent implements OnInit {
   }
 
   private initForms(): void {
-    this.initPersonalInfoForm();
-    this.initProfessionalInfoForm();
-    this.initSocialInfoForm();
-    this.initSecurityForm();
-  }
-
-  private initPersonalInfoForm(): void {
-    this.personalInfoForm = this.fb.group({
-      cpf: [{ value: '', disabled: false }, [Validators.required, this.cpfMaskValidator]],
-      full_name: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      phone: ['', Validators.required],
-      gender: [''],
-      preferred_name: ['']
-    });
-
-    const currentUser = this.authService.currentUser;
-    if (currentUser?.cpf) {
-      this.personalInfoForm.get('cpf')?.disable();
-      this.personalInfoForm.patchValue({ cpf: currentUser.cpf });
-    }
-  }
-
-  private initProfessionalInfoForm(): void {
-    this.professionalInfoForm = this.fb.group({
-      profession: ['', Validators.required],
-      specialty: [{ value: '', disabled: true }, Validators.required],
-      subspecialties: [{ value: '', disabled: true }],
-      councilState: ['', Validators.required],
-      councilNumber: ['', Validators.required],
-      cnpj: ['', Validators.required],
-      companyName: ['', Validators.required]
-    });
-  }
-
-  private initSocialInfoForm(): void {
-    this.socialInfoForm = this.fb.group({
-      website: [''],
-      instagram: [''],
-      about: ['']
-    });
-  }
-
-  private initSecurityForm(): void {
-    this.securityForm = this.fb.group({
-      password: ['', [Validators.required, Validators.minLength(8)]],
-      confirmPassword: ['', Validators.required]
-    }, { validators: this.passwordMatchValidator });
-  }
-
-  private passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
-    const password = control.get('password')?.value;
-    const confirmPassword = control.get('confirmPassword')?.value;
-    return password === confirmPassword ? null : { mismatch: true };
-  }
-
-  private cpfMaskValidator(control: AbstractControl): ValidationErrors | null {
-    const cpf = control.value;
-    const cpfPattern = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
-    return cpfPattern.test(cpf) ? null : { invalidCpf: true };
+    this.personalInfoForm = FormInitializers.initPersonalInfoForm(this.fb, this.currentUser?.cpf);
+    this.professionalInfoForm = FormInitializers.initProfessionalInfoForm(this.fb);
+    this.socialInfoForm = FormInitializers.initSocialInfoForm(this.fb);
+    this.securityForm = FormInitializers.initSecurityForm(this.fb);
   }
 
   private loadUserData(): void {
-    const currentUser = this.authService.currentUser;
-    if (currentUser) {
-      this.loadUserDataFromUser(currentUser);
+    this.currentUser = this.authService.currentUser!;
+    if (this.currentUser) {
+      this.loadUserDataFromUser(this.currentUser);
     } else {
       this.loadUserDataFromLocalStorage();
     }
@@ -167,30 +141,78 @@ export class FirstAccessComponent implements OnInit {
     });
 
     if (user.specialty_id) {
-      this.professionsService.getProfessions().subscribe({
-        next: (response: ProfessionsResponse) => {
-          this.professions = response.professions || [];
-          for (const profession of this.professions) {
-            const specialty = profession.specialties.find(s => s.id === user.specialty_id);
-            if (specialty) {
-              this.professionalInfoForm.patchValue({ profession: profession.id });
-              this.onProfessionChange(profession.id, true);
-              
-              this.professionalInfoForm.patchValue({ specialty: specialty.id });
-              this.onSpecialtyChange(specialty.id, true);
-              
-              if (user.subspecialty_id) {
-                this.professionalInfoForm.patchValue({ subspecialties: user.subspecialty_id });
-              }
-              break;
+      this.loadProfessionsData(user);
+    }
+  }
+
+  private loadProfessionsData(user: User): void {
+    this.professionsService.getProfessions().subscribe({
+      next: (response: ProfessionsResponse) => {
+        this.professions = response.professions || [];
+        for (const profession of this.professions) {
+          const specialty = profession.specialties.find(s => s.id === user.specialty_id);
+          if (specialty) {
+            this.professionalInfoForm.patchValue({ profession: profession.id });
+            this.onProfessionChange(profession.id, true);
+            
+            this.professionalInfoForm.patchValue({ specialty: specialty.id });
+            this.onSpecialtyChange(specialty.id, true);
+            
+            if (user.subspecialty_id) {
+              this.professionalInfoForm.patchValue({ subspecialties: user.subspecialty_id });
             }
+            break;
           }
+        }
+      },
+      error: (error) => {
+        console.error('Erro ao carregar profissões:', error);
+      }
+    });
+  }
+
+  getCurrentFormGroup(): FormGroup {
+    switch (this.currentStep) {
+      case 1:
+        return this.personalInfoForm;
+      case 2:
+        return this.professionalInfoForm;
+      case 3:
+        return this.socialInfoForm;
+      case 4:
+        return this.securityForm;
+      default:
+        return this.personalInfoForm;
+    }
+  }
+
+  nextStep(): void {
+    const currentForm = this.getCurrentFormGroup();
+    if (currentForm.valid && this.currentStep < 5) {
+      const formData = this.formatFormData(currentForm.getRawValue());
+      this.currentStep++;
+      
+      this.userService.updateUser(formData).subscribe({
+        next: (response: UserUpdateApiResponse) => {
+          localStorage.setItem('currentUser', JSON.stringify(response.user));
+          this.cdr.detectChanges();
         },
         error: (error) => {
-          console.error('Erro ao carregar profissões:', error);
+          console.error('Erro ao atualizar usuário:', error);
         }
       });
     }
+  }
+
+  previousStep(): void {
+    if (this.currentStep > 1) {
+      this.currentStep--;
+      this.cdr.detectChanges();
+    }
+  }
+
+  private formatFormData(formData: PersonalInfoForm | ProfessionalInfoForm | SocialInfoForm | SecurityForm): UserUpdateRequest {
+    return FormDataFormatter.formatFormData(formData, this.currentStep, this.tempProfilePictureUrl);
   }
 
   onProfessionChange(professionId: string, keepValues: boolean = false): void {
@@ -231,54 +253,6 @@ export class FirstAccessComponent implements OnInit {
     }
   }
 
-  getStepTitle(step: number): string {
-    return STEP_TITLES[step as keyof typeof STEP_TITLES] || '';
-  }
-
-  getCurrentFormGroup(): FormGroup {
-    switch (this.currentStep) {
-      case 1:
-        return this.personalInfoForm;
-      case 2:
-        return this.professionalInfoForm;
-      case 3:
-        return this.socialInfoForm;
-      case 4:
-        return this.securityForm;
-      default:
-        return this.personalInfoForm;
-    }
-  }
-
-  nextStep(): void {
-    const currentForm = this.getCurrentFormGroup();
-    if (currentForm.valid && this.currentStep < 5) {
-      const formData = this.formatFormData(currentForm.getRawValue());
-      this.currentStep++;
-
-      if(this.currentStep > 4) {
-        this.showModal = false;
-      }
-      
-      this.userService.updateUser(formData).subscribe({
-        next: (response: UserUpdateApiResponse) => {
-          localStorage.setItem('currentUser', JSON.stringify(response.user));
-          this.cdr.detectChanges();
-        },
-        error: (error) => {
-          console.error('Erro ao atualizar usuário:', error);
-        }
-      });
-    }
-  }
-
-  previousStep(): void {
-    if (this.currentStep > 1) {
-      this.currentStep--;
-      this.cdr.detectChanges();
-    }
-  }
-
   changeProfileImage(): void {
     const input = document.createElement('input');
     input.type = 'file';
@@ -310,47 +284,11 @@ export class FirstAccessComponent implements OnInit {
     input.click();
   }
 
-  private formatFormData(formData: PersonalInfoForm | ProfessionalInfoForm | SocialInfoForm | SecurityForm): UserUpdateRequest {
-    if (this.currentStep === 1) {
-      const personalData = formData as PersonalInfoForm;
-      return {
-        cpf: personalData.cpf,
-        full_name: personalData.full_name,
-        email: personalData.email,
-        phone: personalData.phone,
-        gender: personalData.gender,
-        preferred_name: personalData.preferred_name
-      };
-    }
-    if (this.currentStep === 2) {
-      const professionalData = formData as ProfessionalInfoForm;
-      return {
-        profession_id: professionalData.profession,
-        specialty_id: professionalData.specialty,
-        subspecialty_id: professionalData.subspecialties,
-        crm_state: professionalData.councilState,
-        crm_number: professionalData.councilNumber,
-        cnpj: professionalData.cnpj,
-        legal_name: professionalData.companyName
-      };
-    }
-    if (this.currentStep === 3) {
-      const socialData = formData as SocialInfoForm;
-      return {
-        website: socialData.website,
-        instagram: socialData.instagram,
-        bio: socialData.about,
-        picture_url: this.tempProfilePictureUrl || null
-      };
-    }
-    if (this.currentStep === 4) {
-      const securityData = formData as SecurityForm;
-      return {
-        password: securityData.password,
-        password_confirmation: securityData.confirmPassword,
-        pre_registered: true
-      };
-    }
-    return {};
+  onConfigureSchedule(): void {
+    console.log('Configuring schedule...');
+  }
+
+  onGoToDashboard(): void {
+    console.log('Navigating to dashboard...');
   }
 }

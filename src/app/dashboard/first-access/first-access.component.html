@@ -2,320 +2,69 @@
 
 <div class="d-flex align-items-center justify-content-center position-fixed top-0 start-0 w-100 h-100" style="z-index: 1001;" [class.d-flex]="showModal" [class.d-none]="!showModal">
   <div class="container">
-    <div class="card shadow mx-auto" style="max-width: 800px;">
-      <div class="card-body p-4">
-        <div class="text-center mb-4">
+    <div class="card shadow mx-auto">
+      <div class="card-body p-5">
+        <div class="text-center mb-4" *ngIf="currentStep !== 5">
           <h2 class="fw-bold">Junte-se ao time Aleevia</h2>
           <p class="text-muted">Preencha o formulário abaixo para se cadastrar na Aleevia.</p>
         </div>
         
-        <div class="mb-4">
-          <div class="d-flex align-items-center justify-content-center">
-            <ng-container *ngFor="let step of [1, 2, 3, 4]; let i = index; let last = last">
-              <div class="d-flex flex-column align-items-center">
-                <div class="stepper-step-circle d-flex align-items-center justify-content-center fw-bold" 
-                     [class.active]="currentStep >= step">{{ step }}</div>
-                <div class="stepper-text text-center mt-2" 
-                     [class.active]="currentStep >= step">{{ getStepTitle(step) }}</div>
-              </div>
-              
-              <div class="stepper-line mx-3" 
-                   [class.active]="currentStep >= (step + 1)" 
-                   *ngIf="!last"></div>
-            </ng-container>
-          </div>
-        </div>
+        <app-stepper 
+          *ngIf="currentStep !== 5"
+          [currentStep]="currentStep"
+          [stepTitles]="stepTitles">
+        </app-stepper>
         
         <!-- Personal Info Form -->
-        <app-form 
-          *ngIf="currentStep === 1" 
-          [formGroup]="personalInfoForm" 
+        <app-personal-info 
+          *ngIf="currentStep === 1"
+          [formGroup]="personalInfoForm"
           [errorMessages]="errorMessages"
-          [submitButtonText]="'Próximo'"
-          (formSubmit)="nextStep()"
-          [isNextButton]="true"
-          #personalInfoFormComponent>
-          
-          <h4 class="fw-bold">Dados pessoais</h4>
-          <p class="text-muted mb-4">Vamos começar? Conta pra gente quem é você!</p>
-          
-          <div class="mb-4">
-            <div class="row gy-3">
-              <div class="col-md-6">
-                <app-input 
-                  label="CPF" 
-                  formControlName="cpf" 
-                  bgColor="white" 
-                  mask="000.000.000-00"
-                  [errorMessage]="personalInfoFormComponent.getErrorMessage('cpf')">
-                </app-input>
-              </div>
-              <div class="col-md-6">
-                <app-input 
-                  label="Nome completo" 
-                  formControlName="full_name" 
-                  bgColor="white"
-                  [errorMessage]="personalInfoFormComponent.getErrorMessage('full_name')">
-                </app-input>
-              </div>
-            </div>
-            
-            <div class="row gy-3 mt-1">
-              <div class="col-md-6">
-                <app-input 
-                  label="E-mail" 
-                  type="email" 
-                  formControlName="email" 
-                  bgColor="white"
-                  [errorMessage]="personalInfoFormComponent.getErrorMessage('email')">
-                </app-input>
-              </div>
-              <div class="col-md-6">
-                <app-input 
-                  label="Telefone" 
-                  mask="(00) 00000-0000" 
-                  formControlName="phone" 
-                  bgColor="white"
-                  [errorMessage]="personalInfoFormComponent.getErrorMessage('phone')">
-                </app-input>
-              </div>
-            </div>
-            
-            <div class="row gy-3 mt-1">
-              <div class="col-md-6">
-                <app-input 
-                  label="Gênero" 
-                  inputType="select"
-                  [options]="genderOptions"
-                  optionLabel="label"
-                  optionValue="value"
-                  formControlName="gender"
-                  placeholder="Selecione seu gênero"
-                  bgColor="white"
-                  [errorMessage]="personalInfoFormComponent.getErrorMessage('gender')">
-                </app-input>
-              </div>
-              <div class="col-md-6">
-                <app-input 
-                  label="Como gostaria de ser chamado?" 
-                  formControlName="preferred_name" 
-                  bgColor="white"
-                  [errorMessage]="personalInfoFormComponent.getErrorMessage('preferred_name')">
-                </app-input>
-              </div>
-            </div>
-          </div>
-        </app-form>
+          (formSubmit)="nextStep()">
+        </app-personal-info>
         
         <!-- Professional Info Form -->
-        <app-form 
-          *ngIf="currentStep === 2" 
-          [formGroup]="professionalInfoForm" 
+        <app-professional-info 
+          *ngIf="currentStep === 2"
+          [formGroup]="professionalInfoForm"
           [errorMessages]="errorMessages"
-          [submitButtonText]="'Próximo'"
+          [professions]="professions"
+          [specialties]="specialties"
+          [subspecialties]="subspecialties"
           (formSubmit)="nextStep()"
-          [isNextButton]="true"
-          [showPreviousButton]="true"
           (previous)="previousStep()"
-          #professionalInfoFormComponent>
-          
-          <h4 class="fw-bold">Dados profissionais</h4>
-          <p class="text-muted mb-4">Agora conta um pouco sobre sua trajetória profissional!</p>
-          
-          <div class="mb-4">
-            <div class="row gy-3">
-              <div class="col-md-6">
-                <app-input 
-                  label="Profissão" 
-                  inputType="select"
-                  [options]="professions"
-                  optionLabel="name"
-                  optionValue="id"
-                  formControlName="profession"
-                  (onChange)="onProfessionChange($event)"
-                  bgColor="white"
-                  [errorMessage]="professionalInfoFormComponent.getErrorMessage('profession')">
-                </app-input>
-              </div>
-              <div class="col-md-6">
-                <app-input 
-                  label="Especialidade" 
-                  inputType="select"
-                  [options]="specialties"
-                  optionLabel="name"
-                  optionValue="id"
-                  formControlName="specialty"
-                  (onChange)="onSpecialtyChange($event)"
-                  bgColor="white"
-                  [errorMessage]="professionalInfoFormComponent.getErrorMessage('specialty')">
-                </app-input>
-              </div>
-            </div>
-            
-            <div class="row gy-3 mt-1">
-              <div class="col-md-6">
-                <app-input 
-                  label="Sub-especialidades" 
-                  inputType="select"
-                  [options]="subspecialties"
-                  optionLabel="name"
-                  optionValue="id"
-                  formControlName="subspecialties"
-                  bgColor="white"
-                  [errorMessage]="professionalInfoFormComponent.getErrorMessage('subspecialties')">
-                </app-input>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Conselho de classe <span class="text-secondary">(CRM, CREFITO, CRO,CRP...)</span></label>
-                <div class="row g-2">
-                  <div class="col-5">
-                    <app-input 
-                      placeholder="Estado"
-                      inputType="select"
-                      [options]="brazilianStates"
-                      optionValue="value"
-                      optionLabel="label"
-                      formControlName="councilState"
-                      bgColor="white"
-                      [errorMessage]="professionalInfoFormComponent.getErrorMessage('councilState')">
-                    </app-input>
-                  </div>
-                  <div class="col">
-                    <app-input 
-                      formControlName="councilNumber"
-                      bgColor="white"
-                      [errorMessage]="professionalInfoFormComponent.getErrorMessage('councilNumber')">
-                    </app-input>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div class="row gy-3 mt-1">
-              <div class="col-md-6">
-                <app-input 
-                  label="CNPJ" 
-                  mask="00.000.000/0000-00"
-                  formControlName="cnpj"
-                  bgColor="white"
-                  [errorMessage]="professionalInfoFormComponent.getErrorMessage('cnpj')">
-                </app-input>
-              </div>
-              <div class="col-md-6">
-                <app-input 
-                  label="Nome fantasia" 
-                  formControlName="companyName"
-                  bgColor="white"
-                  [errorMessage]="professionalInfoFormComponent.getErrorMessage('companyName')">
-                </app-input>
-              </div>
-            </div>
-          </div>
-        </app-form>
+          (professionChange)="onProfessionChange($event)"
+          (specialtyChange)="onSpecialtyChange($event)">
+        </app-professional-info>
         
         <!-- Social Info Form -->
-        <app-form 
-          *ngIf="currentStep === 3" 
-          [formGroup]="socialInfoForm" 
+        <app-social-info
+          *ngIf="currentStep === 3"
+          [formGroup]="socialInfoForm"
           [errorMessages]="errorMessages"
-          [submitButtonText]="'Próximo'"
+          [profilePictureUrl]="profilePictureUrl"
+          [isUploading]="isUploading"
           (formSubmit)="nextStep()"
-          [isNextButton]="true"
-          [showPreviousButton]="true"
           (previous)="previousStep()"
-          #socialInfoFormComponent>
-          
-          <h4 class="fw-bold">Seu perfil</h4>
-          <p class="text-muted mb-4">Queremos saber mais sobre sua forma de divulgação e como conhece-lo melhor</p>
-          
-          <div class="mb-4">
-            <div class="d-flex justify-content-center mb-4">
-              <div class="position-relative" style="cursor: pointer;" (click)="changeProfileImage()">
-                <div class="rounded-circle bg-light d-flex align-items-center justify-content-center" style="width: 100px; height: 100px; overflow: hidden;">
-                  <img *ngIf="!isUploading" [src]="profilePictureUrl || 'assets/images/default-avatar.png'" alt="Profile Avatar" class="img-fluid" style="object-fit: cover; width: 100%; height: 100%;">
-                  <div *ngIf="isUploading" class="d-flex align-items-center justify-content-center w-100 h-100">
-                    <div class="spinner-border text-primary" role="status">
-                      <span class="visually-hidden">Carregando...</span>
-                    </div>
-                  </div>
-                </div>
-                <div class="btn btn-primary rounded-circle position-absolute bottom-0 end-0 d-flex align-items-center justify-content-center" style="width: 30px; height: 30px; padding: 0; pointer-events: none;">
-                  <img src="assets/images/edit-pen-icon.png" alt="Edit Profile" style="width: 12px; height: 12px;">
-                </div>
-              </div>
-            </div>
-            
-            <div class="row gy-3 mt-1">
-              <div class="col-md-6">
-                <app-input 
-                  label="Site"
-                  formControlName="website"
-                  bgColor="white"
-                  [errorMessage]="socialInfoFormComponent.getErrorMessage('website')">
-                </app-input>
-              </div>
-              <div class="col-md-6">
-                <app-input 
-                  label="Instagram"
-                  formControlName="instagram"
-                  bgColor="white"
-                  [errorMessage]="socialInfoFormComponent.getErrorMessage('instagram')">
-                </app-input>
-              </div>
-            </div>
-            
-            <div class="mt-3">
-              <app-input 
-                label="Sobre você"
-                inputType="textarea"
-                [rows]="4"
-                formControlName="about"
-                bgColor="white"
-                [errorMessage]="socialInfoFormComponent.getErrorMessage('about')">
-                <p class="text-muted small">Conte o que você quer que seus pacientes saibam sobre você</p>
-              </app-input>
-            </div>
-          </div>
-        </app-form>
+          (changeProfileImage)="changeProfileImage()">
+        </app-social-info>
         
         <!-- Security Form -->
-        <app-form 
-          *ngIf="currentStep === 4" 
-          [formGroup]="securityForm" 
+        <app-security-info
+          *ngIf="currentStep === 4"
+          [formGroup]="securityForm"
           [errorMessages]="errorMessages"
-          submitButtonText="Finalizar"
           (formSubmit)="nextStep()"
-          [isNextButton]="true"
-          [showPreviousButton]="true"
-          [showSubmitButton]="true"
-          (previous)="previousStep()"
-          #securityFormComponent>
-          
-          <h4 class="fw-bold">Crie sua senha</h4>
-          <p class="text-muted mb-4">Qual senha você vai utilizar para entrar na Aleevia?</p>
-          
-          <div class="mb-4">
-            <div class="mb-3">
-              <app-input 
-                label="Digite sua senha"
-                type="password"
-                formControlName="password"
-                bgColor="white"
-                [errorMessage]="securityFormComponent.getErrorMessage('password')">
-              </app-input>
-            </div>
-            
-            <div class="mb-3">
-              <app-input 
-                label="Confirme a senha"
-                type="password"
-                formControlName="confirmPassword"
-                bgColor="white"
-                [errorMessage]="securityFormComponent.getErrorMessage('confirmPassword')">
-              </app-input>
-            </div>
-          </div>
-        </app-form>
+          (previous)="previousStep()">
+        </app-security-info>
+        
+        <!-- Success Modal -->
+        <app-success-modal
+          *ngIf="currentStep === 5"
+          [currentUser]="currentUser"
+          (configureSchedule)="onConfigureSchedule()"
+          (goToDashboard)="onGoToDashboard()">
+        </app-success-modal>
       </div>
     </div>
   </div>

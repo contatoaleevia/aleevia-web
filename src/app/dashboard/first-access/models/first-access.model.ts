@@ -1,3 +1,5 @@
+import { AbstractControl } from "@angular/forms";
+
 export interface FormData {
   personalInfo: PersonalInfoForm;
   professionalInfo: ProfessionalInfoForm;
@@ -28,10 +30,43 @@ export interface SocialInfoForm {
   website: string;
   instagram: string;
   about: string;
-  profileImage?: File;
+  profileImage?: string;
 }
 
 export interface SecurityForm {
   password: string;
   confirmPassword: string;
+  pre_register: boolean;
+}
+
+export interface PersonalInfoFormControls {
+  cpf: AbstractControl<string>;
+  full_name: AbstractControl<string>;
+  email: AbstractControl<string>;
+  phone: AbstractControl<string>;
+  gender: AbstractControl<string>;
+  preferred_name: AbstractControl<string>;
+}
+
+export interface ProfessionalInfoFormControls {
+  profession: AbstractControl<string>;
+  specialty: AbstractControl<string>;
+  subspecialties: AbstractControl<string>;
+  councilState: AbstractControl<string>;
+  councilNumber: AbstractControl<string>;
+  cnpj: AbstractControl<string>;
+  companyName: AbstractControl<string>;
+}
+
+export interface SocialInfoFormControls {
+  website: AbstractControl<string>;
+  instagram: AbstractControl<string>;
+  about: AbstractControl<string>;
+  profileImage?: AbstractControl<string>;
+}
+
+export interface SecurityFormControls {
+  password: AbstractControl<string>;
+  confirmPassword: AbstractControl<string>;
+  pre_register: AbstractControl<boolean>;
 } 

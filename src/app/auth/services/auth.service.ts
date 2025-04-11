@@ -2,10 +2,10 @@ import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { LoginRequest, LoginResponse } from '../models/auth.model';
-import { User } from '../../shared/models/user.model';
-import { ApiService } from '../../core/services/api.service';
-import { environment } from '../../../environments/environment';
+import { LoginRequest, LoginResponse } from '@auth/models/auth.model';
+import { User } from '@shared/models/user.model';
+import { ApiService } from '@core/services/api.service';
+import { environment } from '@environments/environment';
 import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
