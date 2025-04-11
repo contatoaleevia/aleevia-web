@@ -14,7 +14,7 @@
   <div class="mb-4">
     <div class="d-flex justify-content-center mb-4">
       <div class="position-relative cursor-pointer" (click)="changeProfileImage.emit()">
-        <div class="rounded-circle bg-light d-flex align-items-center justify-content-center w-100 h-100 overflow-hidden">
+        <div class="image-container rounded-circle bg-light d-flex align-items-center justify-content-center overflow-hidden">
           <img *ngIf="!isUploading" [src]="profilePictureUrl || 'assets/images/default-avatar.png'" alt="Profile Avatar" class="img-fluid w-100 h-100 object-fit-cover">
           <div *ngIf="isUploading" class="d-flex align-items-center justify-content-center w-100 h-100">
             <div class="spinner-border text-primary" role="status">
