@@ -2,12 +2,12 @@
   <h1>Em desenvolvimento</h1>
 
   <app-first-access
-    *ngIf="!currentUser.pre_registered"
+    *ngIf="currentUser.pre_registered"
     (configureSchedule)="onConfigureSchedule()"
   ></app-first-access>
 
   <div
-    *ngIf="showCalendarConfig && currentUser.google_token!"
+    *ngIf="showCalendarConfig && !currentUser.google_token!"
     class="modal-overlay"
   >
     <div class="modal-content text-center align-items-center">
