@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
@@ -49,6 +49,8 @@ import { FormDataFormatter } from '@dashboard/first-access/utils/form-data-forma
   styleUrl: './first-access.component.scss'
 })
 export class FirstAccessComponent implements OnInit {
+  @Output() configureSchedule = new EventEmitter<void>();
+
   private readonly authService = inject(AuthService);
   private readonly fb = inject(FormBuilder);
   private readonly professionsService = inject(ProfessionsService);

@@ -45,7 +45,7 @@ export class FormDataFormatter {
         return {
           password: securityData.password,
           password_confirmation: securityData.confirmPassword,
-          pre_registered: true
+          pre_registered: false
         };
       }
       default:

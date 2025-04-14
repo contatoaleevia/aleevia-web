@@ -8,7 +8,7 @@ export class FormInitializers {
       full_name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', Validators.required],
-      gender: [''],
+      gender: ['', Validators.required],
       preferred_name: ['']
     });
 
