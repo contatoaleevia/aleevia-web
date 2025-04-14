@@ -1,3 +1,21 @@
-<h1>Em desenvolvimento</h1>
+<div class="container">
+  <h1>Em desenvolvimento</h1>
 
-<app-first-access *ngIf="!currentUser.pre_registered"></app-first-access>
+  <app-first-access
+    *ngIf="!currentUser.pre_registered"
+    (configureSchedule)="onConfigureSchedule()"
+  ></app-first-access>
+
+  <div
+    *ngIf="showCalendarConfig && currentUser.google_token!"
+    class="modal-overlay"
+  >
+    <div class="modal-content text-center align-items-center">
+      <h2 class="mb-4">Vamos configurar sua agenda?</h2>
+      <img src="assets/images/calendar-icon.png" alt="Calendar" class="mb-4" />
+      <p class="text-muted mb-4">Qual agenda deseja conectar?</p>
+
+      <app-google-calendar></app-google-calendar>
+    </div>
+  </div>
+</div>

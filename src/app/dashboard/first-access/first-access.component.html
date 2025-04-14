@@ -62,7 +62,7 @@
         <app-success-modal
           *ngIf="currentStep === 5"
           [currentUser]="currentUser"
-          (configureSchedule)="onConfigureSchedule()"
+          (configureSchedule)="configureSchedule.emit(); showModal = false"
           (goToDashboard)="onGoToDashboard()">
         </app-success-modal>
       </div>

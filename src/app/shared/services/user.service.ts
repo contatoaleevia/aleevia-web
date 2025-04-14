@@ -13,7 +13,6 @@ export class UserService {
   }
   
   uploadFile(formData: FormData): Observable<any> {
-    formData.append('acl', 'private');
     return this.apiService.post('/files/upload', formData);
   }
 } 
