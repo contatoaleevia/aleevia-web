@@ -1,0 +1,98 @@
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-8">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="card">
+        <div class="card-body">
+          <div class="mb-3">
+            <app-input
+              label="Pergunta"
+              [value]="form.get('question')?.value"
+              [required]="true"
+              [errorMessage]="form.get('question')?.errors?.['required'] ? 'Campo obrigatório' : null"
+              placeholder="Digite a pergunta"
+              bgColor="#FFFFFF"
+              [showErrorOnTouched]="true"
+              (onChange)="form.get('question')?.setValue($event)">
+            </app-input>
+          </div>
+
+          <div class="mb-3">
+            <app-input
+              label="Resposta"
+              [value]="form.get('answer')?.value"
+              [required]="true"
+              inputType="textarea"
+              [rows]="4"
+              [errorMessage]="form.get('answer')?.errors?.['required'] ? 'Campo obrigatório' : null"
+              placeholder="Digite a resposta"
+              bgColor="#FFFFFF"
+              [showErrorOnTouched]="true"
+              (onChange)="form.get('answer')?.setValue($event)">
+            </app-input>
+          </div>
+
+          <div class="mb-3">
+            <app-input
+              label="Classificação"
+              [value]="form.get('classification')?.value"
+              [required]="true"
+              inputType="select"
+              [options]="classificationOptions"
+              optionLabel="label"
+              optionValue="value"
+              [errorMessage]="form.get('classification')?.errors?.['required'] ? 'Campo obrigatório' : null"
+              placeholder="Selecione a classificação"
+              bgColor="#FFFFFF"
+              [showErrorOnTouched]="true"
+              (onChange)="form.get('classification')?.setValue($event)">
+            </app-input>
+          </div>
+
+          <div class="d-flex gap-2 justify-content-end">
+            <app-button
+              type="primary"
+              [loading]="loading"
+              [disabled]="form.invalid || loading">
+              Salvar
+            </app-button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="col-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title mb-4">Sobre o post</h5>
+          
+          <div class="preview-section mb-3" *ngIf="isEditing">
+            <app-button
+              type="primary"
+              variant="outline"
+              [fullWidth]="true">
+              Preview
+            </app-button>
+          </div>
+
+          <div class="info-section">
+            <div class="d-flex align-items-center mb-3">
+              <i class="bi bi-key-fill me-2"></i>
+              <div>
+                <span class="text-muted">Status:</span>
+                <span class="ms-1">{{ isEditing ? 'Editando' : 'Novo' }}</span>
+              </div>
+            </div>
+
+            <div class="d-flex align-items-center">
+              <i class="bi bi-calendar me-2"></i>
+              <div>
+                <span class="text-muted">Publicado em:</span>
+                <span class="ms-1">{{ currentDate | date:'dd, MMM yyyy' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

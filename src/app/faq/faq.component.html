@@ -1,0 +1,84 @@
+<div class="container py-4">
+  <div class="card custom-card">
+    <div class="p-24">
+      <h2 class="mb-4 fw-semibold text-dark fs-8">Perguntas frequentes</h2>
+      <div
+        class="d-flex align-items-center gap-2 mb-4 justify-content-end"
+        (click)="onAdd()"
+      >
+        <div
+          class="plus-button-container d-flex align-items-center justify-content-center"
+        >
+          <i class="bi bi-plus-lg fs-5"></i>
+        </div>
+        <span class="add-content-text fw-semibold">Adicione novo conteúdo</span>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr>
+              <th class="ps-0 fw-bold fs-14 w-30">Dúvida</th>
+              <th class="fw-bold fs-14 w-20 text-secondary-table">
+                Data criação
+              </th>
+              <th class="fw-bold fs-14 w-15 text-secondary-table">
+                Última atualização
+              </th>
+              <th class="fw-bold fs-14 w-20 text-secondary-table">
+                Classificação
+              </th>
+              <th
+                class="pe-0 fw-bold fs-14 w-15 text-secondary-table text-center"
+              >
+                Ações
+              </th>
+            </tr>
+          </thead>
+          <tbody class="fs-14">
+            <tr *ngFor="let faq of faqs">
+              <td
+                class="ps-0 text-truncate question-text overflow-hidden text-nowrap fw-medium"
+              >
+                {{ faq.question }}
+              </td>
+              <td class="text-secondary-table">
+                {{ faq.created_at | date : "dd/MM/yyyy" }}
+              </td>
+              <td class="text-secondary-table">
+                {{ faq.updated_at | date : "dd/MM/yyyy" }}
+              </td>
+              <td class="text-secondary-table">{{ faq.classification }}</td>
+              <td class="pe-0">
+                <div
+                  class="d-flex gap-3 justify-content-center align-items-center"
+                >
+                  <button
+                    class="btn btn-link p-1 text-decoration-none"
+                    (click)="onEdit(faq.id)"
+                  >
+                    <i class="bi bi-pencil text-primary fs-5"></i>
+                  </button>
+                  <button
+                    class="btn btn-link p-1 text-decoration-none"
+                    (click)="openDeleteModal(faq)"
+                  >
+                    <i class="bi bi-trash text-danger fs-5"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-delete-modal
+  [show]="showDeleteModal"
+  [faq]="selectedFaq!"
+  (confirm)="confirmDelete()"
+  (cancel)="closeDeleteModal()"
+>
+</app-delete-modal>
