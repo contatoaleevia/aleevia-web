@@ -1,46 +1,82 @@
 @use '../../styles/variables' as vars;
 @use "sass:color";
 
+$primary-color: #0050EF;
+$primary-shadow: rgba(74, 58, 255, 0.18);
+
 .btn {
   font-weight: vars.$font-weight-medium;
   vertical-align: middle;
-  border: vars.$border-width solid transparent;
+  border: 1px solid transparent;
   padding: vars.$spacer vars.$spacer * 1.5;
   font-size: vars.$font-size-base;
   line-height: 1.5;
-  border-radius: vars.$border-radius;
-  transition: vars.$transition-base;
+  border-radius: 8px;
+  transition: all 0.3s ease;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  white-space: nowrap;
   
   &:focus {
     outline: 0;
-    box-shadow: 0 0 0 vars.$focus-ring-width rgba(vars.$primary, 0.25);
+    box-shadow: 0 0 0 3px rgba($primary-color, 0.25);
   }
   
   &:disabled, &.disabled {
     opacity: 0.65;
+    cursor: not-allowed;
   }
 }
 
 .btn-primary {
-  background-color: vars.$primary;
-  border-color: vars.$primary;
+  background-color: $primary-color;
+  border-color: $primary-color;
+  color: white;
   
-  &:hover, &:focus, &:active {
-    background-color: vars.$primary-hover;
-    border-color: vars.$primary-hover;
+  &:hover, &:focus {
+    background-color: color.scale($primary-color, $lightness: -10%);
+    border-color: color.scale($primary-color, $lightness: -10%);
+  }
+  
+  &:active {
+    background-color: color.scale($primary-color, $lightness: -15%);
+    border-color: color.scale($primary-color, $lightness: -15%);
+  }
+}
+
+.btn-pill {
+  border-radius: 56px;
+  box-shadow: 0px 3px 12px 0px $primary-shadow;
+}
+
+.btn-outline {
+  background-color: white;
+  border-color: $primary-color;
+  color: $primary-color;
+  
+  &:hover, &:focus {
+    background-color: rgba($primary-color, 0.05);
+    color: $primary-color;
+  }
+  
+  &:active {
+    background-color: rgba($primary-color, 0.1);
   }
 }
 
 .next-button {
-  background: vars.$primary !important;
-  border-color: vars.$primary !important;
-  box-shadow: 0px 3px 12px 0px rgba(74, 58, 255, 0.18) !important;
+  background: $primary-color !important;
+  border-color: $primary-color !important;
+  box-shadow: 0px 3px 12px 0px $primary-shadow !important;
   padding: 0.5rem 1.5rem !important;
+  border-radius: 56px !important;
   
   &:hover {
-    background: color.scale(vars.$primary, $lightness: -5%) !important;
-    border-color: color.scale(vars.$primary, $lightness: -5%) !important;
+    background: color.scale($primary-color, $lightness: -5%) !important;
+    border-color: color.scale($primary-color, $lightness: -5%) !important;
   }
 }
 
@@ -48,6 +84,7 @@
   padding: 0.5rem 1.5rem !important;
   border-color: vars.$gray-900 !important;
   color: vars.$gray-900 !important;
+  border-radius: 56px !important;
   
   &:hover {
     background-color: rgba(vars.$gray-900, 0.05) !important;
@@ -107,23 +144,24 @@
 .btn-sm {
   padding: vars.$spacer * 0.375 vars.$spacer * 0.75;
   font-size: vars.$font-size-sm;
-  border-radius: vars.$border-radius-sm;
 }
 
 .btn-md {
   padding: vars.$spacer * 0.75 vars.$spacer * 1.5;
   font-size: vars.$font-size-base;
-  border-radius: vars.$border-radius;
 }
 
 .btn-lg {
   padding: vars.$spacer vars.$spacer * 2;
   font-size: vars.$font-size-lg;
-  border-radius: vars.$border-radius-lg;
 }
 
 .btn-full-width {
   display: flex;
+  width: 100%;
+}
+
+.w-100 {
   width: 100%;
 }
 
