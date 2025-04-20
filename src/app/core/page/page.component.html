@@ -2,5 +2,10 @@
 <app-side-bar></app-side-bar>
 
 <main class="main-content">
+  <h1 class="page-title mb-0" *ngIf="!isDashboard">{{ pageTitle }}</h1>
+  <h1 class="page-title mb-0" *ngIf="isDashboard">
+    <span class="fw-normal">Bem-vindo, </span>
+    <span class="fw-bold">{{ userName }}</span>
+  </h1>
   <router-outlet></router-outlet>
 </main>

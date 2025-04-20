@@ -1,0 +1,337 @@
+.schedule-container {
+  border-radius: 16px;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+  }
+}
+
+.calendar-icon-container {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid #e9eaeb;
+  background: #fff;
+  box-shadow: 0px 1px 2px 0px rgba(10, 13, 18, 0.05);
+}
+
+.new-schedule-icon-container {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  border: 1px solid #eaecf0;
+  background: #fff;
+  padding: 4px;
+  cursor: pointer;
+}
+
+.new-schedule-text {
+  color: #292D32;
+  font-family: 'Nunito', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+.border-bottom-light {
+  border-bottom: 1px solid #F2F2F2;
+}
+
+.icon-24 {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-36 {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FF7A29;
+}
+
+.schedule-title {
+  color: #181D27;
+  font-family: 'Nunito', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 28px;
+}
+
+.schedule-subtitle {
+  color: #535862;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.fw-medium {
+  font-weight: 500;
+}
+
+.text-muted {
+  color: #6c757d;
+}
+
+.border-bottom {
+  border-bottom: 1px solid #dee2e6;
+}
+
+.text-center {
+  .fw-medium {
+    color: #495057;
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      color: #0d6efd;
+      background-color: rgba(13, 110, 253, 0.1);
+      border-radius: 0.25rem;
+    }
+  }
+}
+
+.service-chips {
+  .btn {
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+
+    &.btn-light {
+      background: var(--Gray-50, #f8f9fa);
+      border: 1px solid var(--Gray-200, #e9eaeb);
+      color: var(--Gray-700, #454950);
+    }
+  }
+}
+
+// Form Labels
+.form-label {
+  color: var(--Gray-700, #454950);
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+// Week Days
+.week-days-container {
+  background: #FFFFFF;
+  border-radius: 0;
+  overflow: hidden;
+  width: 100%;
+  overflow-x: auto;
+
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  .d-flex {
+    min-width: max-content;
+    width: 100%;
+  }
+
+  .week-day-item {
+    flex: 1;
+    min-width: 200px;
+    border: 1px solid #EBEBEB;
+    background: #D0D0D0;
+    min-height: 150px;
+    max-height: 300px;
+    display: flex;
+    flex-direction: column;
+
+    &.has-config {
+      background: #57FF5733;
+    }
+
+    &:not(:last-child) {
+      border-right: none;
+    }
+
+    .day-header {
+      padding: 8px;
+      text-align: center;
+      color: #919095;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      border-bottom: 1px solid #EBEBEB;
+      background: #FFFFFF;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .day-content {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      padding: 16px;
+      position: relative;
+      overflow-y: auto;
+
+      &::-webkit-scrollbar {
+        width: 4px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 4px;
+      }
+
+      &::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
+
+      .schedule-list {
+        width: 100%;
+      }
+
+      .schedule-info {
+        width: 100%;
+        background: #FFFFFF;
+        border-radius: 8px;
+        padding: 12px;
+        position: relative;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .schedule-times {
+          flex: 1;
+
+          .schedule-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+
+            &:last-child {
+              margin-bottom: 0;
+            }
+
+            .schedule-label {
+              color: #919095;
+              font-family: 'Inter', sans-serif;
+              font-size: 12px;
+            }
+
+            .schedule-time {
+              color: #454950;
+              font-family: 'Inter', sans-serif;
+              font-size: 12px;
+              font-weight: 500;
+            }
+          }
+        }
+
+        .edit-button {
+          min-width: 24px;
+          height: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0;
+          margin: 0;
+          border-radius: 4px;
+          transition: all 0.2s ease;
+          background: #F8F9FA;
+          border: 1px solid #E9EAEB;
+          color: #919095;
+          flex-shrink: 0;
+
+          &:hover {
+            color: #454950;
+            background: #EAECF0;
+          }
+
+          i {
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+        }
+      }
+
+      .add-schedule-button {
+        color: #0d6efd;
+        font-size: 12px;
+        font-weight: 500;
+        
+        i {
+          font-size: 14px;
+        }
+
+        &:hover {
+          text-decoration: none;
+          opacity: 0.8;
+        }
+      }
+
+      .no-config {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+      }
+
+      .configure-button {
+        font-size: 12px;
+        padding: 6px 12px;
+        white-space: nowrap;
+      }
+    }
+  }
+}
+
+.btn-primary {
+  &.rounded-pill {
+    padding: 10px 24px;
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+  }
+}

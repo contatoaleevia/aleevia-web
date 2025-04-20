@@ -37,6 +37,7 @@ export class InputComponent implements ControlValueAccessor, OnInit, OnChanges, 
   @Input() rows: number = 4;
   @Input() errorMessage: string | null = null;
   @Input() checkboxLabel: string = '';
+  @Input() variant: 'default' | 'outline' = 'default';
   @Output() onChange = new EventEmitter<any>();
   
   internalValue: string | boolean = '';
