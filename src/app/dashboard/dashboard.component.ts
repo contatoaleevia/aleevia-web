@@ -2,12 +2,11 @@ import { Component } from '@angular/core';
 import { FirstAccessComponent } from '@dashboard/first-access/first-access.component';
 import { CommonModule } from '@angular/common';
 import { User } from '@shared/models/user.model';
-import { GoogleCalendarComponent } from '../shared/components/google-calendar/google-calendar.component';
-
+import { GoogleLoginButtonComponent } from '@shared/components/google-login-button/google-login-button.component';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [FirstAccessComponent, CommonModule, GoogleCalendarComponent],
+  imports: [FirstAccessComponent, CommonModule, GoogleLoginButtonComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })

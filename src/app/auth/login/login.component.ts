@@ -7,11 +7,10 @@ import { InputComponent } from '@shared/components/input/input.component';
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { AuthService } from '@auth/services/auth.service';
 import { LoginRequest } from '@auth/models/auth.model';
-import { GoogleCalendarComponent } from '@app/shared/components/google-calendar/google-calendar.component';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, InputComponent, ButtonComponent, GoogleCalendarComponent],
+  imports: [CommonModule, ReactiveFormsModule, InputComponent, ButtonComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
