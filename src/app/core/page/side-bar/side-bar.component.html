@@ -6,7 +6,7 @@
     </a>
 
     <!-- Agenda -->
-    <a routerLink="/agenda" routerLinkActive="active" class="nav-link d-flex justify-content-center">
+    <a routerLinkActive="active" class="nav-link d-flex justify-content-center">
       <img src="assets/images/sidebar/schedule.svg" alt="Agenda">
     </a>
 
@@ -16,17 +16,17 @@
     </a>
 
     <!-- Pacientes -->
-    <a routerLink="/pacientes" routerLinkActive="active" class="nav-link d-flex justify-content-center">
+    <a routerLinkActive="active" class="nav-link d-flex justify-content-center">
       <img src="assets/images/sidebar/patients.svg" alt="Pacientes">
     </a>
 
     <!-- Configurações -->
-    <a routerLink="/configuracoes" routerLinkActive="active" class="nav-link d-flex justify-content-center mt-auto">
+    <a routerLinkActive="active" class="nav-link d-flex justify-content-center mt-auto">
       <img src="assets/images/sidebar/settings.svg" alt="Configurações">
     </a>
 
     <!-- Logout -->
-    <a routerLink="/logout" class="nav-link d-flex justify-content-center mt-3">
+    <a (click)="logout()" class="nav-link d-flex justify-content-center mt-3">
       <img src="assets/images/sidebar/logout.svg" alt="Sair">
     </a>
   </nav>
