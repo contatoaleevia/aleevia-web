@@ -18,9 +18,9 @@ export class FaqComponent implements OnInit {
   
   faqs: FAQ[] = [];
   showDeleteModal = false;
-  selectedFaq: FAQ | null = null;
+  selectedFaq: FAQ = {} as FAQ;
 
-  ngOnInit(): void {
+  ngOnInit(): void {  
     this.loadFaqs();
   }
 
@@ -37,7 +37,7 @@ export class FaqComponent implements OnInit {
 
   closeDeleteModal(): void {
     this.showDeleteModal = false;
-    this.selectedFaq = null;
+    this.selectedFaq = {} as FAQ;
   }
 
   confirmDelete(): void {
