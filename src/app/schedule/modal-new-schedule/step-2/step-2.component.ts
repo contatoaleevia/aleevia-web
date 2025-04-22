@@ -137,8 +137,6 @@ export class Step2Component implements OnInit {
       schedules: schedules
     };
 
-    console.log(payload);
-
     this.save.emit(payload);
   }
 }
