@@ -36,7 +36,7 @@ export class ModalNewScheduleComponent implements OnInit {
     neighborhood: ''
   };
 
-  currentStep = 1;
+  currentStep = 2;
   isFormValid = false;
   isLoading = false;
   scheduleData?: SchedulePayload;

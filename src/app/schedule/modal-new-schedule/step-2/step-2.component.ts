@@ -99,6 +99,9 @@ export class Step2Component implements OnInit {
     const hasSelectedDay = this.weekDays.some(day => day.selected);
     const isScheduleValid = this.scheduleForm.valid;
     this.formValidityChange.emit(hasSelectedDay && isScheduleValid);
+    if(isScheduleValid) {
+      this.saveSchedule();
+    }
   }
 
   saveSchedule(): void {
@@ -133,6 +136,8 @@ export class Step2Component implements OnInit {
       procedure_value: procedureValue,
       schedules: schedules
     };
+
+    console.log(payload);
 
     this.save.emit(payload);
   }

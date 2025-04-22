@@ -97,7 +97,9 @@ export class ScheduleComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (addresses: Address[]) => {
           if (addresses && addresses.length > 0) {
-            this.address = addresses[0];
+            if (!this.address || JSON.stringify(this.address) !== JSON.stringify(addresses[0])) {
+              this.address = addresses[0];
+            }
           } else {
             this.address = undefined;
           }
@@ -133,6 +135,17 @@ export class ScheduleComponent implements OnInit, OnDestroy {
     if (this.address) {
       modalRef.componentInstance.formData = { ...this.address };
     }
+
+    modalRef.result.then(
+      (result) => {
+        if (result && result.address) {
+          this.address = result.address;
+        }
+      },
+      (reason) => {
+        // Modal dismissed
+      }
+    );
   }
 
   getFormattedAddress(): string {

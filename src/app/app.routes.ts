@@ -6,7 +6,7 @@ import { authGuard } from './auth/guards/auth.guard';
 import { PageComponent } from './core/page/page.component';
 import { FaqComponent } from './faq/faq.component';
 import { FaqUpsertComponent } from './faq/faq-upsert/faq-upsert.component';
-
+import { ScheduleComponent } from './schedule/schedule.component';
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
@@ -20,6 +20,7 @@ export const routes: Routes = [
       { path: 'faq', component: FaqComponent },
       { path: 'faq/new', component: FaqUpsertComponent },
       { path: 'faq/edit/:id', component: FaqUpsertComponent },
+      { path: 'schedule', component: ScheduleComponent },
     ]
   },
   { path: '**', redirectTo: 'login' }
