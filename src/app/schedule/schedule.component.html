@@ -14,6 +14,16 @@
           </div>
         </div>
 
+        <div class="mb-4" *ngIf="address">
+          <h6 class="mb-2">Endereço</h6>
+          <div class="d-flex align-items-center">
+            <span class="text-secondary">{{ getFormattedAddress() }}</span>
+            <button class="btn btn-link text-primary ms-2 p-0" (click)="openNewScheduleModal()">
+              <i class="bi bi-pencil"></i>
+            </button>
+          </div>
+        </div>
+
         <div class="d-flex justify-content-between align-items-center mb-4 pb-4 border-bottom-light">
           <div class="service-chips">
             <button class="btn btn-primary me-2">
@@ -23,7 +33,7 @@
               Vídeo conferencia
             </button>
           </div>
-          <div class="d-flex align-items-center">
+          <div class="d-flex align-items-center" (click)="openNewScheduleModal()" style="cursor: pointer;" *ngIf="!address">
             <div class="new-schedule-icon-container d-flex align-items-center justify-content-center me-2">
               <i class="bi bi-plus icon-36"></i>
             </div>
@@ -80,39 +90,13 @@
 
         <div class="week-days-container mb-4">
           <div class="d-flex justify-content-between">
-            <div *ngFor="let day of weekDays" class="week-day-item" [ngClass]="{'has-config': day.configs && day.configs.length > 0}">
+            <div *ngFor="let day of weekDays" class="week-day-item">
               <div class="day-header">{{ day.code }}</div>
-              <div class="day-content" [class.scrollable]="day.configs && day.configs.length > 2">
-                <ng-container *ngIf="day.configs && day.configs.length > 0; else noConfig">
-                  <div class="schedule-list">
-                    <div *ngFor="let config of day.configs" class="schedule-info">
-                      <div class="schedule-times">
-                        <div class="schedule-row">
-                          <span class="schedule-label">Início:</span>
-                          <span class="schedule-time">{{ config.start }}</span>
-                        </div>
-                        <div class="schedule-row">
-                          <span class="schedule-label">Fim:</span>
-                          <span class="schedule-time">{{ config.end }}</span>
-                        </div>
-                      </div>
-                      <button class="btn btn-link edit-button">
-                        <i class="bi bi-pencil"></i>
-                      </button>
-                    </div>
-                    <button class="btn btn-link add-schedule-button w-100 mt-2" (click)="addSchedule(day)">
-                      <i class="bi bi-plus"></i> Adicionar jornada
-                    </button>
-                  </div>
-                </ng-container>
-                <ng-template #noConfig>
-                  <div class="no-config">
-                    <button class="btn btn-outline-primary configure-button" (click)="configureSchedule(day)">
-                      Configurar agenda
-                    </button>
-                  </div>
-                </ng-template>
-              </div>
+            </div>
+          </div>
+          <div class="coming-soon-container">
+            <div class="coming-soon">
+              Em breve
             </div>
           </div>
         </div>
