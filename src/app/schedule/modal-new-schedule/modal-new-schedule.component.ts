@@ -36,7 +36,7 @@ export class ModalNewScheduleComponent implements OnInit {
     neighborhood: ''
   };
 
-  currentStep = 2;
+  currentStep = 1;
   isFormValid = false;
   isLoading = false;
   scheduleData?: SchedulePayload;
@@ -70,7 +70,6 @@ export class ModalNewScheduleComponent implements OnInit {
           }
         });
     } else if (this.currentStep === 2 && this.isFormValid && this.scheduleData) {
-      console.log(this.scheduleData);
       this.isLoading = true;
       this.doctorService.saveSchedule(this.scheduleData)
         .pipe(
@@ -78,7 +77,6 @@ export class ModalNewScheduleComponent implements OnInit {
         )
         .subscribe({
           next: (response) => {
-            console.log(response);
             this.activeModal.close(response);
           },
           error: (error) => {
