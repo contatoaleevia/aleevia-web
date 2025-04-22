@@ -93,6 +93,10 @@ export class FaqUpsertComponent implements OnInit {
     }
   }
 
+  preview(): void {
+    this.router.navigate(['/chat']);
+  }
+
   onCancel(): void {
     this.router.navigate(['/faq']);
   }
