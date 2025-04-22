@@ -4,8 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 
 import { AuthService } from '@auth/services/auth.service';
-import { ProfessionsService } from '@shared/services/professions.service';
-import { UserService } from '@shared/services/user.service';
+import { DoctorService } from '@shared/services/doctor.service';
 import { Profession, Specialty, Subspecialty, ProfessionsResponse } from '@shared/models/profession.model';
 import { User, FileUploadResponse, UserUpdateRequest, UserUpdateApiResponse } from '@shared/models/user.model';
 
@@ -53,9 +52,8 @@ export class FirstAccessComponent implements OnInit {
 
   private readonly authService = inject(AuthService);
   private readonly fb = inject(FormBuilder);
-  private readonly professionsService = inject(ProfessionsService);
+  private readonly doctorService = inject(DoctorService);
   private readonly cdr = inject(ChangeDetectorRef);
-  private readonly userService = inject(UserService);
 
   personalInfoForm!: FormGroup<PersonalInfoFormControls>;
   professionalInfoForm!: FormGroup<ProfessionalInfoFormControls>;
@@ -146,7 +144,7 @@ export class FirstAccessComponent implements OnInit {
   }
 
   private loadProfessionsData(user: User): void {
-    this.professionsService.getProfessions().subscribe({
+    this.doctorService.getProfessions().subscribe({
       next: (response: ProfessionsResponse) => {
         this.professions = response.professions || [];
         for (const profession of this.professions) {
@@ -191,8 +189,8 @@ export class FirstAccessComponent implements OnInit {
     if (currentForm.valid && this.currentStep < 5) {
       const formData = this.formatFormData(currentForm.getRawValue());
       this.currentStep++;
-
-      this.userService.updateUser(formData).subscribe({
+      
+      this.doctorService.updateUser(formData).subscribe({
         next: (response: UserUpdateApiResponse) => {
           localStorage.setItem('currentUser', JSON.stringify(response.user));
           this.cdr.detectChanges();
@@ -264,8 +262,8 @@ export class FirstAccessComponent implements OnInit {
         this.isUploading = true;
         const formData = new FormData();
         formData.append('file', file);
-
-        this.userService.uploadFile(formData).subscribe({
+        
+        this.doctorService.uploadFile(formData).subscribe({
           next: (response: FileUploadResponse) => {
             this.tempProfilePictureUrl = response.url;
             this.profilePictureUrl = response.url;

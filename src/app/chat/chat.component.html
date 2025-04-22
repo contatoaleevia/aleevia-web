@@ -1,0 +1,23 @@
+<ng-container *ngIf="currentUser$ | async as currentUser">
+  <app-chat-header [currentUser]="currentUser"></app-chat-header>
+</ng-container>
+
+<div class="d-grid chat-content gap-3">
+  <h3 class="text-center mt-4">Como posso te ajudar?</h3>
+  
+  <!-- FAQ Questions -->
+   <ng-container *ngIf="!messages.length">
+    <div class="col-12">
+      <app-faq [faqs]="(faqs$ | async)!" (questionClick)="sendMessage($event)"></app-faq>
+    </div>
+   </ng-container>
+
+  <ng-container #messagesContainer *ngIf="messages.length">
+    <app-messages [messages]="messages"></app-messages>
+  </ng-container>
+
+  <app-chat-input
+    [message]="message"
+    (sendMessage)="sendMessage($event)"
+  ></app-chat-input>
+</div>

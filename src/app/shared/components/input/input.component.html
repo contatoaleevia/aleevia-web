@@ -31,7 +31,7 @@
   <ng-container *ngIf="isSelectInput">
     <select
       [id]="id"
-      class="form-select {{ class }}"
+      [class]="'form-select ' + (variant === 'outline' ? 'form-select-outline' : '') + ' ' + class"
       [(ngModel)]="internalValue"
       [disabled]="isDisabled || disabled"
       [required]="required"

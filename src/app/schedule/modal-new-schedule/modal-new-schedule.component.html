@@ -1,0 +1,46 @@
+<div class="modal-header border-0 bg-white pb-2 align-items-start">
+  <div>
+    <h3 class="modal-title mb-1">Configure sua agenda</h3>
+    <p class="text-secondary mb-0">Preencha o horário de inicio da jornada e o fim.</p>
+  </div>
+  <button type="button" class="btn-close" (click)="close()"></button>
+</div>
+<hr class="mx-4 my-0 text-secondary opacity-25">
+<div class="modal-body bg-white pt-4">
+  <app-step-1 
+    *ngIf="currentStep === 1"
+    [(formData)]="formData"
+    [loading]="isLoading"
+    (formValidityChange)="isFormValid = $event"
+  ></app-step-1>
+  <app-step-2
+    *ngIf="currentStep === 2"
+    [doctorAddressId]="formData.id!"
+    (formValidityChange)="isFormValid = $event"
+    (save)="onScheduleSave($event)"
+    #step2
+  ></app-step-2>
+</div>
+<div class="modal-footer border-0 bg-white">
+  <div class="d-flex justify-content-between w-100">
+    <app-button 
+      *ngIf="currentStep > 1"
+      type="outline" 
+      [isPrevious]="true"
+      (click)="previous()"
+    >
+      Voltar
+    </app-button>
+    <div class="ms-auto">
+      <app-button 
+        type="primary" 
+        [isNext]="true"
+        [disabled]="!isFormValid || isLoading"
+        [loading]="isLoading"
+        (click)="next()"
+      >
+        {{ currentStep === 1 ? 'Próximo' : 'Salvar' }}
+      </app-button>
+    </div>
+  </div>
+</div>

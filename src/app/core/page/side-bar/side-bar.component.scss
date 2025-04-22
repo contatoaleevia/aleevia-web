@@ -1,6 +1,7 @@
 .sidebar {
   width: 80px;
-  height: calc(100vh - 76px);
+  height: 100vh;
+  border-right: 1px solid #EBEBEB;
   position: fixed;
   left: 0;
   top: 76px;
@@ -8,32 +9,38 @@
 }
 
 .nav {
-  height: 100%;
+  height: calc(100vh - 76px - 32px);
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-items {
+  flex: 1;
+}
+
+.nav-bottom {
+  margin-top: auto;
 }
 
 .nav-link {
   width: 40px;
   height: 40px;
-  padding: 8px;
-  border-radius: 8px;
+  border-radius: 10px;
   transition: all 0.2s ease;
+  color: #A9A9A9;
+  cursor: pointer;
 
-  img {
-    width: 24px;
-    height: 24px;
-    filter: brightness(0) saturate(100%) invert(71%) sepia(3%) saturate(0%) hue-rotate(317deg) brightness(89%) contrast(86%);
-    transition: filter 0.2s ease;
+  i {
+    font-size: 20px;
   }
 
   &:hover {
-    background-color: rgba(65, 105, 225, 0.1);
+    background-color: #F8F9FA;
+    color: #454950;
   }
 
   &.active {
-    background-color: #4169E1;
-
-    img {
-      filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7500%) hue-rotate(175deg) brightness(114%) contrast(108%);
-    }
+    background-color: #0056CC;
+    color: #FFFFFF;
   }
 }

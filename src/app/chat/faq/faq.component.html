@@ -1,0 +1,17 @@
+<div class="faq-questions d-flex flex-column align-items-center overflow-auto h-75">
+    <div
+      *ngFor="let faq of faqs"
+      class="question-card rounded p-3 mb-3 cursor-pointer w-75"
+      (click)="onQuestionClick(faq.question)"
+    >
+      <div class="d-flex align-items-center">
+        <i class="bi bi-question-circle text-muted me-3"></i>
+        <div>
+          <h4 class="h6 mb-1">{{ faq.question }}</h4>
+          <p class="small text-muted mb-0">
+            Pergunte para a IA e ela responderá!
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
