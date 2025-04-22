@@ -1,11 +1,5 @@
 <div class="chat-input bg-white p-3 border-top">
     <div class="d-flex gap-2">
-      <button class="btn btn-light border">
-        <i class="bi bi-mic"></i>
-      </button>
-      <button class="btn btn-light border">
-        <i class="bi bi-image"></i>
-      </button>
       <app-input
         class="flex-grow-1"
         placeholder="Digite sua dúvida"
@@ -16,7 +10,7 @@
       <app-button
         icon="send"
         type="primary"
-        [iconPosition]="'right'"
+        iconPosition="right"
         (click)="sendMessageHandler()"
       >
         Enviar
