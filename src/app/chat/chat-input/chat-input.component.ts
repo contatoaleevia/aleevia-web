@@ -14,7 +14,9 @@ export class ChatInputComponent {
   @Output() sendMessage = new EventEmitter<string>();
 
   sendMessageHandler() {
-    this.sendMessage.emit(this.message);
+    if (this.message.trim()) {
+      this.sendMessage.emit(this.message);
+      this.message = '';
+    }
   }
-
 }

@@ -1,4 +1,4 @@
-<div class="messages d-flex flex-column gap-3 overflow-auto h-100">
+<div #messagesContainer class="messages d-flex flex-column gap-3 overflow-auto h-100">
     <div 
       *ngFor="let message of messages" 
       class="message d-flex"
@@ -15,7 +15,7 @@
           {{ message.content }}
         </ng-container>
         <ng-template #typingIndicator>
-          <div class="typing-indicator">
+          <div class="typing-indicator d-flex justify-content-center">
             <span></span>
             <span></span>
             <span></span>

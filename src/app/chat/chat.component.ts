@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked, AfterViewInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { InputComponent } from '../shared/components/input/input.component';
@@ -21,19 +21,17 @@ import { ChatInputComponent } from './chat-input/chat-input.component';
   standalone: true,
   imports: [CommonModule, FormsModule, ChatHeaderComponent, FaqComponent, MessagesComponent, ChatInputComponent]
 })
-export class ChatComponent implements OnInit, AfterViewChecked, AfterViewInit {
-  @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
-
+export class ChatComponent implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly faqService = inject(FaqService);
   private readonly chatService = inject(ChatService);
-  private shouldScrollToBottom = false;
 
   currentUser$ = this.authService.getCurrentUser();
   faqs$: Observable<FAQ[]> = new Observable<FAQ[]>();
   messages: Message[] = [];
   message: string = '';
   chatId: string = '';
+  showWelcomeSection: boolean = true;
 
   constructor() {
     this.faqs$ = this.faqService.getAll();
@@ -41,28 +39,6 @@ export class ChatComponent implements OnInit, AfterViewChecked, AfterViewInit {
 
   ngOnInit() {
     this.createChat();
-  }
-
-  ngAfterViewInit() {
-    setTimeout(() => {
-      if (this.messages.length > 0) {
-        this.scrollToBottom();
-      }
-    });
-  }
-
-  ngAfterViewChecked() {
-    if (this.shouldScrollToBottom) {
-      this.scrollToBottom();
-      this.shouldScrollToBottom = false;
-    }
-  }
-
-  private scrollToBottom(): void {
-    try {
-      const element = this.messagesContainer.nativeElement;
-      element.scrollTop = element.scrollHeight;
-    } catch(err) { }
   }
 
   private async createChat() {
@@ -83,15 +59,15 @@ export class ChatComponent implements OnInit, AfterViewChecked, AfterViewInit {
           ...msg,
           isPlaceholder: false
         }));
-        this.shouldScrollToBottom = true;
       } catch (error) {
         console.error('Erro ao carregar mensagens:', error);
       }
     }
   }
 
-  async sendMessage(content: string){
+  async sendMessage(content: string) {
     if (!content?.trim() || !this.chatId) return;
+    if(this.showWelcomeSection) this.showWelcomeSection = false;
 
     const userMessage: Message = {
       content: content.trim(),
@@ -112,7 +88,6 @@ export class ChatComponent implements OnInit, AfterViewChecked, AfterViewInit {
 
     this.messages.push(userMessage, placeholderMessage);
     this.message = '';
-    this.shouldScrollToBottom = true;
 
     try {
       const messageData = await this.chatService.sendMessage(this.chatId, content);
@@ -123,8 +98,6 @@ export class ChatComponent implements OnInit, AfterViewChecked, AfterViewInit {
           isPlaceholder: false
         } : msg
       );
-      
-      this.shouldScrollToBottom = true;
     } catch (error) {
       console.error('Erro ao enviar mensagem:', error);
       
