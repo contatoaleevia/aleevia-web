@@ -38,12 +38,14 @@ export class InputComponent implements ControlValueAccessor, OnInit, OnChanges, 
   @Input() errorMessage: string | null = null;
   @Input() checkboxLabel: string = '';
   @Input() variant: 'default' | 'outline' = 'default';
+  @Input() showErrorOnTouched: boolean = true;
   @Output() onChange = new EventEmitter<any>();
   
   internalValue: string | boolean = '';
   isDisabled: boolean = false;
   isFocused: boolean = false;
   showPassword: boolean = false;
+  isTouched: boolean = false;
   
   private onChangeCallback: (_: any) => void = () => {};
   private onTouchedCallback: () => void = () => {};
@@ -129,6 +131,7 @@ export class InputComponent implements ControlValueAccessor, OnInit, OnChanges, 
 
   onBlur(): void {
     this.isFocused = false;
+    this.isTouched = true;
     this.onTouchedCallback();
   }
 

@@ -81,7 +81,7 @@
     </div>
   </ng-container>
   
-  <div *ngIf="errorMessage" class="text-danger small mt-1">
+  <div *ngIf="errorMessage && (!showErrorOnTouched || isTouched)" class="text-danger small mt-1">
     {{ errorMessage }}
   </div>
 </div>

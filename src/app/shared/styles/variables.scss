@@ -1,28 +1,5 @@
 @use "sass:color";
 
-// Cores principais
-$primary: #4880FF;
-$primary-hover: color.scale($primary, $lightness: -10%);
-$primary-active: color.scale($primary, $lightness: -15%);
-$secondary: #6c757d;
-$success: #28a745;
-$info: #17a2b8;
-$warning: #ffc107;
-$danger: #dc3545;
-$light: #f8f9fa;
-$dark: #343a40;
-
-// Cores do stepper
-$stepper-step-circle: #e0e0e0;
-$stepper-step-circle-active: #1a56db;
-$stepper-text: #666;
-$stepper-text-active: #1a56db;
-$stepper-line: #e0e0e0;
-$stepper-line-active: #1a56db;
-
-// Cores do modal
-$modal-backdrop: rgba(0, 0, 0, 0.5);
-
 // Tons de cinza
 $white: #ffffff;
 $gray-100: #f8f9fa;
@@ -35,6 +12,46 @@ $gray-700: #495057;
 $gray-800: #343a40;
 $gray-900: #212529;
 $black: #000000;
+
+// Cores principais
+$primary: #4880FF;
+$primary-hover: color.scale($primary, $lightness: -10%);
+$primary-active: color.scale($primary, $lightness: -15%);
+$secondary: $gray-600;
+$success: #28a745;
+$info: #17a2b8;
+$warning: #ffc107;
+$danger: #dc3545;
+$light: $gray-100;
+$dark: $gray-800;
+
+// Cores do FAQ
+$faq-border-color: #e8e8e8;
+$faq-plus-button-border: #EAECF0;
+$faq-plus-button-icon: #FF7A29;
+$faq-text-primary: #292D32;
+$faq-text-secondary: #A9A9A9;
+$faq-text-question: #464646;
+$faq-text-dark: #221F1F;
+$faq-action-hover-opacity: 0.8;
+$faq-action-hover-scale: 1.1;
+
+// Cores do FAQ Upsert
+$faq-upsert-icon-color: $gray-600;
+$faq-upsert-title-color: #333;
+$faq-upsert-text-size: 0.9rem;
+$faq-upsert-icon-size: 1.1rem;
+
+// Cores do stepper
+$stepper-step-circle: #e0e0e0;
+$stepper-step-circle-active: #1a56db;
+$stepper-text: #666;
+$stepper-text-active: #1a56db;
+$stepper-line: #e0e0e0;
+$stepper-line-active: #1a56db;
+
+// Cores do modal
+$modal-backdrop: rgba(0, 0, 0, 0.5);
 
 // Cores específicas
 $placeholder-color: #A6A6A6;

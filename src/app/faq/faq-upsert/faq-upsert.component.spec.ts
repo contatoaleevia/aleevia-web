@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GoogleCalendarComponent } from './google-calendar.component';
+import { FaqUpsertComponent } from './faq-upsert.component';
 
-describe('GoogleCalendarComponent', () => {
-  let component: GoogleCalendarComponent;
-  let fixture: ComponentFixture<GoogleCalendarComponent>;
+describe('FaqUpsertComponent', () => {
+  let component: FaqUpsertComponent;
+  let fixture: ComponentFixture<FaqUpsertComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GoogleCalendarComponent]
+      imports: [FaqUpsertComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(GoogleCalendarComponent);
+    fixture = TestBed.createComponent(FaqUpsertComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

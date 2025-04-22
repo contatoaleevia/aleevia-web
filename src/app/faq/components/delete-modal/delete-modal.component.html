@@ -1,0 +1,39 @@
+<div class="modal" [class.show]="show" [class.d-block]="show" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title">Confirmar exclusão</h5>
+        <button type="button" class="btn-close" (click)="onCancel()"></button>
+      </div>
+      <div class="modal-body">
+        <p class="mb-4">Deseja excluir essa pergunta?</p>
+        
+        <div class="preview-content p-3 bg-light rounded mb-4">
+          <div class="mb-3">
+            <label class="fw-semibold mb-2">Pergunta:</label>
+            <p class="mb-0">{{ faq.question }}</p>
+          </div>
+          <div>
+            <label class="fw-semibold mb-2">Resposta:</label>
+            <p class="mb-0">{{ faq.answer }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer border-top-0">
+        <app-button
+          type="secondary"
+          variant="outline"
+          (clicked)="onCancel()">
+          Não
+        </app-button>
+        <app-button
+          type="primary"
+          (clicked)="onConfirm()">
+          Sim
+        </app-button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop fade show" *ngIf="show"></div>

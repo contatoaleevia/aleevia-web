@@ -8,10 +8,10 @@ import { DoctorService } from '@shared/services/doctor.service';
 import { Profession, Specialty, Subspecialty, ProfessionsResponse } from '@shared/models/profession.model';
 import { User, FileUploadResponse, UserUpdateRequest, UserUpdateApiResponse } from '@shared/models/user.model';
 
-import { 
-  PersonalInfoForm, 
-  ProfessionalInfoForm, 
-  SocialInfoForm, 
+import {
+  PersonalInfoForm,
+  ProfessionalInfoForm,
+  SocialInfoForm,
   SecurityForm,
   PersonalInfoFormControls,
   ProfessionalInfoFormControls,
@@ -35,8 +35,8 @@ import { FormDataFormatter } from '@dashboard/first-access/utils/form-data-forma
   selector: 'app-first-access',
   standalone: true,
   imports: [
-    CommonModule, 
-    ReactiveFormsModule, 
+    CommonModule,
+    ReactiveFormsModule,
     StepperComponent,
     PersonalInfoComponent,
     ProfessionalInfoComponent,
@@ -112,7 +112,7 @@ export class FirstAccessComponent implements OnInit {
 
   private loadUserDataFromUser(user: User): void {
     this.profilePictureUrl = user.picture_url || null;
-    
+
     this.personalInfoForm.patchValue({
       cpf: user.cpf || '',
       full_name: user.full_name || '',
@@ -140,9 +140,7 @@ export class FirstAccessComponent implements OnInit {
       about: user.bio || ''
     });
 
-    if (user.specialty_id) {
-      this.loadProfessionsData(user);
-    }
+    this.loadProfessionsData(user);
   }
 
   private loadProfessionsData(user: User): void {
@@ -154,10 +152,10 @@ export class FirstAccessComponent implements OnInit {
           if (specialty) {
             this.professionalInfoForm.patchValue({ profession: profession.id });
             this.onProfessionChange(profession.id, true);
-            
+
             this.professionalInfoForm.patchValue({ specialty: specialty.id });
             this.onSpecialtyChange(specialty.id, true);
-            
+
             if (user.subspecialty_id) {
               this.professionalInfoForm.patchValue({ subspecialties: user.subspecialty_id });
             }
@@ -221,7 +219,7 @@ export class FirstAccessComponent implements OnInit {
       this.specialties = profession.specialties;
       const specialtyControl = this.professionalInfoForm.get('specialty');
       const subspecialtiesControl = this.professionalInfoForm.get('subspecialties');
-      
+
       if (specialtyControl && subspecialtiesControl) {
         specialtyControl.enable();
         if (!keepValues) {
@@ -238,7 +236,7 @@ export class FirstAccessComponent implements OnInit {
     if (specialty) {
       this.subspecialties = specialty.subspecialties;
       const subspecialtiesControl = this.professionalInfoForm.get('subspecialties');
-      
+
       if (subspecialtiesControl) {
         if (this.subspecialties.length > 0) {
           subspecialtiesControl.enable();
@@ -257,7 +255,7 @@ export class FirstAccessComponent implements OnInit {
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/*';
-    
+
     input.onchange = (event: Event) => {
       const file = (event.target as HTMLInputElement).files?.[0];
       if (file) {
@@ -280,7 +278,7 @@ export class FirstAccessComponent implements OnInit {
         });
       }
     };
-    
+
     input.click();
   }
 
