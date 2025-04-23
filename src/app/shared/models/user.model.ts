@@ -10,6 +10,7 @@ export interface BaseUser {
   cpf: string;
   gender?: string;
   pre_registered: boolean;
+  google_token: string | null;
 }
 
 export interface Address {
@@ -60,6 +61,7 @@ export interface UserUpdateResponse extends BaseUser, ProfessionalInfo, SocialIn
   gender: string;
   preferred_name: string;
   picture_url: string | null;
+  google_token: string | null;
   profession: string;
   profession_id: string;
   specialty: string;

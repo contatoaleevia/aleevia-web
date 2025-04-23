@@ -1,0 +1,16 @@
+<div class="mb-4">
+  <div class="d-flex align-items-center justify-content-center">
+    <ng-container *ngFor="let step of [1, 2, 3, 4]; let i = index; let last = last">
+      <div class="d-flex flex-column align-items-center">
+        <div class="stepper-step-circle d-flex align-items-center justify-content-center fw-bold" 
+             [class.active]="currentStep >= step">{{ step }}</div>
+        <div class="stepper-text text-center mt-2" 
+             [class.active]="currentStep >= step">{{ getStepTitle(step) }}</div>
+      </div>
+      
+      <div class="stepper-line mx-3" 
+           [class.active]="currentStep >= (step + 1)" 
+           *ngIf="!last"></div>
+    </ng-container>
+  </div>
+</div>

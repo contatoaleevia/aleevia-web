@@ -1,0 +1,40 @@
+.sidebar {
+  width: 80px;
+  height: calc(100vh - 76px);
+  position: fixed;
+  left: 0;
+  top: 76px;
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
+}
+
+.nav {
+  height: 100%;
+}
+
+.nav-link {
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  img {
+    width: 24px;
+    height: 24px;
+    filter: brightness(0) saturate(100%) invert(71%) sepia(3%) saturate(0%) hue-rotate(317deg) brightness(89%) contrast(86%);
+    transition: filter 0.2s ease;
+  }
+
+  &:hover {
+    background-color: rgba(65, 105, 225, 0.1);
+  }
+
+  &.active {
+    background-color: #4169E1;
+
+    img {
+      filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(7500%) hue-rotate(175deg) brightness(114%) contrast(108%);
+    }
+  }
+}
