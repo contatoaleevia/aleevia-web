@@ -52,6 +52,16 @@ export class DoctorService {
     return this.addresses$;
   }
 
+  deleteAddress(addressId: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/addresses/${addressId}`).pipe(
+      tap(() => {
+        const currentAddresses = this.addressesCache.value;
+        const updatedAddresses = currentAddresses.filter(address => address.id !== addressId);
+        this.addressesCache.next(updatedAddresses);
+      })
+    );
+  }
+
   getProfessions(): Observable<ProfessionsResponse> {
     return this.http.get<ProfessionsResponse>(`${this.apiUrl}/professions`);
   }

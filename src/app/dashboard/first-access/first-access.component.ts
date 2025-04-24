@@ -282,10 +282,6 @@ export class FirstAccessComponent implements OnInit {
     input.click();
   }
 
-  onConfigureSchedule(): void {
-    console.log('Configuring schedule...');
-  }
-
   onGoToDashboard(): void {
     console.log('Navigating to dashboard...');
   }
