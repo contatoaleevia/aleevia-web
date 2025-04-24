@@ -60,8 +60,7 @@ export class ModalNewScheduleComponent implements OnInit {
           finalize(() => this.isLoading = false)
         )
         .subscribe({
-          next: (response) => {
-            this.formData = response;
+          next: () => {
             this.currentStep = 2;
             this.isFormValid = false;
           },

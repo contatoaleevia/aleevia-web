@@ -19,7 +19,7 @@ export class FaqService {
    */
   getAll(): Observable<FAQ[]> {
     if (!this.loaded) {
-      this.apiService.get<FAQ[]>(`${this.path}?doctor_id=${this.currentUser.id}`).pipe(
+      this.apiService.get<FAQ[]>(`${this.path}/${this.currentUser.id}`).pipe(
         tap(faqs => {
           this.faqs.next(faqs);
           this.loaded = true;

@@ -5,9 +5,10 @@ import { InputComponent } from '@shared/components/input/input.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalNewScheduleComponent } from './modal-new-schedule/modal-new-schedule.component';
 import { DoctorService } from '@app/shared/services/doctor.service';
-import { Address } from '@app/shared/models/user.model';
-import { Subject, takeUntil } from 'rxjs';
+import { Address, UpdateAddress } from '@app/shared/models/user.model';
+import { Subject, takeUntil, BehaviorSubject, Observable } from 'rxjs';
 import { WeekDay } from './models/schedule.model';
+import { DeleteModalComponent, DeleteModalConfig } from '@app/shared/components/delete-modal/delete-modal.component';
 
 @Component({
   selector: 'app-schedule',
@@ -18,12 +19,13 @@ import { WeekDay } from './models/schedule.model';
 })
 export class ScheduleComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
+  private addressSubject = new BehaviorSubject<Address | undefined>(undefined);
 
   selectedService: string = '';
   selectedHealthService: string = '';
   procedureDuration: string = '30 min.';
   appointmentInterval: string = '30 min.';
-  address?: Address;
+  address$: Observable<Address | undefined> = this.addressSubject.asObservable();
 
   weekDays: WeekDay[] = [
     {
@@ -96,12 +98,14 @@ export class ScheduleComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (addresses: Address[]) => {
+          console.log('Addresses updated:', addresses);
           if (addresses && addresses.length > 0) {
-            if (!this.address || JSON.stringify(this.address) !== JSON.stringify(addresses[0])) {
-              this.address = addresses[0];
+            const currentAddress = this.addressSubject.getValue();
+            if (!currentAddress || JSON.stringify(currentAddress) !== JSON.stringify(addresses[0])) {
+              this.addressSubject.next(addresses[0]);
             }
           } else {
-            this.address = undefined;
+            this.addressSubject.next(undefined);
           }
         },
         error: (error) => {
@@ -132,24 +136,75 @@ export class ScheduleComponent implements OnInit, OnDestroy {
       keyboard: false
     });
 
-    if (this.address) {
-      modalRef.componentInstance.formData = { ...this.address };
+    if (this.addressSubject.getValue()) {
+      modalRef.componentInstance.formData = { ...this.addressSubject.getValue() };
     }
 
     modalRef.result.then(
       (result) => {
-        if (result && result.address) {
-          this.address = result.address;
+        if (result) {
+          this.addressSubject.next(result);
+        }
+      }
+    );
+  }
+
+  openDeleteModal(address: UpdateAddress) {
+    console.log(address);
+    const modalConfig: DeleteModalConfig = {
+      title: 'Excluir Endereço',
+      message: 'Deseja excluir este endereço?',
+      showPreview: true,
+      previewTitle: 'Endereço a ser excluído',
+      previewContent: {
+        address: this.getFormattedAddress()
+      },
+      confirmText: 'Excluir',
+      cancelText: 'Cancelar'
+    };
+
+    const modalRef = this.modalService.open(DeleteModalComponent, {
+      centered: true,
+      backdrop: 'static',
+      keyboard: false
+    });
+
+    modalRef.componentInstance.config = modalConfig;
+
+    modalRef.result.then(
+      () => {
+        if (address.id) {
+          this.doctorService.deleteAddress(address.id).subscribe({
+            next: () => {
+              this.addressSubject.next(undefined);
+              this.subscribeToAddressChanges();
+            },
+            error: (error) => {
+              console.error('Error deleting address:', error);
+            }
+          });
         }
       },
-      (reason) => {
-        // Modal dismissed
+      () => {
+        // Handle cancellation
       }
     );
   }
 
   getFormattedAddress(): string {
-    if (!this.address) return '';
-    return `${this.address.address}, ${this.address.number}${this.address.complement ? ` - ${this.address.complement}` : ''}, ${this.address.neighborhood}, ${this.address.city} - ${this.address.state}`;
+    const address = this.addressSubject.getValue();
+    if (!address) return '';
+    
+    const parts = [
+      address.name,
+      `${address.address}, ${address.number}`,
+      address.complement,
+      address.neighborhood,
+      `${address.city} - ${address.state}`
+    ];
+
+    return parts
+      .filter(part => part && part.trim() !== '')
+      .join(', ');
   }
 }

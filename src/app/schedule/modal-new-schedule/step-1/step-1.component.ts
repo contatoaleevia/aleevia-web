@@ -52,6 +52,7 @@ export class Step1Component implements OnInit {
 
   private initializeForm() {
     this.form = this.fb.group({
+      name: ['', Validators.required],
       zip_code: ['', [Validators.required, Validators.pattern(/^\d{5}-\d{3}$/)]],
       address: ['', Validators.required],
       number: ['', Validators.required],

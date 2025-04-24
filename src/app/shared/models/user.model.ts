@@ -18,6 +18,7 @@ export interface UpdateAddress extends Address {
 }
 
 export interface Address {
+  name?: string;
   address: string;
   city: string;
   state: string;
