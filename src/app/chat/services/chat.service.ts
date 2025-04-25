@@ -19,7 +19,7 @@ export class ChatService {
 
   async sendMessage(chatId: string, content: string): Promise<Message> {
     // JUST TO TEST
-    const doctorId = '179ca6bf-6e88-4dac-bc4a-14042d8a675c';
+    const doctorId = '179ca6bf-6e88-4dac-bc4a-14042d8a675c'; 
 
     return firstValueFrom(
       this.http.post<Message>(`${this.apiUrl}/chats/${chatId}/messages`, { content, doctor_id: doctorId })
