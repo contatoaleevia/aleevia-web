@@ -7,7 +7,7 @@
   border-radius: vars.$border-radius;
   padding: 0.75rem 1rem;
   font-size: vars.$font-size-base;
-  color: vars.$gray-600;
+  color: #94A3B8;
   transition: vars.$transition-base;
   
   &:focus {
@@ -22,7 +22,6 @@
   }
   
   &::placeholder {
-    color: vars.$placeholder-color;
     opacity: 1;
   }
 }
@@ -33,6 +32,41 @@
   background-position: right 1rem center;
   background-size: 16px 12px;
   appearance: none;
+
+  &.form-select-outline {
+    border-radius: 2px;
+    border: none;
+    border-bottom: 1px solid var(--slate-200, #E2E8F0);
+    background-color: var(--base-white, #FFF);
+    padding: 8px 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: #94A3B8;
+    background-position: right 0 center;
+
+    &:focus {
+      box-shadow: none;
+      border-color: #E2E8F0;
+    }
+
+    &:disabled {
+      background-color: #f8f9fa;
+      cursor: not-allowed;
+    }
+
+    &::placeholder {
+      color: #94A3B8;
+      opacity: 1;
+    }
+
+    option {
+      color: #94A3B8;
+    }
+
+    option:first-child {
+      color: #94A3B8;
+    }
+  }
 }
 
 .form-label {

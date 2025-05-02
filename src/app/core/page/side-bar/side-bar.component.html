@@ -1,33 +1,27 @@
 <aside class="sidebar bg-white d-flex flex-column align-items-center py-4">
   <nav class="nav flex-column gap-4">
-    <!-- Dashboard -->
     <a routerLink="/dashboard" routerLinkActive="active" class="nav-link d-flex justify-content-center">
-      <img src="assets/images/sidebar/dashboard.svg" alt="Dashboard">
+      <i class="bi bi-grid"></i>
     </a>
 
-    <!-- Agenda -->
-    <a routerLinkActive="active" class="nav-link d-flex justify-content-center">
-      <img src="assets/images/sidebar/schedule.svg" alt="Agenda">
+    <a routerLink="/schedule" routerLinkActive="active" class="nav-link d-flex justify-content-center">
+      <i class="bi bi-calendar-week"></i>
     </a>
 
-    <!-- Prontuário -->
     <a routerLink="/faq" routerLinkActive="active" class="nav-link d-flex justify-content-center">
-      <img src="assets/images/sidebar/edit.svg" alt="Prontuário">
+      <i class="bi bi-file-text"></i>
     </a>
 
-    <!-- Pacientes -->
     <a routerLinkActive="active" class="nav-link d-flex justify-content-center">
-      <img src="assets/images/sidebar/patients.svg" alt="Pacientes">
+      <i class="bi bi-people"></i>
     </a>
 
-    <!-- Configurações -->
     <a routerLinkActive="active" class="nav-link d-flex justify-content-center mt-auto">
-      <img src="assets/images/sidebar/settings.svg" alt="Configurações">
+      <i class="bi bi-gear"></i>
     </a>
 
-    <!-- Logout -->
-    <a (click)="logout()" class="nav-link d-flex justify-content-center mt-3">
-      <img src="assets/images/sidebar/logout.svg" alt="Sair">
+    <a (click)="logout()" class="nav-link d-flex justify-content-center">
+      <i class="bi bi-box-arrow-right"></i>
     </a>
   </nav>
 </aside>

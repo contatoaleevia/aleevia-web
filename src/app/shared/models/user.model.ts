@@ -13,14 +13,19 @@ export interface BaseUser {
   google_token: string | null;
 }
 
+export interface UpdateAddress extends Address {
+  id?: string;
+}
+
 export interface Address {
-  address?: string;
-  city?: string;
-  state?: string;
-  zip_code?: string;
-  number?: string;
+  name?: string;
+  address: string;
+  city: string;
+  state: string;
+  zip_code: string;
+  number: string;
   complement?: string;
-  neighborhood?: string;
+  neighborhood: string;
 }
 
 export interface ProfessionalInfo {

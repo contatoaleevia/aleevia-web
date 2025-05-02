@@ -66,7 +66,7 @@ export class ChatComponent implements OnInit {
   }
 
   async sendMessage(content: string) {
-    if (!content?.trim() || !this.chatId) return;
+    if (!content?.trim() || !this.chatId || this.messages.length === 0) return;
     if(this.showWelcomeSection) this.showWelcomeSection = false;
 
     const userMessage: Message = {
