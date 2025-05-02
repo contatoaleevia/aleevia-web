@@ -7,10 +7,18 @@ import { PageComponent } from './core/page/page.component';
 import { FaqComponent } from './faq/faq.component';
 import { FaqUpsertComponent } from './faq/faq-upsert/faq-upsert.component';
 import { ChatComponent } from './chat/chat.component';
+import { authRoutes } from './auth/auth.routes';
+
 export const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
-  { path: 'auth/callback', component: GoogleCallbackComponent },
+  {
+    path: '',
+    redirectTo: 'auth',
+    pathMatch: 'full'
+  },
+  {
+    path: 'auth',
+    children: authRoutes
+  },
   {
     path: '',
     component: PageComponent,
@@ -23,6 +31,6 @@ export const routes: Routes = [
       { path: 'chat', component: ChatComponent },
     ]
   },
-  { path: '**', redirectTo: 'login' }
+  { path: '**', redirectTo: 'auth' }
 ];
 
