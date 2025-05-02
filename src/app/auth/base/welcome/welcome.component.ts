@@ -29,5 +29,6 @@ export class WelcomeComponent {
 
   onContinue() {
     this.router.navigate(['/auth/login']);
+    localStorage.setItem('cpfCnpj', this.cpfCnpjForm.get('cpfCnpj')?.value);
   }
 }
