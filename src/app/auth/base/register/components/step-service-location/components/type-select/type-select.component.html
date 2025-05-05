@@ -1,0 +1,60 @@
+<div class="mx-auto h-100 d-flex flex-column max-w-600 min-h-80vh">
+  <h2 class="fw-bold mb-3 mt-2 fs-1">Local de atendimento</h2>
+  <p class="text-secondary mb-4">Selecione suas formas de atendimento</p>
+
+  <div class="d-flex gap-4 justify-content-center mb-5">
+    <div
+      class="option-card p-4 flex-fill text-center selectable-card"
+      [ngClass]="{ selected: selectedTypes.includes(SERVICE_LOCATION_TYPES.ONLINE) }"
+      (click)="toggleType(SERVICE_LOCATION_TYPES.ONLINE)"
+    >
+      <div
+        class="icon mb-2"
+        [ngClass]="{
+          'icon-selected': selectedTypes.includes(SERVICE_LOCATION_TYPES.ONLINE)
+        }"
+      >
+        <i class="bi bi-display"></i>
+      </div>
+      <div class="fw-bold fs-3 mb-2">Online</div>
+      <div class="text-secondary">
+        Você gerencia seus atendimentos de forma remota, por conta própria, sem
+        estrutura física fixa.
+      </div>
+    </div>
+    <div
+      class="option-card p-4 flex-fill text-center selectable-card"
+      [ngClass]="{
+        selected: selectedTypes.includes(SERVICE_LOCATION_TYPES.PRESENCIAL)
+      }"
+      (click)="toggleType(SERVICE_LOCATION_TYPES.PRESENCIAL)"
+    >
+      <div
+        class="icon mb-2"
+        [ngClass]="{
+          'icon-selected': selectedTypes.includes(SERVICE_LOCATION_TYPES.PRESENCIAL)
+        }"
+      >
+        <i class="bi bi-building"></i>
+      </div>
+      <div class="fw-bold fs-3 mb-2">Presencial</div>
+      <div class="text-secondary">
+        Você administra um espaço presencial, como clínica, consultório ou sala
+        compartilhada com outros profissionais.
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-end">
+    <app-button
+      type="primary"
+      [fullWidth]="true"
+      [disabled]="selectedTypes.length === 0"
+      [isNext]="true"
+      (click)="onAction()"
+      class="btn-custom-next"
+    >
+      Continuar
+    </app-button>
+  </div>
+</div>

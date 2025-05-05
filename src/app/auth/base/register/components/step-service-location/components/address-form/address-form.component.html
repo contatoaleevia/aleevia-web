@@ -1,0 +1,117 @@
+<form [formGroup]="form" (ngSubmit)="onAction()" class="mx-auto h-100 d-flex flex-column max-w-600 min-h-80vh">
+  <div>
+    <h2 class="fw-bold mb-3 mt-2 fs-3">Agora, vamos cadastrar o endereço</h2>
+    <p class="text-secondary mb-4">Informações do seu espaço de saúde</p>
+
+    <div class="row mb-3">
+      <div class="col-md-6 mb-3 mb-md-0">
+        <app-input
+          formControlName="addressName"
+          label="Nome do endereço"
+          placeholder="Digite o nome do espaço"
+          bgColor="white"
+          inputType="text"
+        ></app-input>
+      </div>
+      <div class="col-md-6">
+        <app-input
+          formControlName="spaceType"
+          label="Selecione o espaço de saúde"
+          placeholder="Selecione o espaço"
+          bgColor="white"
+          inputType="select"
+          [options]="spaceTypeOptions"
+          optionLabel="name"
+          optionValue="id"
+        ></app-input>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-12">
+        <app-input
+          formControlName="zipCode"
+          label="CEP"
+          placeholder="_____-__"
+          bgColor="white"
+          inputType="text"
+          mask="00000-000"
+        ></app-input>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-6 mb-3 mb-md-0">
+        <app-input
+          formControlName="street"
+          label="Logradouro"
+          placeholder="Rua, avenida, praça..."
+          bgColor="white"
+          inputType="text"
+        ></app-input>
+      </div>
+      <div class="col-md-6">
+        <app-input
+          formControlName="neighborhood"
+          label="Bairro"
+          placeholder="Digite o seu bairro"
+          bgColor="white"
+          inputType="text"
+        ></app-input>
+      </div>
+    </div>
+
+    <div class="row mb-3">
+      <div class="col-md-6 mb-3 mb-md-0">
+        <app-input
+          formControlName="number"
+          label="Número"
+          placeholder="Número do local"
+          bgColor="white"
+          inputType="text"
+        ></app-input>
+      </div>
+      <div class="col-md-6">
+        <app-input
+          formControlName="complement"
+          label="Complemento"
+          placeholder="Apto, bloco..."
+          bgColor="white"
+          inputType="text"
+        ></app-input>
+      </div>
+    </div>
+
+    <div class="row mb-4">
+      <div class="col-md-6 mb-3 mb-md-0">
+        <app-input
+          formControlName="state"
+          label="Estado"
+          placeholder="Estado"
+          bgColor="white"
+          inputType="text"
+        ></app-input>
+      </div>
+      <div class="col-md-6">
+        <app-input
+          formControlName="city"
+          label="Cidade"
+          placeholder="Cidade"
+          bgColor="white"
+          inputType="text"
+        ></app-input>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-end mt-auto">
+    <app-button
+      type="primary"
+      [fullWidth]="false"
+      [disabled]="form.invalid"
+      [isNext]="true"
+    >
+      Adicionar endereço
+    </app-button>
+  </div>
+</form>

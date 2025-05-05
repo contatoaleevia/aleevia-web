@@ -1,21 +1,17 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
-
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { REGISTRATION_TYPES } from '../constants/registration-types';
 @Component({
   selector: 'app-start',
   standalone: true,
-  imports: [CommonModule],
   templateUrl: './start.component.html',
   styleUrl: './start.component.scss'
 })
 export class StartComponent {
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute
-  ) {}
+  readonly router = inject(Router);
+  readonly REGISTRATION_TYPES = REGISTRATION_TYPES;
 
-  navigateTo(route: string) {
-    this.router.navigate([route], { relativeTo: this.route });
+  navigateTo(type: string) {
+    this.router.navigate(['/auth/register', type, 'cpf-cnpj']);
   }
 }

@@ -13,6 +13,7 @@ interface ViaCepResponse {
   gia: string;
   ddd: string;
   siafi: string;
+  erro?: boolean;
 }
 
 @Injectable({

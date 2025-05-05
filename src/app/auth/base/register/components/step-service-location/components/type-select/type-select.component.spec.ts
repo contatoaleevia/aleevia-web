@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { IndividualComponent } from './individual.component';
+import { TypeSelectComponent } from './type-select.component';
 
-describe('IndividualComponent', () => {
-  let component: IndividualComponent;
-  let fixture: ComponentFixture<IndividualComponent>;
+describe('TypeSelectComponent', () => {
+  let component: TypeSelectComponent;
+  let fixture: ComponentFixture<TypeSelectComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [IndividualComponent]
+      imports: [TypeSelectComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(IndividualComponent);
+    fixture = TestBed.createComponent(TypeSelectComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

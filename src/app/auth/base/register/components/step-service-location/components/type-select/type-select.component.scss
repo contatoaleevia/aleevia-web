@@ -1,0 +1,38 @@
+.selectable-card {
+  cursor: pointer;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  transition: border-color 0.2s;
+}
+
+.btn-custom-next {
+  border-radius: 24px;
+  min-width: 200px;
+  box-shadow: 0 4px 16px #0001;
+}
+
+.option-card .icon {
+  color: #b0b0b0;
+  background: #f0f0f0;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 8px auto;
+  font-size: 2rem;
+  transition: background 0.2s, color 0.2s;
+}
+
+.option-card.selected .icon,
+.option-card .icon.icon-selected {
+  color: #fff;
+  background: #2563eb;
+}
+
+.option-card.selected {
+  border-color: #2563eb !important;
+  background: #f5faff;
+  box-shadow: 0 0 0 2px #2563eb22;
+}

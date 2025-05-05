@@ -1,8 +1,9 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { InputComponent } from 'src/app/shared/components/input/input.component';
 import { ButtonComponent } from 'src/app/shared/components/button/button.component';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-step-password',
   standalone: true,
@@ -13,10 +14,9 @@ import { ButtonComponent } from 'src/app/shared/components/button/button.compone
 export class StepPasswordComponent {
   form: FormGroup;
   submitted = false;
+  isClinic = false;
 
-  @Output() actionHandler = new EventEmitter<void>();
-
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private router: Router) {
     this.form = this.fb.group({
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]]
@@ -35,7 +35,8 @@ export class StepPasswordComponent {
   onSubmit() {
     this.submitted = true;
     if (this.form.valid) {
-      this.actionHandler.emit();
+      localStorage.setItem('password', this.form.get('password')?.value);
+      this.router.navigate(['/auth/register', this.isClinic ? 'clinic' : 'individual', 'service-location']);
     }
   }
 }

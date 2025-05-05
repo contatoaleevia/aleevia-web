@@ -1,0 +1,29 @@
+<div class="mx-auto max-w-600 min-h-80vh d-flex flex-column justify-content-center">
+  <h2 class="fw-bold mb-3 mt-2 fs-3">Local de atendimento</h2>
+  <p class="text-secondary mb-4">Informações do seu espaço de saúde</p>
+
+  <div class="bg-white rounded-4 shadow-sm p-4 mb-5 d-flex align-items-center justify-content-between border border-2" style="min-height: 120px;">
+    <div>
+      <div class="fw-bold fs-4 mb-2">{{ serviceLocation.addressName }}</div>
+      <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-geo-alt fs-4 text-primary"></i>
+        <span class="text-secondary fs-5">{{ formattedAddress }}</span>
+      </div>
+    </div>
+    <button class="btn btn-link text-primary p-2 ms-3" (click)="onEdit()">
+      <i class="bi bi-pencil fs-4"></i>
+    </button>
+  </div>
+
+  <div class="d-flex justify-content-end mt-auto">
+    <app-button
+      type="primary"
+      [fullWidth]="false"
+      [isNext]="true"
+      (click)="onAction()"
+      class="btn-custom-next"
+    >
+      Continuar
+    </app-button>
+  </div>
+</div>

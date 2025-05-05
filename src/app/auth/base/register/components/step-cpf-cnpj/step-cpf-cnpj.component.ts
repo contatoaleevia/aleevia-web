@@ -15,7 +15,6 @@ import { Router } from '@angular/router';
 export class StepCpfCnpjComponent implements OnInit {
   form: FormGroup;
   isClinic = false;
-  @Output() actionHandler = new EventEmitter<void>();
 
   constructor(private fb: FormBuilder, private router: Router) {
     this.form = this.fb.group({
@@ -84,7 +83,7 @@ export class StepCpfCnpjComponent implements OnInit {
 
   onSubmit() {
     if (this.form.valid) {
-      this.actionHandler.emit();
+      this.router.navigate(['/auth/register', this.isClinic ? 'clinic' : 'individual', 'password']);
     } else {
       this.form.markAllAsTouched();
     }
