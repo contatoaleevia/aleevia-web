@@ -61,7 +61,7 @@ export class LoginComponent implements OnInit {
     const rememberMe = this.loginForm.value.rememberMe;
 
     const loginRequest: LoginRequest = {
-      cpf: cpfCnpj,
+      username: cpfCnpj,
       password: this.loginForm.value.password,
       rememberMe: rememberMe
     };
@@ -73,7 +73,12 @@ export class LoginComponent implements OnInit {
           this.router.navigate([this.returnUrl]);
         },
         error: (error) => {
-          this.errorMessage = error.error.detail;
+          console.log('Full error object:', error);
+          if (error.error && error.error.Errors && error.error.Errors.length > 0) {
+            this.errorMessage = error.error.Errors[0].Message;
+          } else {
+            this.errorMessage = 'Ocorreu um erro ao tentar fazer login. Por favor, tente novamente.';
+          }
         }
       });
   }

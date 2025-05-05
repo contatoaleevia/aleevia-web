@@ -1,7 +1,7 @@
 import { User } from '@shared/models/user.model';
 
 export interface LoginRequest {
-  cpf: string;
+  username: string;
   password: string;
   rememberMe?: boolean;
 }

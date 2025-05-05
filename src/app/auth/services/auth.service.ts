@@ -57,13 +57,10 @@ export class AuthService {
   }
 
   login(credentials: LoginRequest): Observable<LoginResponse> {
-    const cpf = credentials.cpf.replace(/[.-]/g, '');
-    
-    const formData = new FormData();
-    formData.append('userName', cpf);
-    formData.append('password', credentials.password);
-    formData.append('rememberMe', credentials.rememberMe ? 'true' : 'false');
-    return this.apiService.post<LoginResponse>(this.routeUrl + 'login', formData).pipe(
+    const cpf = credentials.username.replace(/[.-]/g, '');
+    credentials.username = cpf;
+
+    return this.apiService.post<LoginResponse>(this.routeUrl + 'login', credentials).pipe(
       tap(response => {
         if (response && response.access_token) {
           this.setAuthState(response.user, response.access_token);
