@@ -1,10 +1,10 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputComponent } from 'src/app/shared/components/input/input.component';
 import { ButtonComponent } from 'src/app/shared/components/button/button.component';
 import { Router } from '@angular/router';
-
+import { REGISTRATION_TYPES } from '@auth/base/register/constants/registration-types';
 @Component({
   selector: 'app-step-cpf-cnpj',
   standalone: true,
@@ -61,7 +61,7 @@ export class StepCpfCnpjComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.isClinic = this.router.url.includes('clinic');
+    this.isClinic = this.router.url.includes(REGISTRATION_TYPES.CLINIC);
 
     const savedData = localStorage.getItem('registrationData');
     if (savedData) {
@@ -91,7 +91,7 @@ export class StepCpfCnpjComponent implements OnInit {
     if (this.form.valid) {
       const formData = this.form.getRawValue();
       localStorage.setItem('registrationData', JSON.stringify(formData));
-      this.router.navigate(['/auth/register', this.isClinic ? 'clinic' : 'individual', 'password']);
+      this.router.navigate(['/auth/register', this.isClinic ? REGISTRATION_TYPES.CLINIC : REGISTRATION_TYPES.INDIVIDUAL, 'password']);
     } else {
       this.form.markAllAsTouched();
     }

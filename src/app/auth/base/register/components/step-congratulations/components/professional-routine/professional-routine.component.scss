@@ -1,0 +1,35 @@
+.option-card {
+    min-height: 80px;
+    transition: box-shadow 0.2s, border-color 0.2s;
+    cursor: pointer;
+  
+    &:hover {
+      box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.06) !important;
+      border-color: #0d6efd !important    ;
+    }
+  }
+  
+  .option-card:hover .icon-circle {
+    background: #0b5ed7;
+    border-color: #0b5ed7;
+  }
+  
+  .option-icon {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .icon-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #0d6efd;
+    border: 2px solid #0d6efd;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  
+  .icon-circle i {
+    font-size: 1.5rem;
+    color: #fff;
+  }
+  

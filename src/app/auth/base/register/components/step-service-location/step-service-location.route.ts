@@ -11,15 +11,27 @@ export const stepServiceLocationRoute: Routes = [
     children: [
       {
         path: '',
-        component: TypeSelectComponent
+        component: TypeSelectComponent,
+        data: {
+          title: 'Local de atendimento',
+          subtitle: 'Selecione suas formas de atendimento'
+        }
       },
       {
         path: 'address',
-        component: AddressFormComponent
+        component: AddressFormComponent,
+        data: {
+          title: 'Endereço do local',
+          subtitle: 'Informe o endereço do seu local de atendimento'
+        }
       },
       {
         path: 'confirmation',
-        component: ConfirmationViewComponent
+        component: ConfirmationViewComponent,
+        data: {
+          title: 'Confirmação',
+          subtitle: 'Confira os dados do seu local de atendimento'
+        }
       }
     ]
   }

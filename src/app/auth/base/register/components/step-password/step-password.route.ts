@@ -5,5 +5,9 @@ export const stepPasswordRoute: Routes = [
   {
     path: 'password',
     component: StepPasswordComponent,
+    data: {
+      title: 'Senha de acesso',
+      subtitle: 'Informações do seu espaço de saúde'
+    }
   }
 ]; 

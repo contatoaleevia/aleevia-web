@@ -3,9 +3,11 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-step-congratulations',
+  selector: 'app-congratulations',
   imports: [CommonModule, RouterModule],
-  template: '<router-outlet></router-outlet>',
+  templateUrl: './congratulations.component.html',
+  styleUrl: './congratulations.component.scss'
 })
-export class StepCongratulationsComponent {
+export class CongratulationsComponent {
+
 }

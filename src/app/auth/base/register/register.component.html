@@ -1,3 +1,7 @@
 <div class="d-flex flex-column justify-content-start h-100 w-100" style="min-height: 80vh;">
-  <router-outlet></router-outlet>
+  <div class="mx-auto" style="max-width: 600px; width: 100%;">
+    <h2 class="fw-bold mb-2 mt-2 fs-3">{{ (routeData$ | async)?.title }}</h2>
+    <p class="text-secondary mb-4">{{ (routeData$ | async)?.subtitle }}</p>
+    <router-outlet></router-outlet>
+  </div>
 </div>

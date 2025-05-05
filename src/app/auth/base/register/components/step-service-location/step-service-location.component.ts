@@ -6,7 +6,6 @@ import { RouterModule } from '@angular/router';
   selector: 'app-step-service-location',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  templateUrl: './step-service-location.component.html',
-  styleUrl: './step-service-location.component.scss'
+  template: '<router-outlet></router-outlet>',
 })
-export class StepServiceLocationComponent {}
+export class StepServiceLocationComponent { }
