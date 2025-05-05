@@ -5,6 +5,7 @@ import { stepCpfCnpjRoute } from "@auth/base/register/components/step-cpf-cnpj/s
 import { stepPasswordRoute } from "@auth/base/register/components/step-password/step-password.route";
 import { stepServiceLocationRoute } from "@auth/base/register/components/step-service-location/step-service-location.route";
 import { RegisterComponent } from "@auth/base/register/register.component";
+import { registrationGuard } from "@auth/guards/registration.guard";
 
 export const registerRoutes: Routes = [
   {
@@ -19,6 +20,7 @@ export const registerRoutes: Routes = [
   {
     path: 'individual',
     component: RegisterComponent,
+    canActivate: [registrationGuard],
     children: [
       ...stepCpfCnpjRoute,
       ...stepPasswordRoute,
@@ -29,6 +31,7 @@ export const registerRoutes: Routes = [
   {
     path: 'clinic',
     component: RegisterComponent,
+    canActivate: [registrationGuard],
     children: [
       ...stepCpfCnpjRoute,
       ...stepPasswordRoute,
