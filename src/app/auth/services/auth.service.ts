@@ -22,11 +22,12 @@ export class AuthService {
   public currentUser$ = this.currentUserSubject.asObservable();
 
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly apiService = inject(ApiService);
+  private readonly router = inject(Router);
 
-  constructor(
-    private apiService: ApiService,
-    private router: Router
-  ) {
+  private readonly routeUrl = 'auth/';
+
+  constructor() {
     if (isPlatformBrowser(this.platformId)) {
       this.checkAuthStatus();
     }
@@ -59,10 +60,10 @@ export class AuthService {
     const cpf = credentials.cpf.replace(/[.-]/g, '');
     
     const formData = new FormData();
-    formData.append('username', cpf);
+    formData.append('userName', cpf);
     formData.append('password', credentials.password);
-    formData.append('fromApp', credentials.fromApp ? 'true' : 'false');
-    return this.apiService.post<LoginResponse>('/login', formData).pipe(
+    formData.append('rememberMe', credentials.rememberMe ? 'true' : 'false');
+    return this.apiService.post<LoginResponse>(this.routeUrl + 'login', formData).pipe(
       tap(response => {
         if (response && response.access_token) {
           this.setAuthState(response.user, response.access_token);
@@ -77,7 +78,7 @@ export class AuthService {
 
   loginWithGoogle(): void {
     if (isPlatformBrowser(this.platformId)) {
-      window.location.href = `${environment.apiUrl}/auth/google/login`;
+      window.location.href = `${this.routeUrl}google/login`;
     }
   }
 

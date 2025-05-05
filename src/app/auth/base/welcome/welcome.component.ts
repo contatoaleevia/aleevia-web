@@ -4,7 +4,7 @@ import { ButtonComponent } from '@shared/components/button/button.component';
 import { InputComponent } from '@shared/components/input/input.component';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-
+import { UserService } from '@shared/services/user.service';
 @Component({
   selector: 'app-welcome',
   standalone: true,
@@ -16,7 +16,10 @@ export class WelcomeComponent {
   step = 1;
   cpfCnpjForm: FormGroup;
   cpfCnpjMask: string = '000.000.000-00||00.000.000/0000-00';
+  
   private readonly router = inject(Router);
+  private readonly userService = inject(UserService);
+
   constructor(private fb: FormBuilder) {
     this.cpfCnpjForm = this.fb.group({
       cpfCnpj: ['', [Validators.required]]
@@ -28,7 +31,13 @@ export class WelcomeComponent {
   }
 
   onContinue() {
-    this.router.navigate(['/auth/login']);
-    localStorage.setItem('cpfCnpj', this.cpfCnpjForm.get('cpfCnpj')?.value);
+    this.userService.isRegistered(this.cpfCnpjForm.get('cpfCnpj')?.value).subscribe((isRegistered) => {
+      if (isRegistered) {
+        this.router.navigate(['/auth/login']);
+        localStorage.setItem('cpfCnpj', this.cpfCnpjForm.get('cpfCnpj')?.value);
+      } else {
+        this.router.navigate(['/auth/register']);
+      }
+    });
   }
 }

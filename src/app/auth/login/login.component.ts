@@ -45,7 +45,7 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.fb.group({
       cpfCnpj: ['', [Validators.required]],
       password: ['', [Validators.required]],
-      fromApp: [false]
+      rememberMe: [false]
     });
   }
 
@@ -58,12 +58,12 @@ export class LoginComponent implements OnInit {
     this.errorMessage = '';
 
     const cpfCnpj = this.loginForm.value.cpfCnpj.replace(/\D/g, '');
-    const fromApp = this.loginForm.value.fromApp;
+    const rememberMe = this.loginForm.value.rememberMe;
 
     const loginRequest: LoginRequest = {
       cpf: cpfCnpj,
       password: this.loginForm.value.password,
-      fromApp: fromApp
+      rememberMe: rememberMe
     };
 
     this.authService.login(loginRequest)
