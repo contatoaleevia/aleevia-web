@@ -1,4 +1,8 @@
-<form [formGroup]="form" (ngSubmit)="onAction()" class="mx-auto h-100 d-flex flex-column max-w-600 min-h-80vh">
+<form
+  [formGroup]="form"
+  (ngSubmit)="onAction()"
+  class="mx-auto h-100 d-flex flex-column max-w-600 min-h-80vh"
+>
   <div>
     <h2 class="fw-bold mb-3 mt-2 fs-3">Agora, vamos cadastrar o endereço</h2>
     <p class="text-secondary mb-4">Informações do seu espaço de saúde</p>
@@ -14,21 +18,6 @@
         ></app-input>
       </div>
       <div class="col-md-6">
-        <app-input
-          formControlName="spaceType"
-          label="Selecione o espaço de saúde"
-          placeholder="Selecione o espaço"
-          bgColor="white"
-          inputType="select"
-          [options]="spaceTypeOptions"
-          optionLabel="name"
-          optionValue="id"
-        ></app-input>
-      </div>
-    </div>
-
-    <div class="row mb-3">
-      <div class="col-md-12">
         <app-input
           formControlName="zipCode"
           label="CEP"

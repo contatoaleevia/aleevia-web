@@ -35,7 +35,14 @@ export class StepPasswordComponent {
   onSubmit() {
     this.submitted = true;
     if (this.form.valid) {
-      localStorage.setItem('password', this.form.get('password')?.value);
+      const password = this.form.get('password')?.value;
+      localStorage.setItem('password', password);
+
+      // Update registration data with password
+      const registrationData = JSON.parse(localStorage.getItem('registrationData') || '{}');
+      registrationData.password = password;
+      localStorage.setItem('registrationData', JSON.stringify(registrationData));
+
       this.router.navigate(['/auth/register', this.isClinic ? 'clinic' : 'individual', 'service-location']);
     }
   }

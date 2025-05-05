@@ -15,11 +15,6 @@ import { Router } from '@angular/router';
 })
 export class AddressFormComponent {
   form: FormGroup;
-  spaceTypeOptions = [
-    { id: 'clinic', name: 'Clínica' },
-    { id: 'consultorio', name: 'Consultório' },
-    { id: 'sala_compartilhada', name: 'Sala compartilhada' },
-  ];
 
   constructor(
     private fb: FormBuilder,
@@ -28,7 +23,6 @@ export class AddressFormComponent {
   ) {
     this.form = this.fb.group({
       addressName: ['', Validators.required],
-      spaceType: ['', Validators.required],
       zipCode: ['', [Validators.required, Validators.pattern(/^[0-9]{5}-[0-9]{3}$/)]],
       street: ['', Validators.required],
       neighborhood: ['', Validators.required],
@@ -37,6 +31,11 @@ export class AddressFormComponent {
       state: ['', Validators.required],
       city: ['', Validators.required],
     });
+
+    const savedAddress = localStorage.getItem('serviceLocation');
+    if (savedAddress) {
+      this.form.patchValue(JSON.parse(savedAddress));
+    }
 
     this.form.get('zipCode')?.valueChanges.subscribe((cep: string) => {
       if (cep && cep.length === 9 && /^[0-9]{5}-[0-9]{3}$/.test(cep)) {
@@ -57,7 +56,13 @@ export class AddressFormComponent {
 
   onAction() {
     if (this.form.valid) {
-      localStorage.setItem('serviceLocation', JSON.stringify(this.form.value));
+      const addressData = this.form.value;
+      localStorage.setItem('serviceLocation', JSON.stringify(addressData));
+      
+      const registrationData = JSON.parse(localStorage.getItem('registrationData') || '{}');
+      registrationData.address = addressData;
+      localStorage.setItem('registrationData', JSON.stringify(registrationData));
+      
       this.router.navigate(['/auth/register/individual/service-location/confirmation']);
     }
   }

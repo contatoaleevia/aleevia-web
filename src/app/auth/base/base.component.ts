@@ -15,6 +15,6 @@ export class BaseComponent {
   }
 
   goBack() {
-    this.router.navigate(['/auth/welcome']);
+    window.history.back();
   }
 }

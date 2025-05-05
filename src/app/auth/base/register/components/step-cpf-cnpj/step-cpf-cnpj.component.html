@@ -76,10 +76,9 @@
     </div>
   </ng-container>
 
-  <!-- MODO INDIVIDUAL -->
   <ng-template #individualMode>
     <div>
-      <h2 class="fw-bold mb-3 mt-2 fs-2">Seus dados</h2>
+      <h2 class="fw-bold mb-2 mt-2 fs-3">Seus dados</h2>
       <p class="text-secondary mb-4">Informações do seu espaço de saúde</p>
 
       <div class="mb-3">
@@ -132,7 +131,6 @@
 
       <div
         class="d-flex flex-column justify-content-start p-0"
-        style="min-height: 300px"
       >
         <ng-container *ngIf="form.get('isCompany')!.value">
           <div class="mb-3">
@@ -170,7 +168,7 @@
     </div>
   </ng-template>
 
-  <div class="mt-auto">
+  <div class="mt-2">
     <div class="form-check mb-4">
       <input
         class="form-check-input"
@@ -183,15 +181,19 @@
         <a href="#" target="_blank">Política de Privacidade</a>
       </label>
     </div>
-
-    <app-button
-      type="primary"
-      [fullWidth]="true"
-      [disabled]="form.invalid"
-      [isNext]="true"
-    >
-      Continuar
-    </app-button>
+  
+    <div class="d-flex justify-content-end">
+      <app-button
+        type="primary"
+        [fullWidth]="true"
+        [disabled]="form.invalid"
+        [isNext]="true"
+        (click)="onSubmit()"
+        class="btn-custom-next"
+      >
+        Continuar
+      </app-button>
+    </div>
 
     <div class="text-center text-secondary mt-2 small">
       Seus dados estão protegidos

@@ -63,6 +63,12 @@ export class StepCpfCnpjComponent implements OnInit {
   ngOnInit() {
     this.isClinic = this.router.url.includes('clinic');
 
+    const savedData = localStorage.getItem('registrationData');
+    if (savedData) {
+      const data = JSON.parse(savedData);
+      this.form.patchValue(data);
+    }
+
     const cpfCnpj = localStorage.getItem('cpfCnpj');
     if (cpfCnpj) {
       if (this.isCPF(cpfCnpj)) {
@@ -83,6 +89,8 @@ export class StepCpfCnpjComponent implements OnInit {
 
   onSubmit() {
     if (this.form.valid) {
+      const formData = this.form.getRawValue();
+      localStorage.setItem('registrationData', JSON.stringify(formData));
       this.router.navigate(['/auth/register', this.isClinic ? 'clinic' : 'individual', 'password']);
     } else {
       this.form.markAllAsTouched();

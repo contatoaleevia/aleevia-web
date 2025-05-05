@@ -8,7 +8,7 @@
     >
       <div class="row g-0">
         <div
-          class="col-md-6 d-flex align-items-center justify-content-center bg-white"
+          class="col-md-6 d-flex align-items-center justify-content-center bg-white h-100"
         >
           <div
             class="d-flex align-items-center justify-content-center h-100 w-100"
@@ -24,15 +24,25 @@
         <div
           class="col-md-6 d-flex align-items-center justify-content-center bg-white"
         >
-          <div class="w-100 position-relative content-auth">
-            <div class="d-flex justify-content-end align-items-center mb-4">
+          <div class="w-100 position-relative content-auth h-100">
+            <div class="d-flex justify-content-end align-items-center position-absolute top-0 end-0 w-100" style="margin-top: 20px; z-index: 1;">
               <img
                 src="assets/images/logo-aleevia.png"
                 alt="aleevia"
                 class="logo-aleevia"
               />
+              <button
+                class="btn btn-link p-0 position-absolute start-0"
+                (click)="goBack()"
+                aria-label="Voltar"
+                style="margin-top: 20px;"
+              >
+                <i class="bi bi-arrow-left" style="font-size: 1.5rem"></i>
+              </button>
             </div>
-            <router-outlet></router-outlet>
+            <div class="content-wrapper" style="margin-top: 80px;">
+              <router-outlet></router-outlet>
+            </div>
           </div>
         </div>
       </div>
