@@ -7,7 +7,7 @@ import { FAQ, CreateFaqDTO, UpdateFaqDTO } from '@shared/models/faq.model';
   providedIn: 'root'
 })
 export class FaqService {
-  private readonly path = '/faq';
+  private readonly path = 'faq';
   private faqs = new BehaviorSubject<FAQ[]>([]);
   private loaded = false;
   private currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');

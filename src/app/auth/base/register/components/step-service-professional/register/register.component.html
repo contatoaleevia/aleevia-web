@@ -1,0 +1,72 @@
+<form *ngIf="context === 'services'">
+  <div class="mb-4">
+    <app-input
+      label="Nome do serviço"
+      placeholder=""
+      inputType="text"
+    ></app-input>
+  </div>
+  <div class="mb-4">
+    <app-input
+      label="Tempo de atendimento"
+      placeholder="00:00"
+      inputType="text"
+    ></app-input>
+  </div>
+  <div class="mb-4">
+    <app-input
+      label="Valor"
+      placeholder="Digite o valor R$"
+      inputType="text"
+    ></app-input>
+  </div>
+  <div class="mb-4">
+    <app-input
+      label="Aceita convênio"
+      inputType="select"
+      placeholder="Selecione o espaço"
+      [options]="[]"
+    ></app-input>
+  </div>
+  <div class="mb-4">
+    <app-input
+      label="Descrição"
+      placeholder="Digite a descrição da sua clínica para seus clientes"
+      inputType="textarea"
+    ></app-input>
+  </div>
+</form>
+
+<form *ngIf="context === 'professionals'">
+  <div class="mb-4">
+    <app-input label="Nome" inputType="text"></app-input>
+  </div>
+  <div class="mb-4">
+    <app-input
+      label="CPF"
+      placeholder="123.456.789-00"
+      inputType="text"
+    ></app-input>
+  </div>
+  <div class="mb-4">
+    <app-input
+      label="Tipo de acesso"
+      inputType="select"
+      placeholder="Selecione"
+      [options]="[]"
+    ></app-input>
+  </div>
+  <div class="mb-4">
+    <app-input
+      label="Trabalha em"
+      inputType="select"
+      placeholder="Selecione o espaço"
+      [options]="[]"
+    ></app-input>
+  </div>
+</form>
+<div class="d-flex justify-content-end align-items-center mt-4">
+  <app-button type="primary" variant="pill" class="fw-semibold" (click)="save()">
+    Continuar <i class="bi bi-arrow-right ms-2"></i>
+  </app-button>
+</div>

@@ -5,7 +5,6 @@ import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideNgxMask } from 'ngx-mask';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
-import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [

@@ -9,7 +9,7 @@ import { ProfessionsResponse } from '../models/profession.model';
   providedIn: 'root'
 })
 export class DoctorService {
-  private apiUrl = environment.apiUrl + '/doctor';
+  private apiUrl = environment.apiUrl + 'doctor';
   private addressesCache = new BehaviorSubject<UpdateAddress[]>([]);
 
   constructor(private http: HttpClient) {
