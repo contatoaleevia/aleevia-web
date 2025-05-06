@@ -31,10 +31,11 @@ export class WelcomeComponent {
   }
 
   onContinue() {
-    this.userService.isRegistered(this.cpfCnpjForm.get('cpfCnpj')?.value).subscribe((isRegistered) => {
+    const formattedCpfCnpj = this.cpfCnpjForm.get('cpfCnpj')?.value.replace(/\./g, '').replace('/', '').replace('-', '');
+    this.userService.isRegistered(formattedCpfCnpj).subscribe((isRegistered) => {
       if (isRegistered) {
         this.router.navigate(['/auth/login']);
-        localStorage.setItem('cpfCnpj', this.cpfCnpjForm.get('cpfCnpj')?.value);
+        localStorage.setItem('cpfCnpj', formattedCpfCnpj);
       } else {
         this.router.navigate(['/auth/register']);
       }

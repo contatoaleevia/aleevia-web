@@ -24,7 +24,7 @@ export class ConfirmationViewComponent {
   constructor(private router: Router) {}
 
   onAction() {
-    this.router.navigate(['/auth/register/individual/congratulations/1']);
+    this.router.navigate(['/auth/register/individual/service-professional/services']);
   }
 
   onEdit() {

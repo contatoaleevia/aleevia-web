@@ -1,5 +1,5 @@
 <div
-  class="congrats-container d-flex flex-column align-items-center gap-4 min-h-80vh"
+  class="d-flex flex-column align-items-center gap-4"
 >
   <h2 class="fw-bold text-center mb-3 mt-2 fs-2">
     Parabéns! Você tem um<br />espaço de saúde
@@ -9,18 +9,17 @@
     <p class="text-secondary text-center">
       Agora é só começar a organizar sua rotina do seu jeito.
     </p>
-    <p class="text-secondary text-center mb-4">Escolha como quer começar:</p>
+    <p class="text-secondary text-center mb-3">Escolha como quer começar:</p>
   </div>
   <div
     class="d-flex flex-column gap-2 align-items-center w-100"
-    style="max-width: 320px"
   >
-    <button
-      class="btn btn-primary mb-2 w-100"
+    <app-button
+      type="primary"
       [routerLink]="['/auth/register/individual/congratulations/2']"
     >
       Configurar meu espaço
-    </button>
+    </app-button>
     <a href="#" class="text-primary fw-semibold mt-1 text-center"
       >Ir para a Dashboard</a
     >
