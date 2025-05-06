@@ -74,3 +74,75 @@
   font-weight: vars.$font-weight-medium;
   color: vars.$gray-900;
 }
+
+.mat-select-value {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mat-select-value .mat-chip {
+  background: #e3ebfd;
+  color: #2563eb;
+  border-radius: 999px;
+  font-weight: 500;
+  font-size: 22px;
+  padding: 0 18px 0 18px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  margin: 4px 0;
+}
+
+.mat-select-value .mat-chip .mat-icon {
+  color: #64748b;
+  font-size: 24px;
+  margin-left: 8px;
+  cursor: pointer;
+}
+
+// Remove default chip border and shadow
+.mat-select-value .mat-chip.mat-standard-chip {
+  box-shadow: none;
+  border: none;
+}
+
+.custom-chip {
+  display: inline-flex;
+  align-items: center;
+  background: #e3ebfd;
+  color: #2563eb;
+  border-radius: 999px;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 0 10px;
+  height: 32px;
+  margin: 2px 6px 2px 0;
+  line-height: 1;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: font-size 0.2s, height 0.2s, padding 0.2s;
+}
+
+.custom-chip-remove {
+  color: #64748b;
+  font-size: 18px;
+  margin-left: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 600px) {
+  .custom-chip {
+    font-size: 13px;
+    height: 26px;
+    padding: 0 7px;
+  }
+  .custom-chip-remove {
+    font-size: 15px;
+    margin-left: 4px;
+  }
+}

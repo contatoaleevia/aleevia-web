@@ -5,7 +5,8 @@ import { ViaCepService } from '@shared/services/via-cep.service';
 import { InputComponent } from '@shared/components/input/input.component';
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { Router } from '@angular/router';
-
+import { REGISTRATION_TYPES, RegistrationType } from '@auth/base/register/constants/registration-types';
+import { RegistrationContextService } from '@app/auth/services/registration-context.service';
 @Component({
   selector: 'app-address-form',
   standalone: true,
@@ -15,12 +16,15 @@ import { Router } from '@angular/router';
 })
 export class AddressFormComponent {
   form: FormGroup;
+  context: RegistrationType = REGISTRATION_TYPES.INDIVIDUAL;
 
   constructor(
     private fb: FormBuilder,
     private viaCep: ViaCepService,
-    private router: Router
+    private router: Router,
+    private registrationContext: RegistrationContextService
   ) {
+    this.context = this.registrationContext.getContext();
     this.form = this.fb.group({
       addressName: ['', Validators.required],
       zipCode: ['', [Validators.required, Validators.pattern(/^[0-9]{5}-[0-9]{3}$/)]],
@@ -63,7 +67,7 @@ export class AddressFormComponent {
       registrationData.address = addressData;
       localStorage.setItem('registrationData', JSON.stringify(registrationData));
       
-      this.router.navigate(['/auth/register/individual/service-location/confirmation']);
+      this.router.navigate([`/auth/register/${this.context}/service-location/confirmation`]);
     }
   }
 }

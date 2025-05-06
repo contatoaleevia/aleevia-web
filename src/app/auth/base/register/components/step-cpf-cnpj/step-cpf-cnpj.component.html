@@ -3,7 +3,7 @@
   (ngSubmit)="onSubmit()"
   class="mx-auto h-100 d-flex flex-column"
 >
-  <ng-container *ngIf="isClinic; else individualMode">
+  <ng-container *ngIf="context === 'clinic'; else individualMode">
     <div>
       <div class="mb-3">
         <app-input

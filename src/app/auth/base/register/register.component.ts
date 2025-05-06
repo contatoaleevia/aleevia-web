@@ -26,7 +26,6 @@ export class RegisterComponent {
         while (currentRoute?.firstChild) {
           currentRoute = currentRoute.firstChild;
         }
-        console.log('currentRoute', currentRoute);
         return currentRoute?.snapshot.data || {};
       }),
       map(data => ({

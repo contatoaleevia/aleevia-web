@@ -29,22 +29,36 @@
   </ng-container>
   
   <ng-container *ngIf="isSelectInput">
-    <select
-      [id]="id"
-      [class]="'form-select ' + (variant === 'outline' ? 'form-select-outline' : '') + ' ' + class"
-      [(ngModel)]="internalValue"
-      [disabled]="isDisabled || disabled"
-      [required]="required"
-      [ngStyle]="inputStyle"
-      (focus)="onFocus()"
-      (blur)="onBlur()"
-      (change)="selectOption($event)"
-    >
-      <option value="" disabled selected>{{ placeholder }}</option>
-      <option *ngFor="let option of options" [value]="option[optionValue]">
-        {{ option[optionLabel] }}
-      </option>
-    </select>
+    <mat-form-field appearance="outline" style="width: 100%;" color="primary">
+      <mat-label>{{ placeholder || 'Selecione...' }}</mat-label>
+      <mat-select
+        [id]="id"
+        [value]="internalValue"
+        [disabled]="isDisabled || disabled"
+        [required]="required"
+        [ngStyle]="inputStyle"
+        [multiple]="inputType === 'multiselect'"
+        (selectionChange)="updateValue($event)"
+      >
+        <mat-select-trigger *ngIf="inputType === 'multiselect'">
+          <ng-container *ngFor="let selected of selectedOptions">
+            <span class="custom-chip">
+              {{ getOptionLabel(selected) }}
+              <span
+                class="custom-chip-remove"
+                (click)="$event.stopPropagation(); removeSelectedOption(selected);"
+              >
+                &times;
+              </span>
+            </span>
+          </ng-container>
+        </mat-select-trigger>
+        <mat-option *ngIf="placeholder" value="" disabled>{{ placeholder }}</mat-option>
+        <mat-option *ngFor="let option of options" [value]="option[optionValue]">
+          {{ option[optionLabel] }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </ng-container>
   
   <ng-container *ngIf="isTextarea">

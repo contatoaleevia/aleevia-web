@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { SERVICE_LOCATION_TYPES, ServiceLocationType } from '@auth/base/register/constants/registration-types';
 import { ButtonComponent } from '@shared/components/button/button.component';
+import { RegistrationContextService } from 'src/app/auth/services/registration-context.service';
 
 @Component({
   selector: 'app-type-select',
@@ -14,8 +15,14 @@ import { ButtonComponent } from '@shared/components/button/button.component';
 export class TypeSelectComponent {
   SERVICE_LOCATION_TYPES = SERVICE_LOCATION_TYPES;
   selectedTypes: ServiceLocationType[] = [];
+  context: 'individual' | 'clinic';
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private registrationContext: RegistrationContextService
+  ) {
+    this.context = this.registrationContext.getContext();
+  }
 
   toggleType(type: ServiceLocationType) {
     if (this.selectedTypes.includes(type)) {
@@ -28,9 +35,9 @@ export class TypeSelectComponent {
   onAction() {
     const { ONLINE, PRESENCIAL } = SERVICE_LOCATION_TYPES;
     if (this.selectedTypes.length === 1 && this.selectedTypes[0] === ONLINE) {
-      this.router.navigate(['/auth/register/individual/congratulations/1']);
+      this.router.navigate([`/auth/register/${this.context}/congratulations/1`]);
     } else if (this.selectedTypes.includes(PRESENCIAL)) {
-      this.router.navigate(['/auth/register/individual/service-location/address']);
+      this.router.navigate([`/auth/register/${this.context}/service-location/address`]);
     }
   }
 }

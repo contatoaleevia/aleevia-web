@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { InputComponent } from 'src/app/shared/components/input/input.component';
 import { ButtonComponent } from 'src/app/shared/components/button/button.component';
 import { Router } from '@angular/router';
+import { RegistrationContextService } from 'src/app/auth/services/registration-context.service';
+
 @Component({
   selector: 'app-step-password',
   standalone: true,
@@ -14,13 +16,19 @@ import { Router } from '@angular/router';
 export class StepPasswordComponent {
   form: FormGroup;
   submitted = false;
-  isClinic = false;
+  context: 'individual' | 'clinic';
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(
+    private fb: FormBuilder, 
+    private router: Router,
+    private registrationContext: RegistrationContextService
+  ) {
     this.form = this.fb.group({
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]]
     }, { validators: this.passwordsMatchValidator });
+
+    this.context = this.registrationContext.getContext();
   }
 
   passwordsMatchValidator(form: FormGroup) {
@@ -36,14 +44,16 @@ export class StepPasswordComponent {
     this.submitted = true;
     if (this.form.valid) {
       const password = this.form.get('password')?.value;
-      localStorage.setItem('password', password);
 
-      // Update registration data with password
       const registrationData = JSON.parse(localStorage.getItem('registrationData') || '{}');
       registrationData.password = password;
       localStorage.setItem('registrationData', JSON.stringify(registrationData));
 
-      this.router.navigate(['/auth/register', this.isClinic ? 'clinic' : 'individual', 'service-location']);
+      if (this.context === 'clinic') {
+        this.router.navigate([`/auth/register/${this.context}/healthcare-space`]);
+      } else {
+        this.router.navigate([`/auth/register/${this.context}/service-location`]);
+      }
     }
   }
 }
