@@ -88,6 +88,7 @@
         [disabled]="isDisabled || disabled"
         [required]="required"
         (change)="updateValue($event)"
+        style="cursor: pointer;"
       />
       <label class="form-check-label small text-secondary-60" [for]="id">
         {{ checkboxLabel }}

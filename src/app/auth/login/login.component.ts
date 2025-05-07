@@ -84,7 +84,7 @@ export class LoginComponent implements OnInit {
   }
 
   forgotPassword(): void {
-    console.log('Esqueceu a senha');
+    this.router.navigate(['/auth/reset-password']);
   }
 
   loginWithGoogle(): void {

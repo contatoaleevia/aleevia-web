@@ -1,48 +1,51 @@
-<div
-  class="auth-container d-flex align-items-center justify-content-center py-4"
->
-  <div class="container">
-    <div
-      class="bg-white rounded-4 shadow overflow-hidden mx-auto my-4 h-100"
-    >
-      <div class="row g-0">
-        <div
-          class="col-md-6 d-flex align-items-center justify-content-center bg-white h-100"
-        >
-          <div
-            class="d-flex align-items-center justify-content-center h-100 w-100"
-          >
-            <img
-              src="assets/images/base-auth.png"
-              alt="Médicos"
-              class="img-fluid"
-            />
-          </div>
-        </div>
+<div class="auth-container w-100 h-100">
+  <div class="row g-0 w-100 h-100">
+    <div class="col-5 bg-white h-100 overflow-hidden p-0" style="height: 100vh">
+      <img
+        src="assets/images/base-auth.png"
+        alt="Médicos"
+        class="w-100 object-fit-cover d-block"
+        style="height: 100vh"
+      />
+    </div>
 
+    <div
+      class="col-7 d-flex align-items-center justify-content-start bg-white h-100 px-5"
+    >
+      <div class="w-100 position-relative h-100">
         <div
-          class="col-md-6 d-flex align-items-center justify-content-center bg-white"
+          class="d-flex justify-content-end align-items-center position-absolute top-0 end-0 w-100"
+          style="margin-top: 20px; z-index: 1"
         >
-          <div class="w-100 position-relative content-auth h-100">
-            <div class="d-flex justify-content-end align-items-center position-absolute top-0 end-0 w-100" style="margin-top: 20px; z-index: 1;">
-              <img
-                src="assets/images/logo-aleevia.png"
-                alt="aleevia"
-                class="logo-aleevia"
-              />
-              <button
-                class="btn btn-link p-0 position-absolute start-0"
-                (click)="goBack()"
-                aria-label="Voltar"
-                style="margin-top: 20px;"
-                *ngIf="isRegisterRoute"
-              >
-                <i class="bi bi-arrow-left" style="font-size: 1.5rem"></i>
-              </button>
+          <img
+            src="assets/images/logo-aleevia.png"
+            alt="aleevia"
+            class="logo-aleevia"
+          />
+          <button
+            class="btn btn-link p-0 position-absolute start-0"
+            (click)="goBack()"
+            aria-label="Voltar"
+            style="margin-top: 20px"
+            *ngIf="isArrowVisible"
+          >
+            <i class="bi bi-arrow-left" style="font-size: 1.5rem"></i>
+          </button>
+        </div>
+        <div
+          class="content-wrapper overflow-auto"
+          style="margin-top: 80px; height: calc(100% - 80px)"
+        >
+          <div class="d-flex flex-column justify-content-start h-100 w-100">
+            <div style="max-width: 600px; width: 100%">
+              <h2 class="fw-bold mb-2 mt-2 fs-3">
+                {{ (routeData$ | async)?.title }}
+              </h2>
+              <p class="text-secondary mb-4">
+                {{ (routeData$ | async)?.subtitle }}
+              </p>
             </div>
-            <div class="content-wrapper" style="margin-top: 80px;">
-              <router-outlet></router-outlet>
-            </div>
+            <router-outlet></router-outlet>
           </div>
         </div>
       </div>
