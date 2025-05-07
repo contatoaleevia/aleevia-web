@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
   templateUrl: './step-healthcare-space.component.html',
   styleUrl: './step-healthcare-space.component.scss'
 })
-export class StepHealthcareSpaceComponent implements AfterViewInit {
+export class StepHealthcareSpaceComponent {
   form: FormGroup;
   specialties = [
     { id: 'cardiology', name: 'Cardiologia' },
@@ -31,9 +31,6 @@ export class StepHealthcareSpaceComponent implements AfterViewInit {
       site: [''],
       instagram: ['']
     });
-  }
-
-  ngAfterViewInit(): void {
   }
 
   onSubmit() {

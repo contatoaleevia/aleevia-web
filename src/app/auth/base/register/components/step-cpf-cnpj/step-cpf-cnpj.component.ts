@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { InputComponent } from 'src/app/shared/components/input/input.component';
-import { ButtonComponent } from 'src/app/shared/components/button/button.component';
+import { InputComponent } from '@shared/components/input/input.component';
+import { ButtonComponent } from '@shared/components/button/button.component';
 import { Router } from '@angular/router';
-import { RegistrationContextService } from 'src/app/auth/services/registration-context.service';
-
+import { RegistrationContextService } from '@auth/services/registration-context.service';
+import { RegistrationType, REGISTRATION_TYPES } from '@auth/base/register/constants/registration-types';
 @Component({
   selector: 'app-step-cpf-cnpj',
   standalone: true,
@@ -15,7 +15,7 @@ import { RegistrationContextService } from 'src/app/auth/services/registration-c
 })
 export class StepCpfCnpjComponent implements OnInit {
   form: FormGroup;
-  context: 'individual' | 'clinic' = 'individual';
+  context: RegistrationType = REGISTRATION_TYPES.INDIVIDUAL;
 
   constructor(
     private fb: FormBuilder, 
