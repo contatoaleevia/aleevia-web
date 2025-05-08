@@ -4,6 +4,8 @@ import { InputComponent } from 'src/app/shared/components/input/input.component'
 import { ButtonComponent } from 'src/app/shared/components/button/button.component';
 import { NgIf } from '@angular/common';
 import Swal from 'sweetalert2';
+import { RegistrationContextService } from 'src/app/auth/services/registration-context.service';
+import { RegistrationType } from 'src/app/auth/base/register/constants/registration-types';
 
 @Component({
   selector: 'app-register',
@@ -15,7 +17,11 @@ import Swal from 'sweetalert2';
 export class RegisterComponent implements OnInit {
   context: 'services' | 'professionals' = 'services';
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(
+    private route: ActivatedRoute, 
+    private router: Router,
+    private registrationContext: RegistrationContextService
+  ) {}
 
   ngOnInit(): void {
     const url = this.route.snapshot.pathFromRoot
@@ -30,6 +36,7 @@ export class RegisterComponent implements OnInit {
   } 
 
   save() {
+    const registrationType: RegistrationType = this.registrationContext.getContext();
     Swal.fire({
       toast: true,
       position: 'top-end',
@@ -47,9 +54,9 @@ export class RegisterComponent implements OnInit {
     });
 
     if (this.context === 'services') {
-      this.router.navigate(['/auth/register/individual/service-professional/services']);
+      this.router.navigate([`/auth/register/${registrationType}/service-professional/services`]);
     } else {
-      this.router.navigate(['/auth/register/individual/service-professional/professionals']);
+      this.router.navigate([`/auth/register/${registrationType}/service-professional/professionals`]);
     }
   }
 }

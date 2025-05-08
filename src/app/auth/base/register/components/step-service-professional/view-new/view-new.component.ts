@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ButtonComponent } from 'src/app/shared/components/button/button.component';
+import { RegistrationContextService } from 'src/app/auth/services/registration-context.service';
+import { RegistrationType } from 'src/app/auth/base/register/constants/registration-types';
+
 interface Service {
   id: number;
   name: string;
@@ -28,7 +31,12 @@ export class ViewNewComponent implements OnInit {
   showServiceForm = false;
   editingService: Service | null = null;
   keyword: string = '';
-  constructor(private route: ActivatedRoute, private router: Router) { }
+
+  constructor(
+    private route: ActivatedRoute, 
+    private router: Router,
+    private registrationContext: RegistrationContextService
+  ) { }
 
   ngOnInit(): void {
     this.getKeywords();
@@ -64,10 +72,11 @@ export class ViewNewComponent implements OnInit {
   }
 
   goToNextStep() {
+    const registrationType: RegistrationType = this.registrationContext.getContext();
     if (this.context === 'service') {
-      this.router.navigate(['/auth/register/individual/service-professional/professionals']);
+      this.router.navigate([`/auth/register/${registrationType}/service-professional/professionals`]);
     } else {
-      this.router.navigate(['/auth/register/individual/congratulations']);
+      this.router.navigate([`/auth/register/${registrationType}/congratulations`]);
     }
   }
 }

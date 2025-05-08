@@ -1,7 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
 
-@use 'bootstrap/scss/bootstrap';
-@use 'bootstrap-icons/font/bootstrap-icons.css' as bootstrap-icons;
+/* Import Angular Material */
+@use '@angular/material' as mat;
+@use 'sass:map';
+
+/* Import Bootstrap */
+@use 'bootstrap/dist/css/bootstrap.min.css' as *;
+@use 'bootstrap-icons/font/bootstrap-icons.css' as *;
+
+/* Import custom variables */
+@use './app/shared/styles/variables.scss' as *;
 
 /* Importing Google Fonts - Nunito */
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700&display=swap');
@@ -18,4 +26,29 @@ body {
 .min-h-80vh {
   min-height: 80vh;
 }
+
+/* Custom Material Theme */
+@include mat.core();
+
+// Define the palettes
+$custom-primary: mat.m2-define-palette(mat.$m2-blue-palette, 500);
+$custom-primary: map.set($custom-primary, 500, #4880FF);
+$custom-accent: mat.m2-define-palette(mat.$m2-grey-palette, 50, 100, 200);
+$custom-warn: mat.m2-define-palette(mat.$m2-red-palette);
+
+// Create the theme
+$custom-theme: mat.m2-define-light-theme((
+  color: (
+    primary: $custom-primary,
+    accent: $custom-accent,
+    warn: $custom-warn,
+  ),
+  density: 0,
+));
+
+// Apply the theme only once
+@include mat.all-component-themes($custom-theme);
+
+// Apply typography to Angular Material components
+@include mat.core-theme($custom-theme);
 
