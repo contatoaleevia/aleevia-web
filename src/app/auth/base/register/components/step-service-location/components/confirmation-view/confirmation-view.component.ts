@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { RegistrationContextService } from 'src/app/auth/services/registration-context.service';
 import { RegistrationType } from 'src/app/auth/base/register/constants/registration-types';
-
+import { AddressService } from '@shared/services/adress.service';
 @Component({
   selector: 'app-confirmation-view',
   standalone: true,
@@ -13,6 +13,7 @@ import { RegistrationType } from 'src/app/auth/base/register/constants/registrat
   styleUrl: './confirmation-view.component.scss'
 })
 export class ConfirmationViewComponent {
+  private readonly addressService = inject(AddressService);
   serviceLocation = JSON.parse(localStorage.getItem('serviceLocation') || '{}');
   context: RegistrationType;
 

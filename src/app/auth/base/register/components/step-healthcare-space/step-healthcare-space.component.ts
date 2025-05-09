@@ -6,7 +6,8 @@ import { ButtonComponent } from '@shared/components/button/button.component';
 import { Router } from '@angular/router';
 import { Office } from '@shared/models/office.model';
 import { OfficeService } from '@shared/services/office.service';
-
+import { RegistrationContextService } from '@app/auth/services/registration-context.service';
+import { RegistrationType } from '@app/auth/base/register/constants/registration-types';
 @Component({
   selector: 'app-step-healthcare-space',
   standalone: true,
@@ -15,9 +16,12 @@ import { OfficeService } from '@shared/services/office.service';
   styleUrl: './step-healthcare-space.component.scss'
 })
 export class StepHealthcareSpaceComponent {
-  private fb = inject(FormBuilder);
-  private router = inject(Router);
-  private officeService = inject(OfficeService);
+  private readonly registrationContextService = inject(RegistrationContextService);
+  private readonly fb = inject(FormBuilder);
+  private readonly router = inject(Router);
+  private readonly officeService = inject(OfficeService);
+
+  private context: RegistrationType = this.registrationContextService.getContext();
   form: FormGroup = this.initializeForm();
 
   private initializeForm(): FormGroup {
@@ -46,10 +50,19 @@ export class StepHealthcareSpaceComponent {
   onSubmit() {
     if (this.form.valid) {
       const office = this.prepareOfficeData();
+      const registrationData = JSON.parse(localStorage.getItem('registrationData') || '{}');
+      const updatedData = { ...registrationData, ...office };
+      
       try {
-        localStorage.setItem('registrationData', JSON.stringify(office));
-        this.officeService.createOffice(office).subscribe(() => {
-          this.router.navigate(['/auth/register/clinic/service-location']);
+        localStorage.setItem('registrationData', JSON.stringify(updatedData));
+        this.officeService.createOffice(office).subscribe({
+          next: (response: Office) => {
+            this.router.navigate([`/auth/register/${this.context}/service-location`]);
+            localStorage.setItem('officeId', response.id || '');
+          },
+          error: (error: any) => {
+            console.error('Error saving office data:', error);
+          }
         });
       } catch (error) {
         console.error('Error saving office data:', error);

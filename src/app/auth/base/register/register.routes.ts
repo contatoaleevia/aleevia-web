@@ -24,6 +24,7 @@ export const registerRoutes: Routes = [
     children: [
       ...stepCpfCnpjRoute,
       ...stepPasswordRoute,
+      ...stepHealthcareSpaceRoute,
       ...stepServiceLocationRoute,
       ...stepServiceProfessionalRoute,
       ...stepCongratulationsRoute

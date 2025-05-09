@@ -107,8 +107,7 @@ export class StepPasswordComponent {
 
   private handleNavigation() {
     if (!this.router.url.includes('reset-password')) {
-      const route = this.context === 'clinic' ? 'healthcare-space' : 'service-location';
-      this.router.navigate([`/auth/register/${this.context}/${route}`]);
+      this.router.navigate([`/auth/register/${this.context}/healthcare-space`]);
     }
   }
 

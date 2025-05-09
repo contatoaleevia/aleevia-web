@@ -7,4 +7,5 @@ export interface Office {
   site: string;
   instagram: string;
   logo: string;
+  id?: string;
 }
