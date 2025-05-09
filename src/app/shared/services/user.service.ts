@@ -1,4 +1,5 @@
 import { inject, Injectable } from '@angular/core';
+import { IsRegisteredResponse, RegisterUserPayload } from '@auth/models/register.model';
 import { ApiService } from '@core/services/api.service';
 import { Observable } from 'rxjs';
 
@@ -10,11 +11,11 @@ export class UserService {
 
     private readonly routeUrl = 'user/';
 
-    /**
-     * Verifica se o usuário está registrado
-     * @returns Observable com o resultado
-     */
-    isRegistered(cpfcnpj: string): Observable<boolean> {
-        return this.apiService.get<boolean>(this.routeUrl + 'is-registered/' + cpfcnpj);
+    isRegistered(cpfcnpj: string): Observable<IsRegisteredResponse> {
+        return this.apiService.get<IsRegisteredResponse>(this.routeUrl + 'is-registered/' + cpfcnpj);
+    }
+
+    registerUser(payload: RegisterUserPayload): Observable<any> {
+        return this.apiService.post(this.routeUrl + 'manager', payload);
     }
 }

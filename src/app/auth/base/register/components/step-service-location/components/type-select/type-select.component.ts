@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { SERVICE_LOCATION_TYPES, ServiceLocationType } from '@auth/base/register/constants/registration-types';
+import { SERVICE_LOCATION_TYPES, ServiceLocationType } from '@auth/base/register/constants/service-location-types';
+import { RegistrationType } from '@auth/base/register/constants/registration-types';
 import { ButtonComponent } from '@shared/components/button/button.component';
-import { RegistrationContextService } from 'src/app/auth/services/registration-context.service';
-
+import { RegistrationContextService } from '@auth/base/register/registration-context.service';
 @Component({
   selector: 'app-type-select',
   standalone: true,
@@ -13,16 +13,12 @@ import { RegistrationContextService } from 'src/app/auth/services/registration-c
   styleUrl: './type-select.component.scss'
 })
 export class TypeSelectComponent {
+  private readonly registrationContext = inject(RegistrationContextService);
+  private readonly router = inject(Router);
+
   SERVICE_LOCATION_TYPES = SERVICE_LOCATION_TYPES;
   selectedTypes: ServiceLocationType[] = [];
-  context: 'individual' | 'clinic';
-
-  constructor(
-    private router: Router,
-    private registrationContext: RegistrationContextService
-  ) {
-    this.context = this.registrationContext.getContext();
-  }
+  context: RegistrationType = this.registrationContext.getContext();
 
   toggleType(type: ServiceLocationType) {
     if (this.selectedTypes.includes(type)) {

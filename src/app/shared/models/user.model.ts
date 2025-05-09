@@ -1,3 +1,4 @@
+// Base interfaces
 export interface BaseUser {
   id: string;
   full_name: string;
@@ -11,10 +12,6 @@ export interface BaseUser {
   gender?: string;
   pre_registered: boolean;
   google_token: string | null;
-}
-
-export interface UpdateAddress extends Address {
-  id?: string;
 }
 
 export interface Address {
@@ -48,10 +45,16 @@ export interface SocialInfo {
   bio?: string;
 }
 
+// Extended interfaces
+export interface UpdateAddress extends Address {
+  id?: string;
+}
+
 export interface User extends BaseUser, Address, ProfessionalInfo, SocialInfo {
   birth_date?: string;
 }
 
+// API Request/Response interfaces
 export interface UserUpdateRequest extends Partial<BaseUser>, Partial<Address>, Partial<ProfessionalInfo>, Partial<SocialInfo> {
   password?: string;
   password_confirmation?: string;
@@ -89,4 +92,4 @@ export interface UserUpdateApiResponse {
 
 export interface FileUploadResponse {
   url: string;
-} 
+}

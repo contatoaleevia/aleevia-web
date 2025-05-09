@@ -1,10 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ButtonComponent } from '@shared/components/button/button.component';
-import { RegistrationContextService } from 'src/app/auth/services/registration-context.service';
-import { RegistrationType } from 'src/app/auth/base/register/constants/registration-types';
-
+import { RegistrationContextService } from '@auth/base/register/registration-context.service';
+import { RegistrationType } from '@auth/base/register/constants/registration-types';
 @Component({
   selector: 'app-confirmation-view',
   standalone: true,

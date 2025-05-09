@@ -18,7 +18,7 @@
       </div>
       <div class="mb-3">
         <app-input
-          formControlName="phone"
+          formControlName="phoneNumber"
           label="Telefone"
           bgColor="white"
           [required]="true"
@@ -28,7 +28,7 @@
       </div>
       <div class="mb-3">
         <app-input
-          formControlName="companyName"
+          formControlName="corporateName"
           label="Razão Social"
           bgColor="white"
           [required]="true"
@@ -122,7 +122,9 @@
         >
       </div>
 
-      <div class="d-flex flex-column justify-content-start p-0">
+      <div
+        class="d-flex flex-column justify-content-start p-0"
+      >
         <ng-container *ngIf="form.get('isCompany')!.value">
           <div class="mb-3">
             <app-input
@@ -137,7 +139,7 @@
           </div>
           <div class="mb-3">
             <app-input
-              formControlName="phone"
+              formControlName="phoneNumber"
               label="Telefone"
               bgColor="white"
               [required]="true"
@@ -147,7 +149,7 @@
           </div>
           <div class="mb-3">
             <app-input
-              formControlName="companyName"
+              formControlName="corporateName"
               label="Razão Social"
               bgColor="white"
               [required]="true"
@@ -172,7 +174,7 @@
         <a href="#" target="_blank">Política de Privacidade</a>
       </label>
     </div>
-
+  
     <div class="d-flex justify-content-end">
       <app-button
         type="primary"

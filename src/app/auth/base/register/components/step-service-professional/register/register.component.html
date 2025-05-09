@@ -1,37 +1,48 @@
 <form *ngIf="context === 'services'">
-  <div class="mb-4">
+  <div class="mb-3">
+    <app-input
+      label="Tipo de serviço"
+      inputType="select"
+      [options]="serviceTypes"
+    ></app-input>
+  </div>
+  <div class="mb-3">
     <app-input
       label="Nome do serviço"
       placeholder=""
       inputType="text"
+      bgColor="white"
     ></app-input>
   </div>
-  <div class="mb-4">
+  <div class="mb-3">
     <app-input
       label="Tempo de atendimento"
       placeholder="00:00"
       inputType="text"
+      bgColor="white"
     ></app-input>
   </div>
-  <div class="mb-4">
+  <div class="mb-3">
     <app-input
       label="Valor"
       placeholder="Digite o valor R$"
       inputType="text"
+      bgColor="white"
     ></app-input>
   </div>
-  <div class="mb-4">
+  <div class="mb-3">
     <app-input
       label="Aceita convênio"
       inputType="select"
       [options]="[]"
     ></app-input>
   </div>
-  <div class="mb-4">
+  <div class="mb-3">
     <app-input
       label="Descrição"
       placeholder="Digite a descrição da sua clínica para seus clientes"
       inputType="textarea"
+      bgColor="white"
     ></app-input>
   </div>
 </form>
@@ -45,6 +56,7 @@
       label="CPF"
       placeholder="123.456.789-00"
       inputType="text"
+      bgColor="white"
     ></app-input>
   </div>
   <div class="mb-4">
@@ -52,6 +64,7 @@
       label="Tipo de acesso"
       inputType="select"
       [options]="[]"
+      bgColor="white"
     ></app-input>
   </div>
   <div class="mb-4">
@@ -59,6 +72,7 @@
       label="Trabalha em"
       inputType="select"
       [options]="[]"
+      bgColor="white"
     ></app-input>
   </div>
 </form>
