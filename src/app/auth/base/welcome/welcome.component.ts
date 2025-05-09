@@ -5,6 +5,8 @@ import { InputComponent } from '@shared/components/input/input.component';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { UserService } from '@shared/services/user.service';
+import { IsRegisteredResponse } from '@auth/models/register.model';
+
 @Component({
   selector: 'app-welcome',
   standalone: true,
@@ -32,8 +34,8 @@ export class WelcomeComponent {
 
   onContinue() {
     const formattedCpfCnpj = this.cpfCnpjForm.get('cpfCnpj')?.value.replace(/\./g, '').replace('/', '').replace('-', '');
-    this.userService.isRegistered(formattedCpfCnpj).subscribe((isRegistered) => {
-      if (isRegistered) {
+    this.userService.isRegistered(formattedCpfCnpj).subscribe((response: IsRegisteredResponse) => {
+      if (response.isRegistered) {
         this.router.navigate(['/auth/login']);
         localStorage.setItem('cpfCnpj', formattedCpfCnpj);
       } else {

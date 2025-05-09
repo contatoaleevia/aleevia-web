@@ -1,9 +1,11 @@
-import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { InputComponent } from 'src/app/shared/components/input/input.component';
-import { ButtonComponent } from 'src/app/shared/components/button/button.component';
+import { InputComponent } from '@shared/components/input/input.component';
+import { ButtonComponent } from '@shared/components/button/button.component';
 import { Router } from '@angular/router';
+import { Office } from '@shared/models/office.model';
+import { OfficeService } from '@shared/services/office.service';
 
 @Component({
   selector: 'app-step-healthcare-space',
@@ -13,31 +15,45 @@ import { Router } from '@angular/router';
   styleUrl: './step-healthcare-space.component.scss'
 })
 export class StepHealthcareSpaceComponent {
-  form: FormGroup;
-  specialties = [
-    { id: 'cardiology', name: 'Cardiologia' },
-    { id: 'dermatology', name: 'Dermatologia' },
-    { id: 'pediatrics', name: 'Pediatria' },
-  ];
-  @ViewChild('specialtiesSelect', { static: false }) specialtiesSelect!: ElementRef<HTMLSelectElement>;
+  private fb = inject(FormBuilder);
+  private router = inject(Router);
+  private officeService = inject(OfficeService);
+  form: FormGroup = this.initializeForm();
 
-  constructor(private fb: FormBuilder, private router: Router) {
-    this.form = this.fb.group({
-      image: [null],
+  private initializeForm(): FormGroup {
+    return this.fb.group({
       name: ['', Validators.required],
-      specialties: [[], Validators.required],
-      phone: ['', Validators.required],
+      phoneNumber: ['', Validators.required],
       whatsapp: [''],
       site: [''],
-      instagram: ['']
+      instagram: [''],
+      logo: [null]
     });
+  }
+
+  private prepareOfficeData(): Office {
+    return {
+      name: this.form.value.name,
+      phoneNumber: this.form.value.phoneNumber,
+      whatsapp: this.form.value.whatsapp,
+      email: this.form.value.email,
+      site: this.form.value.site,
+      instagram: this.form.value.instagram,
+      logo: this.form.value.logo
+    };
   }
 
   onSubmit() {
     if (this.form.valid) {
-      console.log(this.form.value);
-      localStorage.setItem('registrationData', JSON.stringify(this.form.value));
-      this.router.navigate(['/auth/register/clinic/service-location']);
+      const office = this.prepareOfficeData();
+      try {
+        localStorage.setItem('registrationData', JSON.stringify(office));
+        this.officeService.createOffice(office).subscribe(() => {
+          this.router.navigate(['/auth/register/clinic/service-location']);
+        });
+      } catch (error) {
+        console.error('Error saving office data:', error);
+      }
     } else {
       this.form.markAllAsTouched();
     }
@@ -49,7 +65,7 @@ export class StepHealthcareSpaceComponent {
       const file = input.files[0];
       const reader = new FileReader();
       reader.onload = () => {
-        this.form.patchValue({ image: reader.result });
+        this.form.patchValue({ logo: reader.result });
       };
       reader.readAsDataURL(file);
     }

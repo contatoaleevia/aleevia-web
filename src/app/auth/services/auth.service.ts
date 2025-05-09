@@ -62,8 +62,8 @@ export class AuthService {
 
     return this.apiService.post<LoginResponse>(this.routeUrl + 'login', credentials).pipe(
       tap(response => {
-        if (response && response.access_token) {
-          this.setAuthState(response.user, response.access_token);
+        if (response && response.token) {
+          this.setAuthState(response.user, response.token);
         }
       }),
       catchError(error => {

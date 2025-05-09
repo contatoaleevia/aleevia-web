@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { InputComponent } from 'src/app/shared/components/input/input.component';
-import { ButtonComponent } from 'src/app/shared/components/button/button.component';
+import { InputComponent } from '@shared/components/input/input.component';
+import { ButtonComponent } from '@shared/components/button/button.component';
 import { NgIf } from '@angular/common';
 import Swal from 'sweetalert2';
-import { RegistrationContextService } from 'src/app/auth/services/registration-context.service';
-import { RegistrationType } from 'src/app/auth/base/register/constants/registration-types';
+import { RegistrationContextService } from '@auth/services/registration-context.service';
+import { RegistrationType } from '@auth/base/register/constants/registration-types';
+import { ServiceTypeService } from '@shared/services/service-type.service';
+import { inject } from '@angular/core';
+import { ServiceType } from '@shared/models/service-type.model';
 
 @Component({
   selector: 'app-register',
@@ -15,13 +18,14 @@ import { RegistrationType } from 'src/app/auth/base/register/constants/registrat
   styleUrl: './register.component.scss'
 })
 export class RegisterComponent implements OnInit {
-  context: 'services' | 'professionals' = 'services';
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly registrationContext = inject(RegistrationContextService);
+  private readonly serviceTypeService = inject(ServiceTypeService);
+  
 
-  constructor(
-    private route: ActivatedRoute, 
-    private router: Router,
-    private registrationContext: RegistrationContextService
-  ) {}
+  context: 'services' | 'professionals' = 'services';
+  serviceTypes: ServiceType[] = [];
 
   ngOnInit(): void {
     const url = this.route.snapshot.pathFromRoot
@@ -33,6 +37,10 @@ export class RegisterComponent implements OnInit {
     } else {
       this.context = 'services';
     }
+
+    this.serviceTypeService.getServiceTypes().subscribe(serviceTypes => {
+      this.serviceTypes = serviceTypes;
+    });
   } 
 
   save() {

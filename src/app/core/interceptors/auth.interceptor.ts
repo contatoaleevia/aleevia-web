@@ -18,6 +18,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     req = req.clone({ headers });
   }
   
+  const headers = req.headers.set('x-api-key', '6a5e7add-7e24-48e0-90aa-79486597f1d3');
+  req = req.clone({ headers });
+  
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       console.log('Auth Interceptor - Error:', error.status);

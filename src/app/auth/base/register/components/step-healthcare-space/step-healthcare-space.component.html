@@ -5,8 +5,8 @@
         <label class="avatar-label" style="cursor:pointer;">
           <input type="file" accept="image/*" (change)="onImageChange($event)" hidden #fileInput />
           <img
-            *ngIf="form.value.image; else uploadPlaceholder"
-            [src]="form.value.image"
+            *ngIf="form.value.logo; else uploadPlaceholder"
+            [src]="form.value.logo"
             alt="Imagem do espaço"
             class="avatar-img"
             (click)="fileInput.click()"
@@ -34,23 +34,10 @@
     </div>
   </div>
 
-  <div class="mb-3">
-    <label class="form-label fw-semibold">Especialidades atendidas</label>
-    <app-input
-      formControlName="specialties"
-      inputType="multiselect"
-      [options]="specialties"
-      optionLabel="name"
-      optionValue="id"
-      bgColor="white"
-      [required]="true"
-    ></app-input>
-  </div>
-
   <div class="row mb-3">
     <div class="col-md-6">
       <app-input
-        formControlName="phone"
+        formControlName="phoneNumber"
         bgColor="white" 
         label="Telefone comercial"
         placeholder="(  ) ____-___"
