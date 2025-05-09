@@ -6,7 +6,7 @@ import { InputComponent } from '@shared/components/input/input.component';
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { Router } from '@angular/router';
 import { RegistrationType } from '@auth/base/register/constants/registration-types';
-import { RegistrationContextService } from '@auth/services/registration-context.service';
+import { RegistrationContextService } from '@auth/base/register/registration-context.service';
 
 @Component({
   selector: 'app-address-form',

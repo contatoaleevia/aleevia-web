@@ -4,9 +4,9 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { InputComponent } from '@shared/components/input/input.component';
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { Router } from '@angular/router';
-import { RegistrationContextService } from '@auth/services/registration-context.service';
+import { RegistrationContextService } from '@auth/base/register/registration-context.service';
 import { RegistrationType, REGISTRATION_TYPES } from '@auth/base/register/constants/registration-types';
-import { RegistrationData } from '@app/auth/models/register.model';
+import { RegistrationData } from '@auth/models/register.model';
 
 @Component({
   selector: 'app-step-cpf-cnpj',

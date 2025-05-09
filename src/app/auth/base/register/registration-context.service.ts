@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { BehaviorSubject, filter } from 'rxjs';
-import { REGISTRATION_TYPES, RegistrationType } from '../base/register/constants/registration-types';
+import { REGISTRATION_TYPES, RegistrationType } from '@auth/base/register/constants/registration-types';
 
 @Injectable({
   providedIn: 'root'

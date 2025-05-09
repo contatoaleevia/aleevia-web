@@ -4,7 +4,7 @@ import { InputComponent } from '@shared/components/input/input.component';
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { NgIf } from '@angular/common';
 import Swal from 'sweetalert2';
-import { RegistrationContextService } from '@auth/services/registration-context.service';
+import { RegistrationContextService } from '@auth/base/register/registration-context.service';
 import { RegistrationType } from '@auth/base/register/constants/registration-types';
 import { ServiceTypeService } from '@shared/services/service-type.service';
 import { inject } from '@angular/core';

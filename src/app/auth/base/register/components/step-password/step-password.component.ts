@@ -4,13 +4,14 @@ import { CommonModule } from '@angular/common';
 import { InputComponent } from '@shared/components/input/input.component';
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { Router } from '@angular/router';
-import { RegistrationContextService } from '@auth/services/registration-context.service';
+import { RegistrationContextService } from '@auth/base/register/registration-context.service';
 import { RegistrationType } from '@auth/base/register/constants/registration-types';
 import Swal from 'sweetalert2';
 import { UserService } from '@shared/services/user.service';
 import { RegisterUserPayload } from '@auth/models/register.model';
 import { AuthService } from '@auth/services/auth.service';
-import { switchMap, from, tap, map, catchError } from 'rxjs';
+import { switchMap, from, tap, map, catchError, finalize } from 'rxjs';
+import { LoadingService } from '@core/services/loading.service';
 
 @Component({
   selector: 'app-step-password',
@@ -25,6 +26,7 @@ export class StepPasswordComponent {
   private registrationContext = inject(RegistrationContextService);
   private userService = inject(UserService);
   private authService = inject(AuthService);
+  private loadingService = inject(LoadingService);
 
   form: FormGroup;
   submitted = false;
@@ -51,6 +53,7 @@ export class StepPasswordComponent {
   get confirmPassword() { return this.form.get('confirmPassword'); }
 
   private preparePayload(password: string): RegisterUserPayload {
+    this.loadingService.loadingOn();
     const registrationData = JSON.parse(localStorage.getItem('registrationData') || '{}');
     const payload: RegisterUserPayload = {
       password,
@@ -106,13 +109,14 @@ export class StepPasswordComponent {
   }
 
   private handleNavigation() {
+    this.loadingService.loadingOff();
     if (!this.router.url.includes('reset-password')) {
       this.router.navigate([`/auth/register/${this.context}/healthcare-space`]);
     }
   }
 
   private handleError(error: any) {
-    console.log(error.error.Errors);
+    this.loadingService.loadingOff();
     return from(Swal.fire({
       title: 'Erro',
       text: error.error.Errors.map((err: any) => err.Message).join('\n'),
@@ -130,7 +134,7 @@ export class StepPasswordComponent {
       this.userService.registerUser(this.preparePayload(password)).pipe(
         switchMap(() => this.handleSuccess()),
         tap(() => this.handleNavigation()),
-        catchError(error => this.handleError(error))
+        catchError(error => this.handleError(error)),
       ).subscribe();
     }
   }

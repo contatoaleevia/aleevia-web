@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ButtonComponent } from 'src/app/shared/components/button/button.component';
-import { RegistrationContextService } from 'src/app/auth/services/registration-context.service';
-import { RegistrationType } from 'src/app/auth/base/register/constants/registration-types';
+import { RegistrationContextService } from '@auth/base/register/registration-context.service';
+import { RegistrationType } from '@auth/base/register/constants/registration-types';
 
 interface Service {
   id: number;

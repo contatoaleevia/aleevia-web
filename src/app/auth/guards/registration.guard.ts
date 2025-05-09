@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { RegistrationContextService } from '@auth/services/registration-context.service';
+import { RegistrationContextService } from '@auth/base/register/registration-context.service';
 
 export const registrationGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
