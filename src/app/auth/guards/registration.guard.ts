@@ -8,7 +8,8 @@ export const registrationGuard: CanActivateFn = (route, state) => {
   const registrationData = localStorage.getItem('registrationData');
   const registrationType = registrationContext.getContext();
   const routeBack = `/auth/register/${registrationType}`;
-  
+  const token = localStorage.getItem('token');
+
   if (!registrationData && !state.url.includes('cpf-cnpj')) {
     router.navigate([routeBack + '/cpf-cnpj']);
     return false;
@@ -16,22 +17,22 @@ export const registrationGuard: CanActivateFn = (route, state) => {
 
   if (registrationData) {
     const data = JSON.parse(registrationData);
-    
-    if (state.url.includes('password') && (!data.name || !data.email || !data.cpf)) {
+
+    if (state.url.includes('password') && !token) {
       router.navigate([routeBack + '/cpf-cnpj']);
       return false;
     }
 
-    if (state.url.includes('service-location') && !data.password) {
+    if (state.url.includes('service-location') && !token) {
       router.navigate([routeBack + '/password']);
       return false;
     }
 
-    if (state.url.includes('confirmation') && !data.address) {
+    if ((state.url.includes('confirmation') && !data.address) || !token) {
       router.navigate([routeBack + '/service-location']);
       return false;
     }
   }
 
   return true;
-}; 
+};

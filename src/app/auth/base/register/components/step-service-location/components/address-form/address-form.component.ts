@@ -33,7 +33,7 @@ export class AddressFormComponent {
 
   private initializeForm(): FormGroup {
     return this.fb.group({
-      addressName: ['', Validators.required],
+      name: ['', Validators.required],
       zipCode: ['', [Validators.required, Validators.pattern(/^[0-9]{5}-[0-9]{3}$/)]],
       street: ['', Validators.required],
       neighborhood: ['', Validators.required],
@@ -83,19 +83,21 @@ export class AddressFormComponent {
 
   private saveAddressData(): void {
     const addressData = this.form.value;
-    const officeId = localStorage.getItem('officeId');
+    const officeId = localStorage.getItem('officeId')?.replace(/"/g, '');
     addressData.sourceId = officeId;
-    addressData.sourceType.userTypeId = 2;
+    addressData.sourceType = {
+      userTypeId: 2
+    };
     localStorage.setItem('serviceLocation', JSON.stringify(addressData));
 
     console.log(addressData);
 
-    // if (officeId) {
-    //   this.addressService.createAddress(addressData).subscribe((response) => {
-    //     addressData.id = response.id;
-    //   });
-    // }
-    
+    if (officeId) {
+      this.addressService.createAddress(addressData).subscribe((response) => {
+        addressData.id = response.id;
+      });
+    }
+
     const registrationData = JSON.parse(localStorage.getItem('registrationData') || '{}');
     registrationData.address = addressData;
     localStorage.setItem('registrationData', JSON.stringify(registrationData));
