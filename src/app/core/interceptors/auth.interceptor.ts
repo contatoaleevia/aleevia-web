@@ -26,7 +26,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       console.log('Auth Interceptor - Error:', error.status);
       
       if (error.status === 401) {
-        authService.logout();
+        // authService.logout();
         router.navigate(['/login'], { 
           queryParams: { returnUrl: router.url } 
         });
