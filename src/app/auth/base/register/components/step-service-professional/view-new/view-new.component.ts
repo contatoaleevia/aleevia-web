@@ -4,13 +4,8 @@ import { CommonModule } from '@angular/common';
 import { ButtonComponent } from 'src/app/shared/components/button/button.component';
 import { RegistrationContextService } from '@auth/base/register/registration-context.service';
 import { RegistrationType } from '@auth/base/register/constants/registration-types';
-
-interface Service {
-  id: number;
-  name: string;
-  price: number;
-  duration: string;
-}
+import { OfficeAttendanceService } from '@app/shared/services/office-attendance.service';
+import { OfficeAttendance } from '@app/shared/models/office-attendance.model';
 
 interface Professional {
   id: number;
@@ -26,16 +21,18 @@ interface Professional {
 })
 export class ViewNewComponent implements OnInit {
   context: 'service' | 'professional' = 'service';
-  services: Service[] = [];
+  services: OfficeAttendance[] = [];
   professionals: Professional[] = [];
   showServiceForm = false;
-  editingService: Service | null = null;
+  editingService: OfficeAttendance | null = null;
   keyword: string = '';
+  officeID: string = JSON.parse(localStorage.getItem('officeId') || '{}');
 
   constructor(
-    private route: ActivatedRoute, 
+    private route: ActivatedRoute,
     private router: Router,
-    private registrationContext: RegistrationContextService
+    private registrationContext: RegistrationContextService,
+    private officeAttendanceService: OfficeAttendanceService
   ) { }
 
   ngOnInit(): void {
@@ -50,13 +47,7 @@ export class ViewNewComponent implements OnInit {
     } else {
       this.context = 'service';
       this.keyword = 'serviços';
-    }
-
-    if (this.context === 'service') {
-      this.services = [
-        { id: 1, name: 'Consulta clínica', price: 100, duration: '1h' },
-        { id: 2, name: 'Consulta clínica', price: 100, duration: '1h' }
-      ];
+      this.getServices();
     }
 
     if (this.context === 'professional') {
@@ -65,6 +56,16 @@ export class ViewNewComponent implements OnInit {
         { id: 2, name: 'Dra. Maria Oliveira', email: 'maria.oliveira@gmail.com' }
       ];
     }
+  }
+
+  getServices() {
+    // this.officeAttendanceService.get(this.officeID).subscribe((services) => {
+    //   this.services = services;
+    // });
+      this.services = [
+        { id: 1, title: 'Consulta clínica', price: 100, description: 'Consulta clínica' },
+        { id: 2, title: 'Consulta clínica', price: 100, description: 'Consulta clínica' }
+      ];
   }
 
   deleteService(id: number) {

@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { RegistrationType } from '@auth/base/register/constants/registration-types';
 import { RegistrationContextService } from '@auth/base/register/registration-context.service';
 import { AddressService } from '@shared/services/adress.service';
+import { LoadingService } from '@app/core/services/loading.service';
 @Component({
   selector: 'app-address-form',
   standalone: true,
@@ -21,6 +22,7 @@ export class AddressFormComponent {
   private readonly router = inject(Router);
   private readonly registrationContext = inject(RegistrationContextService);
   private readonly addressService = inject(AddressService);
+  private readonly loadingService = inject(LoadingService);
 
   form: FormGroup;
   context: RegistrationType = this.registrationContext.getContext();
@@ -82,6 +84,7 @@ export class AddressFormComponent {
   }
 
   private saveAddressData(): void {
+    this.loadingService.loadingOn();
     const addressData = this.form.value;
     const officeId = localStorage.getItem('officeId')?.replace(/"/g, '');
     addressData.sourceId = officeId;
@@ -101,6 +104,7 @@ export class AddressFormComponent {
     const registrationData = JSON.parse(localStorage.getItem('registrationData') || '{}');
     registrationData.address = addressData;
     localStorage.setItem('registrationData', JSON.stringify(registrationData));
+    this.loadingService.loadingOff();
   }
 
   onAction(): void {

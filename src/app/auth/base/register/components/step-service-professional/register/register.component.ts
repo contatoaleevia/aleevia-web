@@ -9,11 +9,15 @@ import { RegistrationType } from '@auth/base/register/constants/registration-typ
 import { ServiceTypeService } from '@shared/services/service-type.service';
 import { inject } from '@angular/core';
 import { ServiceType } from '@shared/models/service-type.model';
+import { LoadingService } from '@app/core/services/loading.service';
+import { OfficeAttendanceService } from '@app/shared/services/office-attendance.service';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { OfficeAttendance } from '@app/shared/models/office-attendance.model';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [InputComponent, ButtonComponent, NgIf],
+  imports: [InputComponent, ButtonComponent, NgIf, ReactiveFormsModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
@@ -21,29 +25,114 @@ export class RegisterComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly registrationContext = inject(RegistrationContextService);
+  private readonly loadingService = inject(LoadingService);
+  private readonly officeAttendanceService = inject(OfficeAttendanceService);
   private readonly serviceTypeService = inject(ServiceTypeService);
-  
+  private readonly fb = inject(FormBuilder);
 
   context: 'services' | 'professionals' = 'services';
-  serviceTypes: ServiceType[] = [];
+  serviceTypes = [
+    { id: '3fa85f64-5717-4562-b3fc-2c963f66afa6', name: 'Clínico' }
+  ];
+
+  serviceForm!: FormGroup;
+  professionalForm!: FormGroup;
 
   ngOnInit(): void {
+    this.detectContext();
+    if(this.context === 'services') {
+      this.initServiceForm();
+    } else {
+      this.initProfessionalForm();
+    }
+  }
+
+  private detectContext() {
     const url = this.route.snapshot.pathFromRoot
       .map(r => r.routeConfig?.path)
       .filter(Boolean)
       .join('/');
-    if (url.includes('add-professional')) {
-      this.context = 'professionals';
-    } else {
-      this.context = 'services';
-    }
+    this.context = url.includes('add-professional') ? 'professionals' : 'services';
+  }
 
-    this.serviceTypeService.getServiceTypes().subscribe(serviceTypes => {
-      this.serviceTypes = serviceTypes;
+  private initServiceForm() {
+    this.serviceForm = this.fb.group({
+      serviceType: [null, Validators.required],
+      name: ['', [Validators.required, Validators.maxLength(100)]],
+      duration: ['', [Validators.required, Validators.pattern(/^\d{2}:\d{2}$/)]],
+      value: ['', [Validators.required, Validators.pattern(/^\d+(,\\d{2})?$/)]],
+      description: ['', [Validators.required, Validators.maxLength(500)]]
     });
-  } 
+  }
+
+  private initProfessionalForm() {
+    this.professionalForm = this.fb.group({
+      name: ['', [Validators.required, Validators.maxLength(100)]],
+      cpf: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      hasSchedule: [null, Validators.required],
+      workplace: [null, Validators.required]
+    });
+  }
+
+  get f() {
+    return this.context === 'services'
+      ? this.serviceForm.controls
+      : this.professionalForm.controls;
+  }
 
   save() {
+    if (this.context === 'services') {
+      this.saveService();
+    } else {
+      this.saveProfessional();
+    }
+  }
+
+  private saveService() {
+    if (this.serviceForm.invalid) {
+      this.serviceForm.markAllAsTouched();
+      return;
+    }
+    this.loadingService.loadingOn();
+    const officeId = localStorage.getItem('officeId')?.replace(/"/g, '');
+    const formValue = this.serviceForm.value;
+    const officeAttendance: OfficeAttendance = {
+      officeId: officeId ?? '',
+      serviceTypeId: formValue.serviceType,
+      title: formValue.name,
+      description: formValue.description,
+      price: Number((formValue.value || '').replace(',', '.'))
+    };
+    this.officeAttendanceService.create(officeAttendance).subscribe({
+      next: () => {
+        this.loadingService.loadingOff();
+        this.handleSuccess();
+      },
+      error: (err) => {
+        this.loadingService.loadingOff();
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro ao salvar serviço',
+          text: err?.error?.message || 'Tente novamente mais tarde.'
+        });
+      }
+    });
+  }
+
+  private saveProfessional() {
+    if (this.professionalForm.invalid) {
+      this.professionalForm.markAllAsTouched();
+      return;
+    }
+    Swal.fire({
+      icon: 'info',
+      title: 'Funcionalidade em desenvolvimento',
+      text: 'Salvar profissional ainda não implementado.'
+    });
+  }
+
+  handleSuccess() {
     const registrationType: RegistrationType = this.registrationContext.getContext();
     Swal.fire({
       toast: true,

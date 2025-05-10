@@ -1,83 +1,160 @@
-<form *ngIf="context === 'services'">
-  <div class="mb-3">
-    <app-input
-      label="Tipo de serviço"
-      inputType="select"
-      [options]="serviceTypes"
-    ></app-input>
-  </div>
-  <div class="mb-3">
-    <app-input
-      label="Nome do serviço"
-      placeholder=""
-      inputType="text"
-      bgColor="white"
-    ></app-input>
-  </div>
-  <div class="mb-3">
-    <app-input
-      label="Tempo de atendimento"
-      placeholder="00:00"
-      inputType="text"
-      bgColor="white"
-    ></app-input>
-  </div>
-  <div class="mb-3">
-    <app-input
-      label="Valor"
-      placeholder="Digite o valor R$"
-      inputType="text"
-      bgColor="white"
-    ></app-input>
-  </div>
-  <div class="mb-3">
-    <app-input
-      label="Aceita convênio"
-      inputType="select"
-      [options]="[]"
-    ></app-input>
-  </div>
-  <div class="mb-3">
-    <app-input
-      label="Descrição"
-      placeholder="Digite a descrição da sua clínica para seus clientes"
-      inputType="textarea"
-      bgColor="white"
-    ></app-input>
-  </div>
-</form>
+<ng-container *ngIf="context === 'services'; else professionals">
+  <form [formGroup]="serviceForm">
+    <div class="mb-3">
+      <app-input
+        label="Tipo de serviço"
+        inputType="select"
+        [options]="serviceTypes"
+        formControlName="serviceType"
+        [errorMessage]="
+          f['serviceType'].touched && f['serviceType'].invalid
+            ? 'Selecione o tipo de serviço'
+            : null
+        "
+      ></app-input>
+    </div>
+    <div class="mb-3">
+      <app-input
+        label="Nome do serviço"
+        inputType="text"
+        bgColor="white"
+        formControlName="name"
+        [errorMessage]="
+          f['name'].touched && f['name'].invalid
+            ? 'Nome obrigatório (máx. 100 caracteres)'
+            : null
+        "
+      ></app-input>
+    </div>
+    <div class="mb-3">
+      <app-input
+        label="Tempo de atendimento"
+        placeholder="00:00"
+        mask="00:00"
+        inputType="text"
+        bgColor="white"
+        formControlName="duration"
+        [errorMessage]="
+          f['duration'].touched && f['duration'].invalid
+            ? 'Formato 00:00'
+            : null
+        "
+      ></app-input>
+    </div>
+    <div class="mb-3">
+      <app-input
+        label="Valor"
+        placeholder="Digite o valor R$"
+        inputType="text"
+        bgColor="white"
+        formControlName="value"
+        [errorMessage]="
+          f['value'].touched && f['value'].invalid
+            ? 'Valor obrigatório. Ex: 100,00'
+            : null
+        "
+      ></app-input>
+    </div>
+    <div class="mb-3">
+      <app-input
+        label="Descrição"
+        placeholder="Digite a descrição da sua clínica para seus clientes"
+        inputType="textarea"
+        bgColor="white"
+        formControlName="description"
+        [errorMessage]="
+          f['description'].touched && f['description'].invalid
+            ? 'Descrição obrigatória (máx. 500 caracteres)'
+            : null
+        "
+      ></app-input>
+    </div>
+  </form>
+</ng-container>
 
-<form *ngIf="context === 'professionals'">
-  <div class="mb-4">
-    <app-input label="Nome" inputType="text"></app-input>
-  </div>
-  <div class="mb-4">
-    <app-input
-      label="CPF"
-      placeholder="123.456.789-00"
-      inputType="text"
-      bgColor="white"
-    ></app-input>
-  </div>
-  <div class="mb-4">
-    <app-input
-      label="Tipo de acesso"
-      inputType="select"
-      [options]="[]"
-      bgColor="white"
-    ></app-input>
-  </div>
-  <div class="mb-4">
-    <app-input
-      label="Trabalha em"
-      inputType="select"
-      [options]="[]"
-      bgColor="white"
-    ></app-input>
-  </div>
-</form>
+<ng-template #professionals>
+  <form [formGroup]="professionalForm">
+    <div class="mb-4">
+      <app-input
+        label="Nome"
+        inputType="text"
+        formControlName="name"
+        bgColor="white"
+      ></app-input>
+    </div>
+    <div class="mb-4">
+      <app-input
+        label="Email"
+        inputType="text"
+        formControlName="email"
+        bgColor="white"
+        [errorMessage]="
+          f['email'].touched && f['email'].invalid
+            ? 'Email inválido'
+            : null
+        "
+      ></app-input>
+    </div>
+    <div class="mb-4">
+      <app-input
+        label="CPF"
+        mask="000.000.000-00"
+        placeholder="123.456.789-00"
+        inputType="text"
+        bgColor="white"
+        formControlName="cpf"
+        [errorMessage]="
+          f['cpf'].touched && f['cpf'].invalid ? 'CPF inválido' : null
+        "
+      ></app-input>
+    </div>
+    <div class="mb-4">
+      <app-input
+        label="Possui agenda"
+        inputType="select"
+        [options]="[
+          { id: true, name: 'Sim' },
+          { id: false, name: 'Não' }
+        ]"
+        bgColor="white"
+        formControlName="hasSchedule"
+        [errorMessage]="
+          f['hasSchedule'].touched && f['hasSchedule'].invalid
+            ? 'Selecione uma opção'
+            : null
+        "
+      ></app-input>
+    </div>
+    <div class="mb-4">
+      <app-input
+        label="Trabalha em"
+        inputType="select"
+        [options]="[
+          { id: 'clinic', name: 'Clínica' },
+          { id: 'home', name: 'Domicílio' }
+        ]"
+        bgColor="white"
+        formControlName="workplace"
+        [errorMessage]="
+          f['workplace'].touched && f['workplace'].invalid
+            ? 'Selecione uma opção'
+            : null
+        "
+      ></app-input>
+    </div>
+  </form>
+</ng-template>
 <div class="d-flex justify-content-end align-items-center mt-4">
-  <app-button type="primary" variant="pill" class="fw-semibold" (click)="save()">
+  <app-button
+    type="primary"
+    variant="pill"
+    class="fw-semibold"
+    [disabled]="
+      (context === 'services' && !!serviceForm.invalid) ||
+      (context === 'professionals' && !!professionalForm.invalid)
+    "
+    (click)="save()"
+  >
     Continuar <i class="bi bi-arrow-right ms-2"></i>
   </app-button>
 </div>
