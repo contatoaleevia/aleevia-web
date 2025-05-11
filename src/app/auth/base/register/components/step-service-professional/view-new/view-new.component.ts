@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ButtonComponent } from 'src/app/shared/components/button/button.component';
@@ -6,6 +6,7 @@ import { RegistrationContextService } from '@auth/base/register/registration-con
 import { RegistrationType } from '@auth/base/register/constants/registration-types';
 import { OfficeAttendanceService } from '@app/shared/services/office-attendance.service';
 import { OfficeAttendance } from '@app/shared/models/office-attendance.model';
+import { LoadingService } from '@app/core/services/loading.service';
 
 interface Professional {
   id: number;
@@ -20,6 +21,8 @@ interface Professional {
   styleUrl: './view-new.component.scss'
 })
 export class ViewNewComponent implements OnInit {
+  private readonly loadingService = inject(LoadingService);
+
   context: 'service' | 'professional' = 'service';
   services: OfficeAttendance[] = [];
   professionals: Professional[] = [];
@@ -51,21 +54,25 @@ export class ViewNewComponent implements OnInit {
     }
 
     if (this.context === 'professional') {
-      this.professionals = [
-        { id: 1, name: 'Dr. João da Silva', email: 'joao.silva@gmail.com' },
-        { id: 2, name: 'Dra. Maria Oliveira', email: 'maria.oliveira@gmail.com' }
-      ];
+      console.log(localStorage.getItem('professionalData'));
+      this.professionals = JSON.parse(localStorage.getItem('professionalData') || '[]');
     }
   }
 
   getServices() {
-    // this.officeAttendanceService.get(this.officeID).subscribe((services) => {
-    //   this.services = services;
-    // });
-      this.services = [
-        { id: 1, title: 'Consulta clínica', price: 100, description: 'Consulta clínica' },
-        { id: 2, title: 'Consulta clínica', price: 100, description: 'Consulta clínica' }
-      ];
+    this.loadingService.loadingOn();
+    this.officeAttendanceService.get(this.officeID).subscribe({
+      next: (services) => {
+        this.services = services;
+      },
+      error: (error: any) => {
+        console.error('Error saving office data:', error);
+        this.loadingService.loadingOff();
+      },
+      complete: () => {
+        this.loadingService.loadingOff();
+      }
+    });
   }
 
   deleteService(id: number) {

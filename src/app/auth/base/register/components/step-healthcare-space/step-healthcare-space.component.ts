@@ -43,8 +43,7 @@ export class StepHealthcareSpaceComponent {
       whatsapp: this.form.value.whatsapp,
       email: this.form.value.email,
       site: this.form.value.site,
-      instagram: this.form.value.instagram,
-      logo: this.form.value.logo
+      instagram: this.form.value.instagram
     };
   }
 
@@ -63,9 +62,12 @@ export class StepHealthcareSpaceComponent {
         },
         error: (error: any) => {
           console.error('Error saving office data:', error);
+          this.loadingService.loadingOff();
+        },
+        complete: () => {
+          this.loadingService.loadingOff();
         }
       });
-      this.loadingService.loadingOff();
     } else {
       this.form.markAllAsTouched();
     }

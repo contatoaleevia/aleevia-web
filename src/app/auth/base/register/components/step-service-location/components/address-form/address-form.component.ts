@@ -9,6 +9,7 @@ import { RegistrationType } from '@auth/base/register/constants/registration-typ
 import { RegistrationContextService } from '@auth/base/register/registration-context.service';
 import { AddressService } from '@shared/services/adress.service';
 import { LoadingService } from '@app/core/services/loading.service';
+import { AddressResponse } from '@shared/models/address.model';
 @Component({
   selector: 'app-address-form',
   standalone: true,
@@ -96,19 +97,28 @@ export class AddressFormComponent {
     console.log(addressData);
 
     if (officeId) {
-      this.addressService.createAddress(addressData).subscribe((response) => {
-        addressData.id = response.id;
+      this.addressService.createAddress(addressData).subscribe({
+        next: (response: AddressResponse) => {
+          addressData.id = response.id;
+        },
+        error: (error: any) => {
+          console.error('Error saving address data:', error);
+          this.loadingService.loadingOff();
+        },
+        complete: () => {
+          this.loadingService.loadingOff();
+        }
       });
     }
 
     const registrationData = JSON.parse(localStorage.getItem('registrationData') || '{}');
     registrationData.address = addressData;
     localStorage.setItem('registrationData', JSON.stringify(registrationData));
-    this.loadingService.loadingOff();
   }
 
   onAction(): void {
     if (this.form.valid) {
+      console.log('saveAddressData');
       this.saveAddressData();
       this.router.navigate([`/auth/register/${this.context}/service-location/confirmation`]);
     }

@@ -3,7 +3,7 @@ export interface FAQ {
   question: string;
   answer: string;
   classification: string;
-  doctor_id: string;
+  sourceId: string;
   created_at: string;
   updated_at: string;
 }
@@ -18,4 +18,15 @@ export interface UpdateFaqDTO {
   question?: string;
   answer?: string;
   classification?: string;
-} 
+}
+
+export interface FaqResponse {
+  faqPage: {
+    total: number;
+    page: number;
+    size: number;
+    totalPages: number;
+  };
+  faqs: FAQ[];
+}
+

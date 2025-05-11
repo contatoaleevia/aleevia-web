@@ -6,11 +6,14 @@ import { FAQ } from '@shared/models/faq.model';
 import { DeleteModalComponent } from '../shared/components/delete-modal/delete-modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DeleteModalConfig } from '../shared/components/delete-modal/delete-modal.component';
+import { ButtonComponent } from '../shared/components/button/button.component';
+import { InputComponent } from '../shared/components/input/input.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-faq',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, ButtonComponent, InputComponent],
   templateUrl: './faq.component.html',
   styleUrls: ['./faq.component.scss']
 })
@@ -18,23 +21,35 @@ export class FaqComponent implements OnInit {
   private faqService = inject(FaqService);
   private router = inject(Router);
   private modalService = inject(NgbModal);
-  
+
   faqs: FAQ[] = [];
   selectedFaq?: FAQ;
+  statusOptions = [
+    { id: 'Ativo', name: 'Ativo' },
+    { id: 'Inativo', name: 'Inativo' }
+  ];
+  filteredFaqs: FAQ[] = [];
 
-  ngOnInit(): void {  
-    this.loadFaqs();
+  ngOnInit(): void {
+    const faq = localStorage.getItem('faq');
+    if(faq) {
+      this.faqs = JSON.parse(faq);
+      this.filteredFaqs = this.faqs;
+    } else {
+      this.loadFaqs();
+    }
   }
 
   private loadFaqs(): void {
     this.faqService.getAll().subscribe(faqs => {
-      this.faqs = faqs;
+      this.faqs = faqs.faqs;
+      this.filteredFaqs = this.faqs;
     });
   }
 
   openDeleteModal(faq: FAQ): void {
     this.selectedFaq = faq;
-    
+
     const modalConfig: DeleteModalConfig = {
       title: 'Excluir FAQ',
       message: 'Deseja excluir esta pergunta?',
@@ -42,7 +57,8 @@ export class FaqComponent implements OnInit {
       previewTitle: 'Conteúdo a ser excluído',
       previewContent: {
         question: faq.question,
-        answer: faq.answer
+        answer: faq.answer,
+        classification: faq.classification
       },
       confirmText: 'Excluir',
       cancelText: 'Cancelar'
@@ -59,15 +75,51 @@ export class FaqComponent implements OnInit {
     modalRef.result.then(
       () => {
         if (this.selectedFaq) {
-          this.faqService.delete(this.selectedFaq.id).subscribe(() => {
-            this.loadFaqs();
-          });
+          const faq = localStorage.getItem('faq');
+          if(faq) {
+            const faqArray = JSON.parse(faq);
+            const index = faqArray.findIndex((faq: any) => faq.id === this.selectedFaq?.id);
+            faqArray.splice(index, 1);
+            localStorage.setItem('faq', JSON.stringify(faqArray));
+            this.faqs = faqArray;
+          }
+          // this.faqService.delete(this.selectedFaq.id).subscribe(() => {
+          //   this.loadFaqs();
+          // });
         }
       },
       () => {
         this.selectedFaq = undefined;
       }
     );
+  }
+
+  onSearch(value: any): void {
+    const searchTerm = typeof value === 'string' ? value :
+                      value.target && value.target.value ? value.target.value : '';
+
+    if (!searchTerm.trim()) {
+      this.filteredFaqs = [...this.faqs];
+      return;
+    }
+
+    this.filteredFaqs = this.faqs.filter(faq =>
+      faq.question.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }
+
+  soon(): void {
+    Swal.fire({
+      title: 'Em breve',
+      text: 'Esta funcionalidade ainda não está disponível',
+      icon: 'info'
+    });
+  }
+
+
+  preview(): void {
+    console.log('preview');
+    this.router.navigate(['/chat']);
   }
 
   onEdit(id: string): void {

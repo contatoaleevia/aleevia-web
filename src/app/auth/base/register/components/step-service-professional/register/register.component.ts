@@ -31,9 +31,7 @@ export class RegisterComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
 
   context: 'services' | 'professionals' = 'services';
-  serviceTypes = [
-    { id: '3fa85f64-5717-4562-b3fc-2c963f66afa6', name: 'Clínico' }
-  ];
+  serviceTypes: ServiceType[] = [];
 
   serviceForm!: FormGroup;
   professionalForm!: FormGroup;
@@ -56,6 +54,9 @@ export class RegisterComponent implements OnInit {
   }
 
   private initServiceForm() {
+    this.serviceTypeService.getServiceTypes().subscribe((serviceTypes: ServiceType[]) => {
+      this.serviceTypes = serviceTypes;
+    });
     this.serviceForm = this.fb.group({
       serviceType: [null, Validators.required],
       name: ['', [Validators.required, Validators.maxLength(100)]],
@@ -121,15 +122,15 @@ export class RegisterComponent implements OnInit {
   }
 
   private saveProfessional() {
+    this.loadingService.loadingOn();
+
+    localStorage.setItem('professionalData', JSON.stringify([this.professionalForm.value]));
     if (this.professionalForm.invalid) {
       this.professionalForm.markAllAsTouched();
       return;
     }
-    Swal.fire({
-      icon: 'info',
-      title: 'Funcionalidade em desenvolvimento',
-      text: 'Salvar profissional ainda não implementado.'
-    });
+    this.loadingService.loadingOff();
+    this.handleSuccess();
   }
 
   handleSuccess() {

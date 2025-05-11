@@ -1,32 +1,70 @@
 <div class="container py-4">
   <div class="card custom-card">
     <div class="p-24">
-      <h2 class="mb-4 fw-semibold text-dark fs-8">Perguntas frequentes</h2>
+      <h2 class="mb-4 fw-semibold text-dark fs-8">Seus conteúdos</h2>
+
       <div
-        class="d-flex align-items-center gap-2 mb-4 justify-content-end"
-        (click)="onAdd()"
+        class="d-flex flex-wrap justify-content-between align-items-center mb-4 row g-2"
       >
-        <div
-          class="plus-button-container d-flex align-items-center justify-content-center"
-        >
-          <i class="bi bi-plus-lg fs-5"></i>
+        <div class="col-md-2">
+          <app-input
+            placeholder="Buscar"
+            inputType="text"
+            class="w-100"
+            (onChange)="onSearch($event)"
+          ></app-input>
         </div>
-        <span class="add-content-text fw-semibold">Adicione novo conteúdo</span>
+
+        <div class="col-md-2 col-lg-2 mt-4">
+          <app-input
+            inputType="select"
+            placeholder="Status"
+            [options]="statusOptions"
+            class="w-100"
+          ></app-input>
+        </div>
+
+        <div class="col-auto">
+          <app-button type="secondary" icon="upload" iconPosition="left" (clicked)="soon()">
+            Importar .xsv
+          </app-button>
+        </div>
+
+        <div class="col-auto">
+          <app-button type="secondary" icon="download" iconPosition="left" (clicked)="soon()">
+            Baixar modelo
+          </app-button>
+        </div>
+
+        <div class="col-auto">
+          <app-button type="secondary" icon="robot" iconPosition="left" (clicked)="preview()">
+            Conversar com a minha IA
+          </app-button>
+        </div>
+
+        <div class="col-auto ms-auto">
+          <app-button
+            type="primary"
+            icon="plus-lg"
+            iconPosition="left"
+            (clicked)="onAdd()"
+          >
+            Criar conteúdo
+          </app-button>
+        </div>
       </div>
 
       <div class="table-responsive">
         <table class="table table-hover mb-0">
           <thead>
             <tr>
-              <th class="ps-0 fw-bold fs-14 w-30">Dúvida</th>
+              <th class="ps-0 fw-bold fs-14 w-30">Assunto</th>
+              <th class="fw-bold fs-14 w-20 text-secondary-table">Categoria</th>
               <th class="fw-bold fs-14 w-20 text-secondary-table">
                 Data criação
               </th>
               <th class="fw-bold fs-14 w-15 text-secondary-table">
                 Última atualização
-              </th>
-              <th class="fw-bold fs-14 w-20 text-secondary-table">
-                Classificação
               </th>
               <th
                 class="pe-0 fw-bold fs-14 w-15 text-secondary-table text-center"
@@ -36,19 +74,19 @@
             </tr>
           </thead>
           <tbody class="fs-14">
-            <tr *ngFor="let faq of faqs">
+            <tr *ngFor="let faq of filteredFaqs">
               <td
                 class="ps-0 text-truncate question-text overflow-hidden text-nowrap fw-medium"
               >
                 {{ faq.question }}
               </td>
+              <td class="text-secondary-table">{{ faq.classification }}</td>
               <td class="text-secondary-table">
                 {{ faq.created_at | date : "dd/MM/yyyy" }}
               </td>
               <td class="text-secondary-table">
                 {{ faq.updated_at | date : "dd/MM/yyyy" }}
               </td>
-              <td class="text-secondary-table">{{ faq.classification }}</td>
               <td class="pe-0">
                 <div
                   class="d-flex gap-3 justify-content-center align-items-center"
