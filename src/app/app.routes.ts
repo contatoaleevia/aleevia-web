@@ -9,6 +9,8 @@ import { ScheduleComponent } from './schedule/schedule.component';
 import { ChatComponent } from './chat/chat.component';
 import { authRoutes } from './auth/auth.routes';
 import { configurationRoutes } from './configuration/configuration.route';
+import { OfficeAttendanceComponent } from './office-attendance/office-attendance.component';
+
 export const routes: Routes = [
   {
     path: '',
@@ -31,6 +33,7 @@ export const routes: Routes = [
       { path: 'schedule', component: ScheduleComponent },
       { path: 'chat', component: ChatComponent },
       { path: 'configuration', children: configurationRoutes },
+      { path: 'attendances', component: OfficeAttendanceComponent },
     ]
   },
   { path: '**', redirectTo: 'auth' }

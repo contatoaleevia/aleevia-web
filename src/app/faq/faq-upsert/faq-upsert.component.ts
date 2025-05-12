@@ -19,7 +19,7 @@ export class FaqUpsertComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly faqService = inject(FaqService);
-  private readonly officeId = localStorage.getItem('officeId') || '{}';
+  private readonly currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
   private readonly loadingService = inject(LoadingService);
 
   form!: FormGroup;
@@ -28,12 +28,9 @@ export class FaqUpsertComponent implements OnInit {
   currentDate = new Date();
 
   classificationOptions = [
-    { label: 'Geral', value: 'Geral' },
-    { label: 'Especialidade', value: 'Especialidade' },
-    { label: 'Sobre o profissional', value: 'Sobre o profissional' },
-    { label: 'Sobre a clínica', value: 'Sobre a clínica' },
-    { label: 'Orientações ao paciente', value: 'Orientações ao paciente' },
-    { label: 'Outro', value: 'Outro' }
+    { label: 'Orientações ao cliente', value: 0 },
+    { label: 'Sobre o profissional', value: 1 },
+    { label: 'Sobre a clínica', value: 2 },
   ];
 
   ngOnInit(): void {
@@ -45,8 +42,9 @@ export class FaqUpsertComponent implements OnInit {
     this.form = this.fb.group({
       question: ['', [Validators.required]],
       answer: ['', [Validators.required]],
-      classification: ['', [Validators.required]],
-      sourceId: [this.officeId]
+      faqCategory: ['', [Validators.required]],
+      sourceId: [this.currentUser.id],
+      sourceType: [0]
     });
   }
 
@@ -60,7 +58,7 @@ export class FaqUpsertComponent implements OnInit {
           this.form.patchValue({
             question: faq.question,
             answer: faq.answer,
-            classification: faq.classification
+            faqCategory: faq.faqCategory
           });
           this.loading = false;
         },
@@ -78,58 +76,57 @@ export class FaqUpsertComponent implements OnInit {
       this.loadingService.loadingOn();
       const id = this.route.snapshot.paramMap.get('id');
       const formData = this.form.value;
-      formData.created_at = new Date();
-      formData.updated_at = new Date();
-      const faq = localStorage.getItem('faq');
+      // const faq = localStorage.getItem('faq');
 
-      if (faq && !this.isEditing) {
-        const faqArray = JSON.parse(faq);
-        faqArray.push(formData);
-        localStorage.setItem('faq', JSON.stringify(faqArray));
-      } else {
-        localStorage.setItem('faq', JSON.stringify([formData]));
-      }
+      // if (faq && !this.isEditing) {
+      //   const faqArray = JSON.parse(faq);
+      //   faqArray.push(formData);
+      //   localStorage.setItem('faq', JSON.stringify(faqArray));
+      // } else {
+      //   localStorage.setItem('faq', JSON.stringify([formData]));
+      // }
 
-      if (this.isEditing && faq) {
-        const faqArray = JSON.parse(faq);
-        const index = faqArray.findIndex((faq: any) => faq.id === id);
-        faqArray[index] = formData;
-        localStorage.setItem('faq', JSON.stringify(faqArray));
-      }
-      this.loadingService.loadingOff();
-      this.loading = false;
-      Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'success',
-        title: 'Pergunta salva com sucesso!',
-        showConfirmButton: false,
-        timer: 2000,
-        timerProgressBar: true,
-        background: '#22c55e',
-        color: '#fff',
-        iconColor: '#fff',
-        customClass: {
-          popup: 'swal2-toast-green'
-        }
-      }).then(() => {
-        this.router.navigate(['/faq']);
-      });
-
-      // const request = this.isEditing
-      //   ? this.faqService.update(id!, formData)
-      //   : this.faqService.create(formData);
-
-      // request.subscribe({
-      //   next: () => {
-      //     this.loading = false;
-      //     this.faqService.refreshCache();
-      //     this.router.navigate(['/faq']);
-      //   },
-      //   error: () => {
-      //     this.loading = false;
+      // if (this.isEditing && faq) {
+      //   const faqArray = JSON.parse(faq);
+      //   const index = faqArray.findIndex((faq: any) => faq.id === id);
+      //   faqArray[index] = formData;
+      //   localStorage.setItem('faq', JSON.stringify(faqArray));
+      // }
+      // this.loadingService.loadingOff();
+      // this.loading = false;
+      // Swal.fire({
+      //   toast: true,
+      //   position: 'top-end',
+      //   icon: 'success',
+      //   title: 'Pergunta salva com sucesso!',
+      //   showConfirmButton: false,
+      //   timer: 2000,
+      //   timerProgressBar: true,
+      //   background: '#22c55e',
+      //   color: '#fff',
+      //   iconColor: '#fff',
+      //   customClass: {
+      //     popup: 'swal2-toast-green'
       //   }
+      // }).then(() => {
+      //   this.router.navigate(['/faq']);
       // });
+      const request = this.isEditing
+        ? this.faqService.update(id!, formData)
+        : this.faqService.create(formData);
+
+      request.subscribe({
+        next: () => {
+          this.loading = false;
+          this.faqService.refreshCache();
+          this.router.navigate(['/faq']);
+          this.loadingService.loadingOff();
+        },
+        error: () => {
+          this.loading = false;
+          this.loadingService.loadingOff();
+        }
+      });
     }
   }
 

@@ -5,7 +5,7 @@
       [enableAddNew]="true"
       (addNew)="addNewService()"
       (edit)="editService($event)"
-      (delete)="deleteService($event.id || 0)"
+      (delete)="deleteService($event.id!)"
     ></app-view-office-attendance>
   </ng-container>
   <ng-container *ngIf="context === 'professional'">
