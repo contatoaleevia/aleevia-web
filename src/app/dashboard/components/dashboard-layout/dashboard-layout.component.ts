@@ -1,20 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ClinicCardComponent } from '../clinic-card/clinic-card.component';
-import { ClinicCardData } from '../clinic-card/clinic-card.model';
 import { AccessProfilesComponent } from '../access-profiles/access-profiles.component';
 import { AccessProfilesData } from '../access-profiles/access-profiles.model';
+import { AiAssistantComponent } from '../ai-assistant/ai-assistant.component';
+import { CategoriesChartComponent } from '../categories-chart/categories-chart.component';
+import { CategoriesChartData } from '../categories-chart/categories-chart.model';
+import { ClinicCardComponent } from '../clinic-card/clinic-card.component';
+import { ClinicCardData } from '../clinic-card/clinic-card.model';
+import { InteractionsChartComponent } from '../interactions-chart/interactions-chart.component';
+import { InteractionsChartData } from '../interactions-chart/interactions-chart.model';
 import { ReferralGaugeComponent } from '../referral-gauge/referral-gauge.component';
 import { ReferralGaugeData } from '../referral-gauge/referral-gauge.model';
 import { SatisfactionRatingComponent } from '../satisfaction-rating/satisfaction-rating.component';
 import { SatisfactionRatingData } from '../satisfaction-rating/satisfaction-rating.model';
-import { CategoriesChartComponent } from '../categories-chart/categories-chart.component';
-import { CategoriesChartData } from '../categories-chart/categories-chart.model';
 import { StatisticsCardComponent } from '../statistics-card/statistics-card.component';
 import { StatisticsCardData } from '../statistics-card/statistics-card.model';
-import { InteractionsChartComponent } from '../interactions-chart/interactions-chart.component';
-import { InteractionsChartData } from '../interactions-chart/interactions-chart.model';
-import { AiAssistantComponent } from '../ai-assistant/ai-assistant.component';
+
 
 @Component({
   selector: 'app-dashboard-layout',

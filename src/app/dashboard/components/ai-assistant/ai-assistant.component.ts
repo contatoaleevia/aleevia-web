@@ -48,7 +48,6 @@ export class AiAssistantComponent implements OnInit, AfterViewChecked {
       await this.loadInitialMessage();
     } catch (error) {
       console.error('Erro ao criar chat:', error);
-      // Fallback to create a mock chat if the API fails
       this.chatId = 'local-' + Date.now().toString();
       this.loadInitialMessage();
     }
@@ -71,7 +70,17 @@ export class AiAssistantComponent implements OnInit, AfterViewChecked {
   }
 
   async sendMessage() {
-    if (!this.message?.trim() || !this.chatId) return;
+    if (!this.message?.trim()) return;
+
+    if (!this.chatId) {
+      try {
+        const chatData = await this.chatService.createChat();
+        this.chatId = chatData.id;
+      } catch (error) {
+        console.error('Erro ao criar chat:', error);
+        this.chatId = 'local-' + Date.now().toString();
+      }
+    }
 
     const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
     const userId = currentUser?.id || 'local-user';
