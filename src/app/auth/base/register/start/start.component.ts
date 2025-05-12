@@ -13,5 +13,6 @@ export class StartComponent {
 
   navigateTo(type: string) {
     this.router.navigate(['/auth/register', type, 'cpf-cnpj']);
+    localStorage.setItem('registrationType', type);
   }
 }

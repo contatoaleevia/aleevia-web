@@ -11,19 +11,13 @@ export class RegistrationContextService {
   context$ = this.contextSubject.asObservable();
 
   constructor(private router: Router) {
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((event: any) => {
-      const url = event.urlAfterRedirects;
-      if (url.includes(REGISTRATION_TYPES.CLINIC)) {
-        this.contextSubject.next(REGISTRATION_TYPES.CLINIC);
-      } else if (url.includes(REGISTRATION_TYPES.INDIVIDUAL)) {
-        this.contextSubject.next(REGISTRATION_TYPES.INDIVIDUAL);
-      }
-    });
+    const registrationType = localStorage.getItem('registrationType');
+    if (registrationType) {
+      this.contextSubject.next(registrationType as RegistrationType);
+    }
   }
 
   getContext(): RegistrationType {
     return this.contextSubject.value;
   }
-} 
+}

@@ -7,7 +7,7 @@ import { RegistrationContextService } from '@auth/base/register/registration-con
 import { RegistrationType } from '@auth/base/register/constants/registration-types';
 import { LoadingService } from '@core/services/loading.service';
 import { FormHealthspaceSpaceComponent } from '@shared/components/form-healthspace-space/form-healthspace-space.component';
-
+import { finalize } from 'rxjs/operators';
 @Component({
   selector: 'app-step-healthcare-space',
   standalone: true,
@@ -30,7 +30,9 @@ export class StepHealthcareSpaceComponent {
     const updatedData = { ...registrationData, ...office };
 
     localStorage.setItem('registrationData', JSON.stringify(updatedData));
-    this.officeService.createOffice(office).subscribe({
+    this.officeService.createOffice(office).pipe(
+      finalize(() => this.loadingService.loadingOff())
+    ).subscribe({
       next: (response: Office) => {
         this.router.navigate([`/auth/register/${this.context}/service-location`]);
         localStorage.setItem('officeId', response.id || '');
@@ -38,9 +40,6 @@ export class StepHealthcareSpaceComponent {
       error: (error: any) => {
         console.error('Error saving office data:', error);
       },
-      complete: () => {
-        this.loadingService.loadingOff();
-      }
     });
   }
 }

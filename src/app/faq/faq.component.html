@@ -6,7 +6,7 @@
       <div
         class="d-flex flex-wrap justify-content-between align-items-center mb-4 row g-2"
       >
-        <div class="col-md-2">
+        <div class="col-md-3">
           <app-input
             placeholder="Buscar"
             inputType="text"
@@ -15,7 +15,7 @@
           ></app-input>
         </div>
 
-        <div class="col-md-2 col-lg-2 mt-4">
+        <div class="col-md-2 col-lg-2 mt-md-0 mt-2">
           <app-input
             inputType="select"
             placeholder="Status"
@@ -24,7 +24,7 @@
           ></app-input>
         </div>
 
-        <div class="col-auto">
+        <div class="col-auto d-flex gap-2 mt-md-0 mt-2">
           <app-button
             type="secondary"
             icon="upload"
@@ -33,9 +33,7 @@
           >
             Importar .xsv
           </app-button>
-        </div>
 
-        <div class="col-auto">
           <app-button
             type="secondary"
             icon="download"
@@ -44,9 +42,7 @@
           >
             Baixar modelo
           </app-button>
-        </div>
 
-        <div class="col-auto">
           <app-button
             type="secondary"
             icon="robot"
@@ -57,7 +53,7 @@
           </app-button>
         </div>
 
-        <div class="col-auto ms-auto">
+        <div class="col-auto ms-auto mt-md-0 mt-2">
           <app-button
             type="primary"
             icon="plus-lg"
@@ -70,10 +66,10 @@
       </div>
 
       <div class="table-responsive">
-        <table class="table table-hover mb-0">
+        <table class="table" [ngClass]="{'table-hover': filteredFaqs.length > 0}">
           <thead>
             <tr>
-              <th class="ps-0 fw-bold fs-14 w-30">Assunto</th>
+              <th class="fw-bold fs-14 w-30">Assunto</th>
               <th class="fw-bold fs-14 w-20 text-secondary-table">Categoria</th>
               <th class="fw-bold fs-14 w-20 text-secondary-table">
                 Data criação
@@ -82,7 +78,7 @@
                 Última atualização
               </th>
               <th
-                class="pe-0 fw-bold fs-14 w-15 text-secondary-table text-center"
+                class="fw-bold fs-14 w-15 text-secondary-table text-center"
               >
                 Ações
               </th>
@@ -92,7 +88,7 @@
             <tbody class="fs-14">
               <tr *ngFor="let faq of filteredFaqs">
                 <td
-                  class="ps-0 text-truncate question-text overflow-hidden text-nowrap fw-medium"
+                  class="text-truncate question-text overflow-hidden text-nowrap fw-medium"
                 >
                   {{ faq.question }}
                 </td>
@@ -103,7 +99,7 @@
                 <td class="text-secondary-table">
                   {{ faq.updated_at | date : "dd/MM/yyyy" }}
                 </td>
-                <td class="pe-0">
+                <td>
                   <div
                     class="d-flex gap-3 justify-content-center align-items-center"
                   >
@@ -140,6 +136,7 @@
                   <app-button
                     type="primary"
                     iconPosition="left"
+                    icon="plus-lg"
                     (clicked)="onAdd()"
                   >
                     Treinar a Lívia

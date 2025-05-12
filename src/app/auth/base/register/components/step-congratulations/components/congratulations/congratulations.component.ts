@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ButtonComponent } from 'src/app/shared/components/button/button.component';
@@ -8,6 +8,11 @@ import { ButtonComponent } from 'src/app/shared/components/button/button.compone
   templateUrl: './congratulations.component.html',
   styleUrl: './congratulations.component.scss'
 })
-export class CongratulationsComponent {
+export class CongratulationsComponent implements OnInit {
+  ngOnInit(): void {
+    localStorage.removeItem('registrationType');
+    localStorage.removeItem('serviceLocation');
+    localStorage.removeItem('registrationData');
+  }
 
 }
