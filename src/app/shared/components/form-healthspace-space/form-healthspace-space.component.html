@@ -1,0 +1,94 @@
+<app-form [formGroup]="form" [submitButtonText]="submitButtonText" [isNextButton]="true" [showPreviousButton]="false" (formSubmit)="onSubmit()">
+  <div class="row mb-4 align-items-center">
+    <div class="col-auto">
+      <div class="avatar-upload">
+        <label class="avatar-label" style="cursor:pointer;">
+          <input type="file" accept="image/*" (change)="onImageChange($event)" hidden #fileInput />
+          <img
+            *ngIf="form.value.logo; else uploadPlaceholder"
+            [src]="form.value.logo"
+            alt="Imagem do espaço"
+            class="avatar-img"
+            (click)="fileInput.click()"
+          />
+          <ng-template #uploadPlaceholder>
+            <img
+              src="assets/images/upload-image.png"
+              alt="Upload imagem"
+              class="avatar-img"
+              (click)="fileInput.click()"
+            />
+          </ng-template>
+        </label>
+      </div>
+    </div>
+    <div class="col">
+      <app-input
+        formControlName="name"
+
+        label="Nome no seu espaço de atendimento"
+        placeholder="Digite o nome do espaço"
+        [required]="true"
+        inputType="text"
+      ></app-input>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <app-input
+        formControlName="phoneNumber"
+
+        label="Telefone comercial"
+        placeholder="(  ) ____-___"
+        [mask]="'(00) 0000-0000'"
+        inputType="text"
+        [required]="true"
+      ></app-input>
+    </div>
+    <div class="col-md-6">
+      <app-input
+        formControlName="whatsapp"
+
+        label="Whatsapp"
+        placeholder="(  ) ____-___"
+        [mask]="'(00) 00000-0000'"
+        inputType="text"
+      ></app-input>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-12">
+      <app-input
+        formControlName="email"
+
+        label="Email"
+        placeholder="Digite seu email comercial"
+        inputType="text"
+        [required]="true"
+      ></app-input>
+    </div>
+  </div>
+
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <app-input
+        formControlName="site"
+
+        label="Site"
+        placeholder="Link do seu site"
+        inputType="text"
+      ></app-input>
+    </div>
+    <div class="col-md-6">
+      <app-input
+        formControlName="instagram"
+
+        label="Instagram"
+        placeholder="Digite seu usuário"
+        inputType="text"
+      ></app-input>
+    </div>
+  </div>
+</app-form>

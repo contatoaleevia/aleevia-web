@@ -1,63 +1,23 @@
 <div class="mx-auto">
   <ng-container *ngIf="context === 'service'">
-    <div class="d-flex flex-wrap gap-3 mb-4">
-      <div
-        *ngFor="let service of services"
-        class="bg-white rounded-3 shadow-sm p-3 border d-flex justify-content-between align-items-center flex-grow-1"
-        style="max-width: 260px; min-width: 200px"
-      >
-        <div class="flex-grow-1">
-          <p class="fw-bold mb-1">{{ service.title }}</p>
-          <p class="text-secondary small">
-            Valor: R$ {{ service.price | number : "1.2-2" }}
-          </p>
-          <p class="text-secondary small">
-            {{ service.description }}
-          </p>
-        </div>
-        <div class="d-flex flex-column align-items-end ms-2 gap-2">
-          <button class="btn btn-link p-0 text-primary" title="Editar">
-            <i class="bi bi-pencil"></i>
-          </button>
-          <button class="btn btn-link p-0 text-danger" title="Remover">
-            <i class="bi bi-trash"></i>
-          </button>
-        </div>
-      </div>
-    </div>
+    <app-view-office-attendance
+      [attendances]="services"
+      [enableAddNew]="true"
+      (addNew)="addNewService()"
+      (edit)="editService($event)"
+      (delete)="deleteService($event.id || 0)"
+    ></app-view-office-attendance>
   </ng-container>
   <ng-container *ngIf="context === 'professional'">
-    <div class="d-flex flex-wrap gap-3 mb-4">
-      <div
-        *ngFor="let professional of professionals"
-        class="bg-white rounded-3 shadow-sm p-3 border d-flex justify-content-between align-items-center flex-grow-1"
-        style="max-width: 260px; min-width: 200px"
-      >
-        <div class="flex-grow-1">
-          <div class="fw-bold mb-1">{{ professional.name }}</div>
-          <div class="text-secondary small">{{ professional.email }}</div>
-        </div>
-        <div class="d-flex flex-column align-items-end ms-2 gap-2">
-          <button class="btn btn-link p-0 text-primary" title="Editar">
-            <i class="bi bi-pencil"></i>
-          </button>
-          <button class="btn btn-link p-0 text-danger" title="Remover">
-            <i class="bi bi-trash"></i>
-          </button>
-        </div>
-      </div>
-    </div>
+    <app-view-professional
+      [professionals]="professionals"
+      [enableAddNew]="true"
+      [addNewPath]="'/auth/register/individual/service-professional/add-professional'"
+      [addNewText]="keyword"
+      (edit)="editProfessional($event)"
+      (delete)="deleteProfessional($event.id || '')"
+    ></app-view-professional>
   </ng-container>
-  <div
-    class="border rounded-3 p-3 d-flex align-items-center gap-2 mb-3"
-    style="cursor: pointer"
-    routerLink="/auth/register/individual/service-professional/add-{{
-      context
-    }}"
-  >
-    <i class="bi bi-plus-lg text-primary fs-5"></i>
-    <span class="fw-medium text-secondary">Cadastrar {{ keyword }}</span>
-  </div>
 
   <div class="d-flex justify-content-between align-items-center">
     <a

@@ -1,5 +1,5 @@
-<app-form 
-  [formGroup]="formGroup" 
+<app-form
+  [formGroup]="formGroup"
   [errorMessages]="errorMessages"
   submitButtonText="Finalizar"
   (formSubmit)="formSubmit.emit()"
@@ -8,27 +8,27 @@
   [showSubmitButton]="true"
   (previous)="previous.emit()"
   #securityFormComponent>
-  
+
   <h4 class="fw-bold">Crie sua senha</h4>
   <p class="text-muted mb-4">Qual senha você vai utilizar para entrar na Aleevia?</p>
-  
+
   <div class="mb-4">
     <div class="mb-3">
-      <app-input 
+      <app-input
         label="Digite sua senha"
         type="password"
         formControlName="password"
-        bgColor="white"
+
         [errorMessage]="securityFormComponent.getErrorMessage('password')">
       </app-input>
     </div>
-    
+
     <div class="mb-3">
-      <app-input 
+      <app-input
         label="Confirme a senha"
         type="password"
         formControlName="confirmPassword"
-        bgColor="white"
+
         [errorMessage]="securityFormComponent.getErrorMessage('confirmPassword')">
       </app-input>
     </div>

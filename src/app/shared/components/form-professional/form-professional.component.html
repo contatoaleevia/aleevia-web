@@ -1,0 +1,37 @@
+<app-form [formGroup]="form" [submitButtonText]="submitButtonText" [isNextButton]="true" [showPreviousButton]="false" (formSubmit)="onSubmit()">
+  <div class="mb-4">
+    <app-input
+      label="Nome"
+      inputType="text"
+      formControlName="name"
+      [errorMessage]="form.get('name')?.touched && form.get('name')?.invalid ? 'Nome obrigatório (máx. 100 caracteres)' : null"
+    ></app-input>
+  </div>
+  <div class="mb-4">
+    <app-input
+      label="Email"
+      inputType="text"
+      formControlName="email"
+      [errorMessage]="form.get('email')?.touched && form.get('email')?.invalid ? 'Email inválido' : null"
+    ></app-input>
+  </div>
+  <div class="mb-4">
+    <app-input
+      label="CPF"
+      mask="000.000.000-00"
+      placeholder="123.456.789-00"
+      inputType="text"
+      formControlName="cpf"
+      [errorMessage]="form.get('cpf')?.touched && form.get('cpf')?.invalid ? 'CPF inválido' : null"
+    ></app-input>
+  </div>
+  <div class="mb-4">
+    <app-input
+      label="Possui agenda"
+      inputType="select"
+      [options]="isActiveOptions"
+      formControlName="isPublic"
+      [errorMessage]="form.get('isPublic')?.touched && form.get('isPublic')?.invalid ? 'Selecione uma opção' : null"
+    ></app-input>
+  </div>
+</app-form>

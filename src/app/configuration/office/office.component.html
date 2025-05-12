@@ -1,0 +1,48 @@
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <!-- Tabs Navigation -->
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link fs-6" [class.active]="activeTab === 'dados'" (click)="switchTab('dados')">Dados</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link fs-6" [class.active]="activeTab === 'endereco'" (click)="switchTab('endereco')">Endereço</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link fs-6" [class.active]="activeTab === 'perfil'" (click)="switchTab('perfil')">Perfil</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link fs-6" [class.active]="activeTab === 'servicos'" (click)="switchTab('servicos')">Serviços</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link fs-6" [class.active]="activeTab === 'profissionais'" (click)="switchTab('profissionais')">Profissionais</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link fs-6" [class.active]="activeTab === 'convenios'" (click)="switchTab('convenios')">Convênios</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link fs-6" [class.active]="activeTab === 'redes-sociais'" (click)="switchTab('redes-sociais')">Redes sociais</a>
+      </li>
+    </ul>
+
+    <div class="p-4">
+      <ng-container *ngIf="activeTab === 'dados'">
+        <app-data [officeId]="officeId"></app-data>
+      </ng-container>
+
+      <ng-container *ngIf="activeTab === 'endereco'">
+        <app-address [officeId]="officeId"></app-address>
+      </ng-container>
+
+      <ng-container *ngIf="activeTab === 'servicos'">
+        <app-office-attendance></app-office-attendance>
+      </ng-container>
+
+      <div *ngIf="activeTab !== 'dados' && activeTab !== 'endereco' && activeTab !== 'servicos'">
+        <div class="py-5 text-center text-muted">
+          <p>Conteúdo da aba {{ activeTab }} em desenvolvimento</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
