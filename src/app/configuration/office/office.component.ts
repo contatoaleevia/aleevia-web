@@ -31,7 +31,7 @@ export class OfficeComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.officeId = params['id'];
       if (this.officeId) {
-        this.loadOffice();
+        // this.loadOffice();
       }
     });
   }
