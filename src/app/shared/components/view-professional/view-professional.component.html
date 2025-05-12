@@ -1,0 +1,29 @@
+<div class="d-flex flex-wrap gap-3 mb-4">
+  <div
+    *ngFor="let professional of professionals"
+    class="bg-white rounded-3 shadow-sm p-3 border d-flex justify-content-between align-items-center flex-grow-1"
+    style="max-width: 260px; min-width: 200px"
+  >
+    <div class="flex-grow-1">
+      <div class="fw-bold mb-1">{{ professional.name }}</div>
+      <div class="text-secondary small">{{ professional.email }}</div>
+    </div>
+    <div class="d-flex flex-column align-items-end ms-2 gap-2">
+      <button class="btn btn-link p-0 text-primary" title="Editar" (click)="onEdit(professional)">
+        <i class="bi bi-pencil"></i>
+      </button>
+      <button class="btn btn-link p-0 text-danger" title="Remover" (click)="onDelete(professional)">
+        <i class="bi bi-trash"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="enableAddNew && addNewPath"
+  class="border rounded-3 p-3 d-flex align-items-center gap-2 mb-3"
+  style="cursor: pointer"
+  [routerLink]="addNewPath"
+>
+  <i class="bi bi-plus-lg text-primary fs-5"></i>
+  <span class="fw-medium text-secondary">Cadastrar {{ addNewText || 'profissional' }}</span>
+</div>

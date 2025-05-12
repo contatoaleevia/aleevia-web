@@ -15,7 +15,11 @@ export class OfficeService {
     return this.apiService.post(this.routeUrl, office);
   }
 
-  bindOfficeToAddress(payload: { officeId: string, addressId: string }): Observable<Office> {
+  bindAddress(payload: { officeId: string, addressId: string }): Observable<Office> {
     return this.apiService.post(`${this.routeUrl}/bind-address`, payload);
+  }
+
+  getOfficeById(id: string): Observable<Office> {
+    return this.apiService.get(`${this.routeUrl}/${id}`);
   }
 }
