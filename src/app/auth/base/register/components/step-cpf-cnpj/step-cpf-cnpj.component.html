@@ -124,8 +124,8 @@
         >
       </div>
 
-      <div class="d-flex flex-column justify-content-start p-0">
-        <ng-container *ngIf="form.get('isCompany')!.value">
+      <ng-container *ngIf="form.get('isCompany')!.value">
+        <div class="d-flex flex-column justify-content-start p-0">
           <div class="mb-3">
             <app-input
               formControlName="cnpj"
@@ -144,8 +144,8 @@
               inputType="text"
             ></app-input>
           </div>
-        </ng-container>
-      </div>
+        </div>
+      </ng-container>
     </div>
   </ng-template>
 
