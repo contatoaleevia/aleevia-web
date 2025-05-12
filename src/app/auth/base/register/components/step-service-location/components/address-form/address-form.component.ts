@@ -76,13 +76,13 @@ export class AddressFormComponent {
         }),
         finalize(() => this.loadingService.loadingOff())
       ).subscribe(() => {
-        this.router.navigate([`/auth/register/${this.context}/service-location/confirmation`]);
+        this.router.navigate([`/auth/register/step/service-location/confirmation`]);
       });
     } else {
       const registrationData = JSON.parse(localStorage.getItem('registrationData') || '{}');
       registrationData.address = addressData;
       localStorage.setItem('registrationData', JSON.stringify(registrationData));
-      this.router.navigate([`/auth/register/${this.context}/service-location/confirmation`]);
+      this.router.navigate([`/auth/register/step/service-location/confirmation`]);
       this.loadingService.loadingOff();
     }
   }

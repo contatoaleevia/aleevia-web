@@ -6,6 +6,9 @@ import { DataComponent } from './components/data/data.component';
 import { AddressComponent } from './components/address/address.component';
 import { OfficeService } from '@shared/services/office.service';
 import { OfficeAttendanceComponent } from './components/office-attendance/office-attendance.component';
+import { Observable, switchMap, of } from 'rxjs';
+import { Office } from '@shared/models/office.model';
+
 @Component({
   selector: 'app-office',
   standalone: true,
@@ -26,25 +29,18 @@ export class OfficeComponent implements OnInit {
 
   officeId: string = '';
   activeTab: string = 'dados';
+  office$: Observable<Office> = of({} as Office);
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this.officeId = params['id'];
-      if (this.officeId) {
-        // this.loadOffice();
-      }
-    });
-  }
-
-  loadOffice(): void {
-    this.officeService.getOfficeById(this.officeId).subscribe({
-      next: (office) => {
-        console.log(office);
-      },
-      error: (error) => {
-        console.error('Error loading office:', error);
-      }
-    });
+    this.office$ = this.route.params.pipe(
+      switchMap(params => {
+        this.officeId = params['id'];
+        if (this.officeId) {
+          return this.officeService.getOfficeById(this.officeId);
+        }
+        return of({} as Office);
+      })
+    );
   }
 
   switchTab(tab: string): void {

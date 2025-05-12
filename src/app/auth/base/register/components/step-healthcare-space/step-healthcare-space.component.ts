@@ -34,7 +34,7 @@ export class StepHealthcareSpaceComponent {
       finalize(() => this.loadingService.loadingOff())
     ).subscribe({
       next: (response: Office) => {
-        this.router.navigate([`/auth/register/${this.context}/service-location`]);
+        this.router.navigate([`/auth/register/step/service-location`]);
         localStorage.setItem('officeId', response.id || '');
       },
       error: (error: any) => {

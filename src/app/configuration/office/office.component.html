@@ -1,6 +1,5 @@
 <div class="container mt-4">
   <div class="card shadow-sm">
-    <!-- Tabs Navigation -->
     <ul class="nav nav-tabs">
       <li class="nav-item">
         <a class="nav-link fs-6" [class.active]="activeTab === 'dados'" (click)="switchTab('dados')">Dados</a>
@@ -23,19 +22,21 @@
     </ul>
 
     <div class="p-4">
-      <div [ngSwitch]="activeTab">
-        <ng-container *ngSwitchCase="'dados'">
-          <app-data [officeId]="officeId"></app-data>
-        </ng-container>
+      <ng-container *ngIf="office$ | async as office">
+        <div [ngSwitch]="activeTab">
+          <ng-container *ngSwitchCase="'dados'">
+            <app-data [office]="office"></app-data>
+          </ng-container>
 
-        <ng-container *ngSwitchCase="'endereco'">
-          <app-address [officeId]="officeId"></app-address>
-        </ng-container>
+          <ng-container *ngSwitchCase="'endereco'">
+            <app-address [office]="office"></app-address>
+          </ng-container>
 
-        <ng-container *ngSwitchCase="'servicos'">
-          <app-office-attendance></app-office-attendance>
-        </ng-container>
-      </div>
+          <ng-container *ngSwitchCase="'servicos'">
+            <app-office-attendance></app-office-attendance>
+          </ng-container>
+        </div>
+      </ng-container>
 
       <div *ngIf="activeTab !== 'dados' && activeTab !== 'endereco' && activeTab !== 'servicos'">
         <div class="py-5 text-center text-muted">

@@ -10,6 +10,8 @@ import { ViewProfessionalComponent } from '@shared/components/view-professional/
 import { Professional } from '@shared/components/form-professional/form-professional.component';
 import { LoadingService } from '@app/core/services/loading.service';
 import { OfficeAttendanceService } from '@app/shared/services/office-attendance.service';
+import { ProfessionalService } from '@app/shared/services/professional.service';
+import { finalize } from 'rxjs';
 @Component({
   selector: 'app-view-new',
   standalone: true,
@@ -26,6 +28,7 @@ import { OfficeAttendanceService } from '@app/shared/services/office-attendance.
 export class ViewNewComponent implements OnInit {
   private readonly loadingService = inject(LoadingService);
   private readonly officeAttendanceService = inject(OfficeAttendanceService);
+  private readonly professionalService = inject(ProfessionalService);
   private readonly registrationContext = inject(RegistrationContextService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -79,26 +82,21 @@ export class ViewNewComponent implements OnInit {
   }
 
   getProfessionals() {
-    this.professionals = [
-      {
-        id: '1',
-        name: 'Dr. João da Silva',
-        email: 'joao.silva@gmail.com',
-        cpf: '123.456.789-00',
-        isPublic: true,
+    this.professionalService.getMyProfessional().pipe(
+      finalize(() => this.loadingService.loadingOff())
+    ).subscribe({
+      next: (professionals) => {
+        this.professionals = professionals;
       },
-      {
-        id: '2',
-        name: 'Dra. Maria Oliveira',
-        email: 'maria.oliveira@gmail.com',
-        cpf: '987.654.321-00',
-        isPublic: true,
-      }
-    ];
+      error: (error: any) => {
+        console.error('Error saving office data:', error);
+      },
+
+    });
   }
 
-  addNewService(){
-    this.router.navigate([`/auth/register/${this.registrationType}/service-professional/add-service`]);
+  addNewService() {
+    this.router.navigate([`/auth/register/step/service-professional/add-service`]);
   }
 
   deleteService(id: string) {
@@ -120,11 +118,10 @@ export class ViewNewComponent implements OnInit {
   }
 
   goToNextStep() {
-    const registrationType: RegistrationType = this.registrationContext.getContext();
     if (this.context === 'service') {
-      this.router.navigate([`/auth/register/${registrationType}/service-professional/professionals`]);
+      this.router.navigate([`/auth/register/step/service-professional/professionals`]);
     } else {
-      this.router.navigate([`/auth/register/${registrationType}/congratulations`]);
+      this.router.navigate([`/auth/register/step/congratulations`]);
     }
   }
 }

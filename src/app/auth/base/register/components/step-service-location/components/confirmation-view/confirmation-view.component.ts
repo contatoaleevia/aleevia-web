@@ -1,9 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ButtonComponent } from '@shared/components/button/button.component';
-import { RegistrationContextService } from '@auth/base/register/registration-context.service';
-import { RegistrationType } from '@auth/base/register/constants/registration-types';
 @Component({
   selector: 'app-confirmation-view',
   standalone: true,
@@ -12,8 +10,8 @@ import { RegistrationType } from '@auth/base/register/constants/registration-typ
   styleUrl: './confirmation-view.component.scss'
 })
 export class ConfirmationViewComponent {
+  private readonly router = inject(Router);
   serviceLocation = JSON.parse(localStorage.getItem('serviceLocation') || '{}');
-  context: RegistrationType;
 
   get formattedAddress(): string {
     const f = this.serviceLocation;
@@ -23,18 +21,11 @@ export class ConfirmationViewComponent {
     return address;
   }
 
-  constructor(
-    private router: Router,
-    private registrationContext: RegistrationContextService
-  ) {
-    this.context = this.registrationContext.getContext();
-  }
-
   onAction() {
-    this.router.navigate([`/auth/register/${this.context}/service-professional/services`]);
+    this.router.navigate([`/auth/register/step/service-professional/services`]);
   }
 
   onEdit() {
-    this.router.navigate([`/auth/register/${this.context}/service-location/address`]);
+    this.router.navigate([`/auth/register/step/service-location/address`]);
   }
 }

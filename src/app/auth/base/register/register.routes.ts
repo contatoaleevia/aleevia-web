@@ -6,21 +6,18 @@ import { stepPasswordRoute } from "@auth/base/register/components/step-password/
 import { stepServiceLocationRoute } from "@auth/base/register/components/step-service-location/step-service-location.route";
 import { stepServiceProfessionalRoute } from "@auth/base/register/components/step-service-professional/step-service-professional.route";
 import { stepHealthcareSpaceRoute } from "@auth/base/register/components/step-healthcare-space/step-healthcare-space.route";
-import { registrationGuard } from "@auth/guards/registration.guard";
-import { REGISTRATION_TYPES } from "./constants/registration-types";
 export const registerRoutes: Routes = [
   {
-    path: '',
+    path: 'start',
     component: StartComponent
   },
   {
-    path: REGISTRATION_TYPES.INDIVIDUAL,
-    redirectTo: `${REGISTRATION_TYPES.INDIVIDUAL}/cpf-cnpj`,
+    path: '',
+    redirectTo: 'start',
     pathMatch: 'full'
   },
   {
-    path: REGISTRATION_TYPES.INDIVIDUAL,
-    canActivate: [registrationGuard],
+    path: 'step',
     children: [
       ...stepCpfCnpjRoute,
       ...stepPasswordRoute,
@@ -30,16 +27,4 @@ export const registerRoutes: Routes = [
       ...stepCongratulationsRoute
     ]
   },
-  {
-    path: REGISTRATION_TYPES.CLINIC,
-    canActivate: [registrationGuard],
-    children: [
-      ...stepCpfCnpjRoute,
-      ...stepPasswordRoute,
-      ...stepHealthcareSpaceRoute,
-      ...stepServiceLocationRoute,
-      ...stepServiceProfessionalRoute,
-      ...stepCongratulationsRoute
-    ]
-  }
 ];

@@ -25,7 +25,7 @@ export class StepCpfCnpjComponent implements OnInit {
     private registrationContext: RegistrationContextService
   ) {
     this.form = this.initializeForm();
-    this.setupFormListeners();
+    // this.setupFormListeners();
   }
 
   private initializeForm(): FormGroup {
@@ -125,7 +125,7 @@ export class StepCpfCnpjComponent implements OnInit {
       const registrationData = this.prepareRegistrationData();
       try {
         localStorage.setItem('registrationData', JSON.stringify(registrationData));
-        this.router.navigate([`/auth/register/${this.context}/password`]);
+        this.router.navigate([`/auth/register/step/password`]);
       } catch (error) {
         console.error('Error saving registration data:', error);
       }
