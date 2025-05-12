@@ -1,0 +1,37 @@
+<div class="ai-assistant-card">
+  <div class="card-header">
+    <h3>Assistente Virtual</h3>
+  </div>
+
+  <div class="messages-container">
+    <div class="messages" #messagesContainer>
+      <div *ngFor="let msg of messages"
+           [ngClass]="{'message': true, 'user-message': msg.role === 'user', 'assistant-message': msg.role === 'assistant'}">
+        <div class="message-content">
+          <div class="message-avatar" *ngIf="msg.role === 'assistant'">
+            <div class="avatar-circle">
+              <img src="assets/images/chat-livia.png" alt="Assistente Virtual">
+            </div>
+          </div>
+          <div class="message-text" [ngClass]="{'placeholder': msg.isPlaceholder}">
+            {{ msg.message }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="input-container">
+    <input
+      type="text"
+      [(ngModel)]="message"
+      (keyup.enter)="sendMessage()"
+      placeholder="Digite sua mensagem..."
+      [disabled]="loading"
+    />
+    <button (click)="sendMessage()" [disabled]="!message.trim() || loading">
+      <span *ngIf="!loading">Enviar</span>
+      <span *ngIf="loading">...</span>
+    </button>
+  </div>
+</div>

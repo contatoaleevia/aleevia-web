@@ -1,0 +1,25 @@
+<div class="dashboard-container">
+  <div class="row">
+    <!-- First Column - Clinic Card and Access Profiles -->
+    <div class="column">
+      <app-clinic-card [clinicData]="clinicCardData"></app-clinic-card>
+      <app-access-profiles [profilesData]="accessProfilesData"></app-access-profiles>
+      <!-- Additional components for first column can be added here -->
+    </div>
+
+    <!-- Second Column - Referral Gauge, Satisfaction Rating, and Categories Chart -->
+    <div class="column justify-content-between">
+      <app-referral-gauge [gaugeData]="referralGaugeData"></app-referral-gauge>
+      <app-satisfaction-rating [ratingData]="satisfactionRatingData"></app-satisfaction-rating>
+      <app-categories-chart [chartData]="categoriesChartData"></app-categories-chart>
+    </div>
+
+    <!-- Third Column - Statistics Card and Interactions Chart -->
+    <div class="column justify-content-between">
+      <app-statistics-card [statsData]="statisticsCardData"></app-statistics-card>
+      <app-interactions-chart [chartData]="interactionsChartData"></app-interactions-chart>
+      <app-ai-assistant></app-ai-assistant>
+      <!-- Additional components for third column can be added here -->
+    </div>
+  </div>
+</div>

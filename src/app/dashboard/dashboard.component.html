@@ -1,6 +1,4 @@
 <div class="container">
-  <h1>Em desenvolvimento</h1>
-
   <app-first-access
     *ngIf="currentUser.pre_registered"
     (configureSchedule)="onConfigureSchedule()"
@@ -18,4 +16,6 @@
       <app-google-login-button class="w-100"></app-google-login-button>
     </div>
   </div>
+
+  <app-dashboard-layout></app-dashboard-layout>
 </div>

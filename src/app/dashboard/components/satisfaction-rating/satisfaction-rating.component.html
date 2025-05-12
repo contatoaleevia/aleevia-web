@@ -1,0 +1,24 @@
+<div class="satisfaction-card">
+  <div class="card-header">
+    <div class="month-selector" (click)="selectMonth()">
+      <span class="current-month">{{ currentMonth }}</span>
+      <i class="bi bi-chevron-down"></i>
+    </div>
+  </div>
+
+  <div *ngFor="let rating of ratingData.ratings" class="rating-item">
+    <div class="icon">
+      <i class="bi bi-star-fill"></i>
+    </div>
+    <div class="rating-content">
+      <div class="rating-label">Satisfação</div>
+      <div class="rating-subtitle">{{ rating.label }}</div>
+    </div>
+    <div class="rating-score">
+      <div class="score-value">{{ rating.score }}/{{ rating.maxScore }}</div>
+      <div class="rating-trend" [ngClass]="getTrendClass(rating.trend)">
+        {{ getTrendPrefix(rating.trend) }}{{ rating.trend }}%
+      </div>
+    </div>
+  </div>
+</div>

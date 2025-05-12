@@ -1,0 +1,20 @@
+<div class="access-profiles-card">
+  <h2 class="title">{{ profilesData.title }}</h2>
+
+  <div class="profiles-list">
+    <div class="profile-item" *ngFor="let profile of profilesData.profiles">
+      <div class="profile-info">
+        <div class="profile-name">{{ profile.name }}</div>
+        <div class="profile-role">{{ profile.role }}</div>
+      </div>
+      <div class="profile-status" [class.active]="profile.isActive">
+        <span class="status-indicator"></span>
+        <span class="status-text">Ativo</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="view-all">
+    Ver todos
+  </div>
+</div>
