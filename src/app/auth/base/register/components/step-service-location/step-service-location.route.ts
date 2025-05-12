@@ -1,8 +1,7 @@
 import { Routes } from "@angular/router";
-import { StepServiceLocationComponent } from "./step-service-location.component";
-import { TypeSelectComponent } from "./components/type-select/type-select.component";
-import { AddressFormComponent } from "./components/address-form/address-form.component";
-import { ConfirmationViewComponent } from "./components/confirmation-view/confirmation-view.component";
+import { StepServiceLocationComponent } from "@auth/base/register/components/step-service-location/step-service-location.component";
+import { AddressFormComponent } from "@auth/base/register/components/step-service-location/components/address-form/address-form.component";
+import { ConfirmationViewComponent } from "@auth/base/register/components/step-service-location/components/confirmation-view/confirmation-view.component";
 
 export const stepServiceLocationRoute: Routes = [
   {
@@ -11,14 +10,6 @@ export const stepServiceLocationRoute: Routes = [
     children: [
       {
         path: '',
-        component: TypeSelectComponent,
-        data: {
-          title: 'Local de atendimento',
-          subtitle: 'Selecione suas formas de atendimento'
-        }
-      },
-      {
-        path: 'address',
         component: AddressFormComponent,
         data: {
           title: 'Endereço do local',

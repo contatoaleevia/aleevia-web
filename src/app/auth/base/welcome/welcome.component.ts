@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { UserService } from '@shared/services/user.service';
 import { IsRegisteredResponse } from '@auth/models/register.model';
+import { LoadingService } from '@app/core/services/loading.service';
 
 @Component({
   selector: 'app-welcome',
@@ -18,9 +19,10 @@ export class WelcomeComponent {
   step = 1;
   cpfCnpjForm: FormGroup;
   cpfCnpjMask: string = '000.000.000-00||00.000.000/0000-00';
-  
+
   private readonly router = inject(Router);
   private readonly userService = inject(UserService);
+  private readonly loadingService = inject(LoadingService);
 
   constructor(private fb: FormBuilder) {
     this.cpfCnpjForm = this.fb.group({
@@ -33,6 +35,7 @@ export class WelcomeComponent {
   }
 
   onContinue() {
+    this.loadingService.loadingOn();
     const formattedCpfCnpj = this.cpfCnpjForm.get('cpfCnpj')?.value.replace(/\./g, '').replace('/', '').replace('-', '');
     this.userService.isRegistered(formattedCpfCnpj).subscribe((response: IsRegisteredResponse) => {
       if (response.isRegistered) {
@@ -41,6 +44,7 @@ export class WelcomeComponent {
       } else {
         this.router.navigate(['/auth/register']);
       }
+      this.loadingService.loadingOff();
     });
   }
 }

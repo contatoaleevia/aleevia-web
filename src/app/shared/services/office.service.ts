@@ -10,7 +10,7 @@ export class OfficeService {
   private readonly apiService = inject(ApiService);
 
   private readonly routeUrl = 'office';
-  
+
   createOffice(office: Office): Observable<Office> {
     return this.apiService.post(this.routeUrl, office);
   }

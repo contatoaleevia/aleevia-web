@@ -7,7 +7,8 @@ import { ButtonComponent } from '@shared/components/button/button.component';
 import { Router } from '@angular/router';
 import { RegistrationType } from '@auth/base/register/constants/registration-types';
 import { RegistrationContextService } from '@auth/base/register/registration-context.service';
-
+import { AddressService } from '@shared/services/adress.service';
+import { LoadingService } from '@app/core/services/loading.service';
 @Component({
   selector: 'app-address-form',
   standalone: true,
@@ -16,10 +17,12 @@ import { RegistrationContextService } from '@auth/base/register/registration-con
   styleUrl: './address-form.component.scss'
 })
 export class AddressFormComponent {
-  private fb = inject(FormBuilder);
-  private viaCep = inject(ViaCepService);
-  private router = inject(Router);
-  private registrationContext = inject(RegistrationContextService);
+  private readonly fb = inject(FormBuilder);
+  private readonly viaCep = inject(ViaCepService);
+  private readonly router = inject(Router);
+  private readonly registrationContext = inject(RegistrationContextService);
+  private readonly addressService = inject(AddressService);
+  private readonly loadingService = inject(LoadingService);
 
   form: FormGroup;
   context: RegistrationType = this.registrationContext.getContext();
@@ -32,7 +35,7 @@ export class AddressFormComponent {
 
   private initializeForm(): FormGroup {
     return this.fb.group({
-      addressName: ['', Validators.required],
+      name: ['', Validators.required],
       zipCode: ['', [Validators.required, Validators.pattern(/^[0-9]{5}-[0-9]{3}$/)]],
       street: ['', Validators.required],
       neighborhood: ['', Validators.required],
@@ -81,12 +84,27 @@ export class AddressFormComponent {
   }
 
   private saveAddressData(): void {
+    this.loadingService.loadingOn();
     const addressData = this.form.value;
+    const officeId = localStorage.getItem('officeId')?.replace(/"/g, '');
+    addressData.sourceId = officeId;
+    addressData.sourceType = {
+      userTypeId: 2
+    };
     localStorage.setItem('serviceLocation', JSON.stringify(addressData));
-    
+
+    console.log(addressData);
+
+    if (officeId) {
+      this.addressService.createAddress(addressData).subscribe((response) => {
+        addressData.id = response.id;
+      });
+    }
+
     const registrationData = JSON.parse(localStorage.getItem('registrationData') || '{}');
     registrationData.address = addressData;
     localStorage.setItem('registrationData', JSON.stringify(registrationData));
+    this.loadingService.loadingOff();
   }
 
   onAction(): void {
