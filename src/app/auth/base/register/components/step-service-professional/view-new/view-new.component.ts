@@ -101,7 +101,7 @@ export class ViewNewComponent implements OnInit {
     this.router.navigate([`/auth/register/${this.registrationType}/service-professional/add-service`]);
   }
 
-  deleteService(id: number) {
+  deleteService(id: string) {
     this.services = this.services.filter(s => s.id !== id);
   }
 

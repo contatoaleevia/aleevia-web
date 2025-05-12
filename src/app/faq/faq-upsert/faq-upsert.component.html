@@ -33,18 +33,18 @@
 
           <div class="mb-3">
             <app-input
-              label="Classificação"
-              [value]="form.get('classification')?.value"
+              label="Categoria"
+              [value]="form.get('faqCategory')?.value"
               [required]="true"
               inputType="select"
               [options]="classificationOptions"
               optionLabel="label"
               optionValue="value"
-              [errorMessage]="form.get('classification')?.errors?.['required'] ? 'Campo obrigatório' : null"
-              placeholder="Selecione a classificação"
+              [errorMessage]="form.get('faqCategory')?.errors?.['required'] ? 'Campo obrigatório' : null"
+              placeholder="Selecione a categoria"
               bgColor="#FFFFFF"
               [showErrorOnTouched]="true"
-              (onChange)="form.get('classification')?.setValue($event)">
+              (onChange)="form.get('faqCategory')?.setValue($event)">
             </app-input>
           </div>
 
@@ -64,7 +64,7 @@
       <div class="card">
         <div class="card-body">
           <h5 class="card-title mb-4">Sobre o post</h5>
-          
+
           <div class="preview-section mb-3" *ngIf="isEditing">
             <app-button
               type="primary"

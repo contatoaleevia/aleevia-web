@@ -25,19 +25,34 @@
         </div>
 
         <div class="col-auto">
-          <app-button type="secondary" icon="upload" iconPosition="left" (clicked)="soon()">
+          <app-button
+            type="secondary"
+            icon="upload"
+            iconPosition="left"
+            (clicked)="soon()"
+          >
             Importar .xsv
           </app-button>
         </div>
 
         <div class="col-auto">
-          <app-button type="secondary" icon="download" iconPosition="left" (clicked)="soon()">
+          <app-button
+            type="secondary"
+            icon="download"
+            iconPosition="left"
+            (clicked)="soon()"
+          >
             Baixar modelo
           </app-button>
         </div>
 
         <div class="col-auto">
-          <app-button type="secondary" icon="robot" iconPosition="left" (clicked)="preview()">
+          <app-button
+            type="secondary"
+            icon="robot"
+            iconPosition="left"
+            (clicked)="preview()"
+          >
             Conversar com a minha IA
           </app-button>
         </div>
@@ -73,40 +88,66 @@
               </th>
             </tr>
           </thead>
-          <tbody class="fs-14">
-            <tr *ngFor="let faq of filteredFaqs">
-              <td
-                class="ps-0 text-truncate question-text overflow-hidden text-nowrap fw-medium"
-              >
-                {{ faq.question }}
-              </td>
-              <td class="text-secondary-table">{{ faq.classification }}</td>
-              <td class="text-secondary-table">
-                {{ faq.created_at | date : "dd/MM/yyyy" }}
-              </td>
-              <td class="text-secondary-table">
-                {{ faq.updated_at | date : "dd/MM/yyyy" }}
-              </td>
-              <td class="pe-0">
-                <div
-                  class="d-flex gap-3 justify-content-center align-items-center"
+          <ng-container *ngIf="filteredFaqs.length > 0; else noFaqs">
+            <tbody class="fs-14">
+              <tr *ngFor="let faq of filteredFaqs">
+                <td
+                  class="ps-0 text-truncate question-text overflow-hidden text-nowrap fw-medium"
                 >
-                  <button
-                    class="btn btn-link p-1 text-decoration-none"
-                    (click)="onEdit(faq.id)"
+                  {{ faq.question }}
+                </td>
+                <td class="text-secondary-table">{{ faq.faqCategory }}</td>
+                <td class="text-secondary-table">
+                  {{ faq.created_at | date : "dd/MM/yyyy" }}
+                </td>
+                <td class="text-secondary-table">
+                  {{ faq.updated_at | date : "dd/MM/yyyy" }}
+                </td>
+                <td class="pe-0">
+                  <div
+                    class="d-flex gap-3 justify-content-center align-items-center"
                   >
-                    <i class="bi bi-pencil text-primary fs-5"></i>
-                  </button>
-                  <button
-                    class="btn btn-link p-1 text-decoration-none"
-                    (click)="openDeleteModal(faq)"
+                    <button
+                      class="btn btn-link p-1 text-decoration-none"
+                      (click)="onEdit(faq.id)"
+                    >
+                      <i class="bi bi-pencil text-primary fs-5"></i>
+                    </button>
+                    <button
+                      class="btn btn-link p-1 text-decoration-none"
+                      (click)="openDeleteModal(faq)"
+                    >
+                      <i class="bi bi-trash text-danger fs-5"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </ng-container>
+          <ng-template #noFaqs>
+            <tbody>
+              <tr>
+                <td colspan="5" class="text-center">
+                  <img
+                    src="assets/images/empty.png"
+                    alt="Nenhum conteúdo encontrado"
+                    class="w-auto"
+                  />
+                  <p class="text-secondary">
+                    Construa o conhecimento da Livia com a sua experiência.
+                    Cadastre um treinamento!
+                  </p>
+                  <app-button
+                    type="primary"
+                    iconPosition="left"
+                    (clicked)="onAdd()"
                   >
-                    <i class="bi bi-trash text-danger fs-5"></i>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
+                    Treinar a Lívia
+                  </app-button>
+                </td>
+              </tr>
+            </tbody>
+          </ng-template>
         </table>
       </div>
     </div>

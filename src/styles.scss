@@ -52,3 +52,23 @@ $custom-theme: mat.m2-define-light-theme((
 // Apply typography to Angular Material components
 @include mat.core-theme($custom-theme);
 
+// Fix for Material dropdown appearing behind modal
+.cdk-overlay-container {
+  z-index: 1100 !important;
+}
+
+.mat-select-panel {
+  z-index: 1100 !important;
+}
+
+.mat-mdc-select-panel {
+  z-index: 1100 !important;
+}
+
+.cdk-overlay-pane {
+  z-index: 1100 !important;
+}
+
+.modal-content {
+  border: none;
+}

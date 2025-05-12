@@ -4,6 +4,8 @@
       label="Tipo de serviço"
       inputType="select"
       [options]="serviceTypes"
+      optionLabel="name"
+      optionValue="id"
       formControlName="serviceTypeId"
       [errorMessage]="form.get('serviceTypeId')?.touched && form.get('serviceTypeId')?.invalid ? 'Selecione o tipo de serviço' : null"
     ></app-input>

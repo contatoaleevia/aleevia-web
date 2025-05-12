@@ -4,6 +4,7 @@ import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { HeaderComponent } from './header/header.component';
 import { SideBarComponent } from './side-bar/side-bar.component';
 import { filter } from 'rxjs';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-page',
@@ -17,16 +18,30 @@ export class PageComponent implements OnInit {
   currentUser: any;
   isDashboard: boolean = false;
   userName: string = '';
+  showBackButton: boolean = false;
 
   private routeTitles: { [key: string]: string } = {
-    '/dashboard': '',
-    '/schedule': 'Agenda',
-    '/pacientes': 'Pacientes',
-    '/faq': 'Perguntas Frequentes',
-    '/configuration': 'Espaço de Saúde'
+    'dashboard': '',
+    'schedule': 'Agenda',
+    'pacientes': 'Pacientes',
+    'faq': 'Perguntas Frequentes',
+    'configuration': 'Espaço de Saúde',
+    'attendances': 'Serviços'
   };
 
-  constructor(private router: Router) {}
+  private mainRoutes: string[] = [
+    'dashboard',
+    'schedule',
+    'pacientes',
+    'faq',
+    'configuration',
+    'attendances'
+  ];
+
+  constructor(
+    private router: Router,
+    private location: Location
+  ) {}
 
   ngOnInit() {
     const userStr = localStorage.getItem('currentUser');
@@ -47,10 +62,28 @@ export class PageComponent implements OnInit {
     const currentRoute = this.router.url;
     this.isDashboard = currentRoute.includes('dashboard');
 
+    // Verificar se deve mostrar o botão de voltar
+    this.showBackButton = !this.mainRoutes.some(route =>
+      currentRoute === '/' + route ||
+      currentRoute === '/' ||
+      (currentRoute.includes(route) && currentRoute.split('/').length <= 2)
+    );
+
     if (this.isDashboard) {
       this.userName = this.currentUser?.preferred_name || this.currentUser?.full_name || 'Usuário';
     } else {
-      this.pageTitle = this.routeTitles[currentRoute] || '';
+      // Verificar qual rota está incluída na URL atual
+      this.pageTitle = '';
+      for (const [route, title] of Object.entries(this.routeTitles)) {
+        if (currentRoute.includes(route) && route !== 'dashboard') {
+          this.pageTitle = title;
+          break;
+        }
+      }
     }
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 }

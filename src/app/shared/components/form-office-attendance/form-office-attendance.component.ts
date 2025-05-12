@@ -56,17 +56,27 @@ export class FormOfficeAttendanceComponent implements OnInit {
           id: type.id || '',
           name: type.name
         }));
+        console.log('Service types loaded:', this.serviceTypes);
       });
   }
 
   onSubmit() {
     if (this.form.valid) {
       const formValue = this.form.value;
+
+      let priceValue: number;
+      if (typeof formValue.price === 'string') {
+        priceValue = Number((formValue.price || '').replace(',', '.'));
+      } else {
+        priceValue = formValue.price || 0;
+      }
+
       const officeAttendance: OfficeAttendance = {
         ...formValue,
         officeId: this.officeId || this.initialData?.officeId,
-        price: Number((formValue.price || '').replace(',', '.'))
+        price: priceValue
       };
+
       this.formSubmit.emit(officeAttendance);
     } else {
       this.form.markAllAsTouched();

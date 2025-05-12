@@ -58,7 +58,7 @@ export class FaqComponent implements OnInit {
       previewContent: {
         question: faq.question,
         answer: faq.answer,
-        classification: faq.classification
+        faqCategory: faq.faqCategory
       },
       confirmText: 'Excluir',
       cancelText: 'Cancelar'
