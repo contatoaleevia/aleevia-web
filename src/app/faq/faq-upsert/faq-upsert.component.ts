@@ -19,7 +19,7 @@ export class FaqUpsertComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly faqService = inject(FaqService);
-  private readonly officeId = JSON.parse(localStorage.getItem('officeId') || '{}');
+  private readonly officeId = localStorage.getItem('officeId') || '{}';
   private readonly loadingService = inject(LoadingService);
 
   form!: FormGroup;
