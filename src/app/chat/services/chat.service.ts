@@ -17,9 +17,19 @@ export class ChatService {
     );
   }
 
-  async sendMessage(chatId: string, content: string): Promise<Message> {
+  async sendMessage(chatId: string, messageText: string): Promise<Message> {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    const userId = currentUser?.id || '';
+
     return firstValueFrom(
-      this.http.post<Message>(`${this.apiUrl}chats/${chatId}/messages`, { message: content, content: content, senderType: 2 })
+      this.http.post<Message>(`${this.apiUrl}chats/${chatId}/messages`, {
+        message: messageText,
+        content: {
+          source: 1,
+          sourceId: userId
+        },
+        senderType: 2
+      })
     );
   }
 

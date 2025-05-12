@@ -1,10 +1,10 @@
 <div #messagesContainer class="messages d-flex flex-column gap-3 overflow-auto h-100">
-    <div 
-      *ngFor="let message of messages" 
+    <div
+      *ngFor="let message of messages"
       class="message d-flex"
       [ngClass]="{'justify-content-end': message.role === 'user'}"
     >
-      <div 
+      <div
         class="message-content p-3"
         [ngClass]="{
           'user-message': message.role === 'user',
@@ -12,7 +12,7 @@
         }"
       >
         <ng-container *ngIf="!message.isPlaceholder; else typingIndicator">
-          {{ message.content }}
+          {{ message.message }}
         </ng-container>
         <ng-template #typingIndicator>
           <div class="typing-indicator d-flex justify-content-center">

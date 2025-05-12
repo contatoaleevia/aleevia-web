@@ -56,7 +56,7 @@ export class ChatComponent implements OnInit {
       try {
         const messages = [
           {
-            content: 'Olá, como posso te ajudar?',
+            content: { source: 'assistant', sourceId: 'system' },
             role: 'assistant' as 'assistant',
             message: 'Olá, como posso te ajudar?',
             chat_id: this.chatId,
@@ -79,8 +79,11 @@ export class ChatComponent implements OnInit {
     if (!content?.trim() || !this.chatId || this.messages.length === 0) return;
     if(this.showWelcomeSection) this.showWelcomeSection = false;
 
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    const userId = currentUser?.id || '';
+
     const userMessage: Message = {
-      content: content.trim(),
+      content: { source: 'user', sourceId: userId },
       message: content.trim(),
       role: 'user',
       chat_id: this.chatId,
@@ -90,7 +93,7 @@ export class ChatComponent implements OnInit {
 
     const placeholderMessage: Message = {
       message: 'Digitando...',
-      content: 'Digitando...',
+      content: { source: 'assistant', sourceId: 'system' },
       role: 'assistant',
       chat_id: this.chatId,
       id: (Date.now() + 1).toString(),
