@@ -3,34 +3,5 @@
     <a class="navbar-brand" routerLink="/">
       <img src="assets/images/logo-aleevia.png" alt="Aleevia Logo" height="30">
     </a>
-
-    <div class="d-flex d-lg-none align-items-center">
-      <button class="btn btn-link position-relative me-3">
-        <img src="assets/images/header/notification.png" alt="Notificações" class="notification-icon">
-      </button>
-      <div class="profile-picture rounded-circle overflow-hidden me-3">
-        <img [src]="getProfilePicture()" alt="Profile" class="img-fluid">
-      </div>
-      <button class="navbar-toggler" type="button" (click)="isMenuCollapsed = !isMenuCollapsed">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-    </div>
-
-    <div class="collapse navbar-collapse" [ngbCollapse]="isMenuCollapsed">
-      <div class="navbar-nav ms-auto">
-        <a class="nav-link px-3" routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
-        <a class="nav-link px-3" routerLink="/pacientes" routerLinkActive="active">Pacientes</a>
-        <a class="nav-link px-3" routerLink="/schedule" routerLinkActive="active">Agenda</a>
-      </div>
-
-      <div class="d-none d-lg-flex align-items-center ms-4">
-        <button class="btn btn-link position-relative me-3">
-          <img src="assets/images/header/notification.png" alt="Notificações" class="notification-icon">
-        </button>
-        <div class="profile-picture rounded-circle overflow-hidden">
-          <img [src]="getProfilePicture()" alt="Profile" class="img-fluid">
-        </div>
-      </div>
-    </div>
   </div>
 </header>
