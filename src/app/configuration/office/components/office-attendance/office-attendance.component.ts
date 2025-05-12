@@ -18,7 +18,7 @@ export class OfficeAttendanceComponent implements OnInit {
   constructor(private officeAttendanceService: OfficeAttendanceService) {}
 
   ngOnInit(): void {
-    this.officeId = JSON.parse(localStorage.getItem('officeId') || '{}');
+    this.officeId = localStorage.getItem('officeId') || '{}';
     this.loadAttendances();
   }
 

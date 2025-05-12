@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 export class ConfigurationComponent {
   private readonly officeService = inject(OfficeService);
   private readonly router = inject(Router);
-  private officeId = JSON.parse(localStorage.getItem('officeId') || '{}');
+  private officeId = localStorage.getItem('officeId') || '{}';
 
   offices: Office[] = [];
 
