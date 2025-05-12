@@ -1,0 +1,19 @@
+<div class="referral-gauge-card">
+  <div class="gauge-header">
+    <div class="gauge-title">{{ gaugeData.title }}</div>
+    <div class="gauge-subtitle">{{ gaugeData.subtitle }}</div>
+  </div>
+
+  <div class="gauge-container">
+    <canvas #gaugeCanvas></canvas>
+    <div class="gauge-percentage">{{ gaugeData.percentage }}%</div>
+    <div class="gauge-description">{{ gaugeData.description }}</div>
+  </div>
+
+  <div class="coming-soon-overlay">
+    <div class="overlay-content">
+      <i class="bi bi-bar-chart-line"></i>
+      <span>Em breve novos gráficos</span>
+    </div>
+  </div>
+</div>

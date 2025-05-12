@@ -1,0 +1,32 @@
+<div class="statistics-card">
+  <div class="card-header">
+    <div class="month-selector" (click)="selectMonth()">
+      <span class="current-month">{{ statsData.month }}</span>
+      <i class="bi bi-chevron-down"></i>
+    </div>
+  </div>
+
+  <div class="stats-container">
+    <div class="stats-row">
+      <div *ngFor="let item of statsData.items" class="stat-item">
+        <div class="stat-header">
+          <div class="stat-title">{{ item.title }}</div>
+          <div class="stat-subtitle">{{ item.subtitle }}</div>
+        </div>
+        <div class="stat-data">
+          <div class="stat-value">{{ item.value }}</div>
+          <div class="stat-trend" [ngClass]="getTrendClass(item)">
+            {{ getTrendPrefix(item.trend) }}{{ item.trend }}%
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="coming-soon-overlay">
+    <div class="overlay-content">
+      <i class="bi bi-bar-chart-line"></i>
+      <span>Em breve mais estatísticas</span>
+    </div>
+  </div>
+</div>

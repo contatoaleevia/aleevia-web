@@ -4,7 +4,7 @@ import { AuthService } from '@auth/services/auth.service';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { Router } from '@angular/router';
-
+import { environment } from 'src/environments/environment';
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const router = inject(Router);
@@ -22,7 +22,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     req = req.clone({ headers });
   }
 
-  const headers = req.headers.set('x-api-key', '6a5e7add-7e24-48e0-90aa-79486597f1d3');
+  const headers = req.headers.set('x-api-key', environment.apiKey);
   req = req.clone({ headers });
 
   return next(req).pipe(

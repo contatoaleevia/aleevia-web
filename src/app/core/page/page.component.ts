@@ -70,9 +70,8 @@ export class PageComponent implements OnInit {
     );
 
     if (this.isDashboard) {
-      this.userName = this.currentUser?.preferred_name || this.currentUser?.full_name || 'Usuário';
+      this.userName = this.currentUser.name || 'Usuário';
     } else {
-      // Verificar qual rota está incluída na URL atual
       this.pageTitle = '';
       for (const [route, title] of Object.entries(this.routeTitles)) {
         if (currentRoute.includes(route) && route !== 'dashboard') {

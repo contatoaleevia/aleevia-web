@@ -1,0 +1,176 @@
+.ai-assistant-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: 450px;
+  width: 100%;
+}
+
+.card-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f0f0f0;
+
+  h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+  }
+}
+
+.messages-container {
+  flex: 1;
+  overflow: hidden;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.messages {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 230px;
+}
+
+.message {
+  max-width: 85%;
+
+  .message-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .message-text {
+    padding: 8px 12px;
+    border-radius: 16px;
+    word-break: break-word;
+    line-height: 1.4;
+    font-size: 13px;
+
+    &.placeholder {
+      opacity: 0.7;
+      font-style: italic;
+    }
+  }
+
+  .message-avatar {
+    min-width: 28px;
+
+    .avatar-circle {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+}
+
+.user-message {
+  align-self: flex-end;
+
+  .message-content {
+    flex-direction: row-reverse;
+  }
+
+  .message-text {
+    background-color: #f1f7fe;
+    color: #0056b3;
+  }
+
+  .avatar-circle {
+    background-color: #e6f0ff;
+    color: #0056b3;
+  }
+}
+
+.assistant-message {
+  align-self: flex-start;
+
+  .message-text {
+    background-color: #f7f7f7;
+    color: #333;
+  }
+
+  .avatar-circle {
+    background-color: #7b68ee;
+    color: white;
+  }
+}
+
+.input-container {
+  display: flex;
+  padding: 10px 12px;
+  border-top: 1px solid #f0f0f0;
+  gap: 8px;
+
+  input {
+    flex: 1;
+    border: 1px solid #e0e0e0;
+    border-radius: 16px;
+    padding: 8px 12px;
+    font-size: 13px;
+    outline: none;
+
+    &:focus {
+      border-color: #7b68ee;
+      box-shadow: 0 0 0 2px rgba(123, 104, 238, 0.1);
+    }
+
+    &:disabled {
+      background-color: #f7f7f7;
+      cursor: not-allowed;
+    }
+  }
+
+  button {
+    background-color: #7b68ee;
+    color: white;
+    border: none;
+    border-radius: 16px;
+    padding: 8px 14px;
+    font-weight: 500;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover:not(:disabled) {
+      background-color: #6a5acd;
+    }
+
+    &:disabled {
+      background-color: #d8d8d8;
+      cursor: not-allowed;
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .message .message-text {
+    font-size: 12px;
+    padding: 7px 10px;
+  }
+
+  .input-container {
+    input, button {
+      font-size: 12px;
+      padding: 7px 10px;
+    }
+  }
+}
