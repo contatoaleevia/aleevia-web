@@ -34,7 +34,7 @@ export class ChatComponent implements OnInit {
   showWelcomeSection: boolean = true;
 
   constructor() {
-    this.faqs$ = this.faqService.getAll();
+    this.faqs$ = new Observable<FAQ[]>();
   }
 
   ngOnInit() {
@@ -54,7 +54,17 @@ export class ChatComponent implements OnInit {
   private async loadExistingMessages() {
     if (this.chatId && this.messages.length === 0) {
       try {
-        const messages = await this.chatService.getChatHistory(this.chatId);
+        const messages = [
+          {
+            content: { source: 'assistant', sourceId: 'system' },
+            role: 'assistant' as 'assistant',
+            message: 'Olá, como posso te ajudar?',
+            chat_id: this.chatId,
+            id: '1',
+            sent_at: new Date().toISOString()
+          }
+        ]
+        // await this.chatService.getChatHistory(this.chatId);
         this.messages = messages.map(msg => ({
           ...msg,
           isPlaceholder: false
@@ -69,8 +79,12 @@ export class ChatComponent implements OnInit {
     if (!content?.trim() || !this.chatId || this.messages.length === 0) return;
     if(this.showWelcomeSection) this.showWelcomeSection = false;
 
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    const userId = currentUser?.id || '';
+
     const userMessage: Message = {
-      content: content.trim(),
+      content: { source: 'user', sourceId: userId },
+      message: content.trim(),
       role: 'user',
       chat_id: this.chatId,
       id: Date.now().toString(),
@@ -78,7 +92,8 @@ export class ChatComponent implements OnInit {
     };
 
     const placeholderMessage: Message = {
-      content: 'Digitando...',
+      message: 'Digitando...',
+      content: { source: 'assistant', sourceId: 'system' },
       role: 'assistant',
       chat_id: this.chatId,
       id: (Date.now() + 1).toString(),
@@ -91,8 +106,8 @@ export class ChatComponent implements OnInit {
 
     try {
       const messageData = await this.chatService.sendMessage(this.chatId, content);
-      
-      this.messages = this.messages.map(msg => 
+
+      this.messages = this.messages.map(msg =>
         msg.isPlaceholder ? {
           ...messageData,
           isPlaceholder: false
@@ -100,7 +115,7 @@ export class ChatComponent implements OnInit {
       );
     } catch (error) {
       console.error('Erro ao enviar mensagem:', error);
-      
+
       this.messages = this.messages.map(msg =>
         msg.isPlaceholder ? {
           ...msg,

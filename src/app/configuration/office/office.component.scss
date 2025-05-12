@@ -1,0 +1,69 @@
+.card {
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  border: none;
+  box-shadow: 0px 2px 2px 0px rgba(10, 13, 18, 0.05);
+}
+
+.nav-tabs {
+  padding: 0;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  width: 100%;
+
+  .nav-item {
+    margin-bottom: -1px;
+    flex: 1;
+    text-align: center;
+
+    .nav-link {
+      border: none;
+      color: #7F7F7F;
+      padding: 15px;
+      font-family: Nunito, sans-serif;
+      font-weight: 600;
+      line-height: 1;
+      cursor: pointer;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &.active {
+        color: #0d6efd;
+        border-bottom: 2px solid #0d6efd;
+      }
+
+      &:hover:not(.active) {
+        color: #0d6efd;
+        border-bottom: 2px solid #0d6efd;
+      }
+    }
+  }
+}
+
+.logo-upload {
+  border: 1px dashed #ced4da;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: #0d6efd;
+    background-color: rgba(13, 110, 253, 0.05);
+  }
+}
+
+h5 {
+  color: #212529;
+  font-weight: 600;
+}
+
+.form-check-input:checked {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+label {
+  font-weight: 500;
+  color: #495057;
+}

@@ -19,7 +19,7 @@
         Voltar
       </app-button>
       <app-button
-        *ngIf="isNextButton"
+        [isNext]="isNextButton"
         type="primary"
         [isNext]="true"
         [disabled]="!isFormValid"

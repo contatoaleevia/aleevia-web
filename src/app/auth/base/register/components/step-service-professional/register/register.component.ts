@@ -6,18 +6,25 @@ import { NgIf } from '@angular/common';
 import Swal from 'sweetalert2';
 import { RegistrationContextService } from '@auth/base/register/registration-context.service';
 import { RegistrationType } from '@auth/base/register/constants/registration-types';
-import { ServiceTypeService } from '@shared/services/service-type.service';
 import { inject } from '@angular/core';
-import { ServiceType } from '@shared/models/service-type.model';
 import { LoadingService } from '@app/core/services/loading.service';
 import { OfficeAttendanceService } from '@app/shared/services/office-attendance.service';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { OfficeAttendance } from '@app/shared/models/office-attendance.model';
+import { FormOfficeAttendanceComponent } from '@shared/components/form-office-attendance/form-office-attendance.component';
+import { FormProfessionalComponent, Professional } from '@shared/components/form-professional/form-professional.component';
+import { ServiceType } from '@app/shared/models/service-type.model';
+import { OfficeService } from '@app/shared/services/office.service';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [InputComponent, ButtonComponent, NgIf, ReactiveFormsModule],
+  imports: [
+    NgIf,
+    ReactiveFormsModule,
+    FormOfficeAttendanceComponent,
+    FormProfessionalComponent
+  ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
@@ -27,24 +34,18 @@ export class RegisterComponent implements OnInit {
   private readonly registrationContext = inject(RegistrationContextService);
   private readonly loadingService = inject(LoadingService);
   private readonly officeAttendanceService = inject(OfficeAttendanceService);
-  private readonly serviceTypeService = inject(ServiceTypeService);
-  private readonly fb = inject(FormBuilder);
+  private readonly officeService = inject(OfficeService);
+
 
   context: 'services' | 'professionals' = 'services';
-  serviceTypes = [
-    { id: '3fa85f64-5717-4562-b3fc-2c963f66afa6', name: 'Clínico' }
-  ];
-
+  serviceTypes: ServiceType[] = [];
   serviceForm!: FormGroup;
   professionalForm!: FormGroup;
+  officeId: string = '';
 
   ngOnInit(): void {
     this.detectContext();
-    if(this.context === 'services') {
-      this.initServiceForm();
-    } else {
-      this.initProfessionalForm();
-    }
+    this.loadOfficeId();
   }
 
   private detectContext() {
@@ -55,55 +56,15 @@ export class RegisterComponent implements OnInit {
     this.context = url.includes('add-professional') ? 'professionals' : 'services';
   }
 
-  private initServiceForm() {
-    this.serviceForm = this.fb.group({
-      serviceType: [null, Validators.required],
-      name: ['', [Validators.required, Validators.maxLength(100)]],
-      duration: ['', [Validators.required, Validators.pattern(/^\d{2}:\d{2}$/)]],
-      value: ['', [Validators.required, Validators.pattern(/^\d+(,\\d{2})?$/)]],
-      description: ['', [Validators.required, Validators.maxLength(500)]]
-    });
-  }
-
-  private initProfessionalForm() {
-    this.professionalForm = this.fb.group({
-      name: ['', [Validators.required, Validators.maxLength(100)]],
-      cpf: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      hasSchedule: [null, Validators.required],
-      workplace: [null, Validators.required]
-    });
-  }
-
-  get f() {
-    return this.context === 'services'
-      ? this.serviceForm.controls
-      : this.professionalForm.controls;
-  }
-
-  save() {
-    if (this.context === 'services') {
-      this.saveService();
-    } else {
-      this.saveProfessional();
+  private loadOfficeId() {
+    const storedOfficeId = localStorage.getItem('officeId');
+    if (storedOfficeId) {
+      this.officeId = storedOfficeId;
     }
   }
 
-  private saveService() {
-    if (this.serviceForm.invalid) {
-      this.serviceForm.markAllAsTouched();
-      return;
-    }
+  handleServiceFormSubmit(officeAttendance: OfficeAttendance) {
     this.loadingService.loadingOn();
-    const officeId = localStorage.getItem('officeId')?.replace(/"/g, '');
-    const formValue = this.serviceForm.value;
-    const officeAttendance: OfficeAttendance = {
-      officeId: officeId ?? '',
-      serviceTypeId: formValue.serviceType,
-      title: formValue.name,
-      description: formValue.description,
-      price: Number((formValue.value || '').replace(',', '.'))
-    };
     this.officeAttendanceService.create(officeAttendance).subscribe({
       next: () => {
         this.loadingService.loadingOff();
@@ -120,15 +81,35 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  private saveProfessional() {
-    if (this.professionalForm.invalid) {
-      this.professionalForm.markAllAsTouched();
-      return;
-    }
-    Swal.fire({
-      icon: 'info',
-      title: 'Funcionalidade em desenvolvimento',
-      text: 'Salvar profissional ainda não implementado.'
+  handleProfessionalFormSubmit(professional: Professional) {
+    this.loadingService.loadingOn();
+
+    const professionalPayload = {
+      cpf: professional.cpf,
+      name: professional.name,
+      email: professional.email,
+      isPublic: professional.isPublic,
+      isActive: true
+    };
+
+    const payload = {
+      officeId: this.officeId,
+      professional: professionalPayload
+    };
+
+    this.officeService.bindProfessional(payload).subscribe({
+      next: () => {
+        this.loadingService.loadingOff();
+        this.handleSuccess();
+      },
+      error: (err) => {
+        this.loadingService.loadingOff();
+        Swal.fire({
+          icon: 'error',
+          title: 'Erro ao salvar profissional',
+          text: err?.error?.message || 'Tente novamente mais tarde.'
+        });
+      }
     });
   }
 

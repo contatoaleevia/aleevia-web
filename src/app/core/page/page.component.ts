@@ -19,10 +19,11 @@ export class PageComponent implements OnInit {
   userName: string = '';
 
   private routeTitles: { [key: string]: string } = {
-    '/dashboard': '',  
+    '/dashboard': '',
     '/schedule': 'Agenda',
     '/pacientes': 'Pacientes',
-    '/prontuario': 'Prontuário'
+    '/faq': 'Perguntas Frequentes',
+    '/configuration': 'Espaço de Saúde'
   };
 
   constructor(private router: Router) {}
@@ -45,7 +46,7 @@ export class PageComponent implements OnInit {
   private setPageTitle() {
     const currentRoute = this.router.url;
     this.isDashboard = currentRoute.includes('dashboard');
-    
+
     if (this.isDashboard) {
       this.userName = this.currentUser?.preferred_name || this.currentUser?.full_name || 'Usuário';
     } else {

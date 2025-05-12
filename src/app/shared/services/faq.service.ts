@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable, BehaviorSubject, tap, map, throwError } from 'rxjs';
 import { ApiService } from '@core/services/api.service';
-import { FAQ, CreateFaqDTO, UpdateFaqDTO } from '@shared/models/faq.model';
+import { FAQ, CreateFaqDTO, UpdateFaqDTO, FaqResponse } from '@shared/models/faq.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,20 +13,19 @@ export class FaqService {
   private currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
   private apiService = inject(ApiService);
 
-  /**
-   * Lista todas as FAQs
-   * @returns Observable com a lista de FAQs
-   */
-  getAll(): Observable<FAQ[]> {
+
+  getAll(): Observable<FaqResponse> {
+    const response = this.apiService.get<FaqResponse>(`${this.path}/${this.currentUser.id}`);
+
     if (!this.loaded) {
-      this.apiService.get<FAQ[]>(`${this.path}/${this.currentUser.id}`).pipe(
+      response.pipe(
         tap(faqs => {
-          this.faqs.next(faqs);
+          this.faqs.next(faqs.faqs);
           this.loaded = true;
         })
       ).subscribe();
     }
-    return this.faqs.asObservable();
+    return response;
   }
 
   /**

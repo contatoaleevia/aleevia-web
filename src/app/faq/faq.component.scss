@@ -9,7 +9,8 @@
   padding: vars.$spacer * 1.5;
 }
 
-.plus-button-container, span {
+.plus-button-container,
+span {
   cursor: pointer;
 }
 
@@ -97,4 +98,21 @@ button span {
 
 .w-15 {
   width: 15% !important;
+}
+
+
+th {
+  background: rgba(218, 231, 254, 0.40);
+  font-weight: 600;
+  border: none;
+
+  &:first-of-type {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+  }
+
+  &:last-of-type {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+  }
 }

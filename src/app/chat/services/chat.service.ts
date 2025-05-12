@@ -13,22 +13,29 @@ export class ChatService {
 
   async createChat(): Promise<{ id: string }> {
     return firstValueFrom(
-      this.http.post<{ id: string }>(`${this.apiUrl}/chats`, {})
+      this.http.post<{ id: string }>(`${this.apiUrl}chats`, {})
     );
   }
 
-  async sendMessage(chatId: string, content: string): Promise<Message> {
-    // JUST TO TEST
-    const doctorId = '179ca6bf-6e88-4dac-bc4a-14042d8a675c'; 
+  async sendMessage(chatId: string, messageText: string): Promise<Message> {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    const userId = currentUser?.id || '';
 
     return firstValueFrom(
-      this.http.post<Message>(`${this.apiUrl}/chats/${chatId}/messages`, { content, doctor_id: doctorId })
+      this.http.post<Message>(`${this.apiUrl}chats/${chatId}/messages`, {
+        message: messageText,
+        content: {
+          source: 1,
+          sourceId: userId
+        },
+        senderType: 2
+      })
     );
   }
 
   async getChatHistory(chatId: string): Promise<Message[]> {
     return firstValueFrom(
-      this.http.get<Message[]>(`${this.apiUrl}/chats/${chatId}/messages`)
+      this.http.get<Message[]>(`${this.apiUrl}chats/${chatId}/messages`)
     );
   }
-} 
+}

@@ -19,7 +19,7 @@
           label="Valor do procedimento"
           formControlName="procedureValue"
           type="text"
-          bgColor="white"
+
           variant="outline"
           [required]="true"
         ></app-input>
@@ -30,8 +30,8 @@
       <label class="form-label">Selecione os dias</label>
       <div class="d-flex gap-2">
         <div *ngFor="let day of weekDays" class="d-flex">
-          <button 
-            class="btn btn-outline-primary rounded" 
+          <button
+            class="btn btn-outline-primary rounded"
             [class.active]="day.selected"
             (click)="toggleDay(day)"
             style="width: 40px; height: 40px;"
@@ -46,9 +46,9 @@
       <div *ngFor="let schedule of schedules.controls; let i = index" [formGroupName]="i" class="mb-4">
         <div class="d-flex justify-content-between align-items-center mb-2">
           <label class="form-label mb-0">Jornada {{ i + 1 }}</label>
-          <button 
+          <button
             *ngIf="i > 0"
-            type="button" 
+            type="button"
             class="btn btn-link text-danger p-0"
             (click)="removeSchedule(i)"
           >
@@ -61,7 +61,7 @@
               label="Início"
               type="time"
               formControlName="start"
-              bgColor="white"
+
               variant="outline"
               [required]="true"
               (input)="onTimeInputChange($event, i, 'start')"
@@ -72,7 +72,7 @@
               label="Fim"
               type="time"
               formControlName="end"
-              bgColor="white"
+
               variant="outline"
               [required]="true"
               (input)="onTimeInputChange($event, i, 'end')"

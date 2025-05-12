@@ -1,0 +1,45 @@
+.card {
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  border: none;
+  box-shadow: 0px 2px 2px 0px rgba(10, 13, 18, 0.05);
+}
+
+.clinic-section,
+.online-section {
+  border-radius: 10px;
+  border: 1px solid #E0E0E0;
+  background: var(--Base-White, #FFF);
+  box-shadow: 0px 2px 2px 0px rgba(10, 13, 18, 0.05);
+  height: 100%;
+}
+
+.clinic-section {
+  cursor: pointer;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15) !important;
+  }
+}
+
+.text-muted {
+  color: #6c757d !important;
+}
+
+:host ::ng-deep .btn-primary.btn-outline {
+  color: #0d6efd;
+  border-color: #0d6efd;
+  background-color: transparent;
+
+  &:hover {
+    background-color: rgba(13, 110, 253, 0.1);
+  }
+}
+
+.online-text {
+  color: var(--Gray-900, #181D27);
+}
+
+.bi-circle-fill {
+  color: #0d6efd;
+}

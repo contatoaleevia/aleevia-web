@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
-import { GoogleCallbackComponent } from './auth/callback/google-callback.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { authGuard } from './auth/guards/auth.guard';
 import { PageComponent } from './core/page/page.component';
@@ -9,7 +8,7 @@ import { FaqUpsertComponent } from './faq/faq-upsert/faq-upsert.component';
 import { ScheduleComponent } from './schedule/schedule.component';
 import { ChatComponent } from './chat/chat.component';
 import { authRoutes } from './auth/auth.routes';
-
+import { configurationRoutes } from './configuration/configuration.route';
 export const routes: Routes = [
   {
     path: '',
@@ -31,6 +30,7 @@ export const routes: Routes = [
       { path: 'faq/edit/:id', component: FaqUpsertComponent },
       { path: 'schedule', component: ScheduleComponent },
       { path: 'chat', component: ChatComponent },
+      { path: 'configuration', children: configurationRoutes },
     ]
   },
   { path: '**', redirectTo: 'auth' }
