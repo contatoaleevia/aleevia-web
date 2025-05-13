@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable, BehaviorSubject, tap, map, throwError } from 'rxjs';
+import { Observable, BehaviorSubject, tap, map, throwError, of } from 'rxjs';
 import { ApiService } from '@core/services/api.service';
 import { FAQ, CreateFaqDTO, UpdateFaqDTO, FaqResponse } from '@shared/models/faq.model';
 
@@ -9,23 +9,24 @@ import { FAQ, CreateFaqDTO, UpdateFaqDTO, FaqResponse } from '@shared/models/faq
 export class FaqService {
   private readonly path = 'faq';
   private faqs = new BehaviorSubject<FAQ[]>([]);
+  private faqResponse = new BehaviorSubject<FaqResponse | null>(null);
   private loaded = false;
-  private currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+  private officeId = localStorage.getItem('officeId') || '{}';
   private apiService = inject(ApiService);
 
 
   getAll(): Observable<FaqResponse> {
-    const response = this.apiService.get<FaqResponse>(`${this.path}/${this.currentUser.id}`);
-
-    if (!this.loaded) {
-      response.pipe(
-        tap(faqs => {
-          this.faqs.next(faqs.faqs);
-          this.loaded = true;
-        })
-      ).subscribe();
+    if (this.loaded && this.faqResponse.getValue()) {
+      return of(this.faqResponse.getValue() as FaqResponse);
     }
-    return response;
+
+    return this.apiService.get<FaqResponse>(`${this.path}/${this.officeId}`).pipe(
+      tap(response => {
+        this.faqs.next(response.faqs);
+        this.faqResponse.next(response);
+        this.loaded = true;
+      })
+    );
   }
 
   /**
