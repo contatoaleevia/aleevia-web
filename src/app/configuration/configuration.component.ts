@@ -2,13 +2,12 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonComponent } from '../shared/components/button/button.component';
 import { OfficeService } from '@shared/services/office.service';
-import { Office, OfficeResponse } from '@app/shared/models/office.model';
+import { Office } from '@app/shared/models/office.model';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
 import { LoadingService } from '@app/core/services/loading.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CreateComponent } from './office/create/create.component';
-import { DeleteModalComponent, DeleteModalConfig } from '@app/shared/components/delete-modal/delete-modal.component';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -36,8 +35,8 @@ export class ConfigurationComponent implements OnInit {
     this.officeService.getMyOffices().pipe(
       finalize(() => this.loadingService.loadingOff())
     ).subscribe({
-      next: (response: OfficeResponse[]) => {
-        this.offices = response.map(item => item.office);
+      next: (response: Office[]) => {
+        this.offices = response;
       },
       error: (error: any) => {
         console.error('Error fetching offices:', error);

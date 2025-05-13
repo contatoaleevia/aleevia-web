@@ -37,24 +37,23 @@ export class ChatService {
   }
 
   async sendMessage(chatId: string, messageText: string): Promise<Message> {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-    const userId = currentUser?.id || '';
+    const officeId = localStorage.getItem('officeId') || '';
 
     return firstValueFrom(
       this.http.post<Message>(`${this.apiUrl}chats/${chatId}/messages`, {
         message: messageText,
         content: {
           source: 1,
-          sourceId: userId
+          sourceId: officeId
         },
-        senderType: 2
+        senderType: 1
       })
     );
   }
 
   async getChatHistory(chatId: string): Promise<Message[]> {
     return firstValueFrom(
-      this.http.get<Message[]>(`${this.apiUrl}chats/${chatId}/messages`)
+      this.http.get<Message[]>(`${this.apiUrl}chats/${chatId}`)
     );
   }
 }

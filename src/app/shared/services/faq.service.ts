@@ -15,9 +15,9 @@ export class FaqService {
   private apiService = inject(ApiService);
 
 
-  getAll(): Observable<FaqResponse> {
-    if (this.loaded && this.faqResponse.getValue()) {
-      return of(this.faqResponse.getValue() as FaqResponse);
+  getAll(): Observable<FAQ[]> {
+    if (this.loaded && this.faqs.getValue()) {
+      return of(this.faqs.getValue());
     }
 
     return this.apiService.get<FaqResponse>(`${this.path}/${this.officeId}`).pipe(
@@ -25,6 +25,9 @@ export class FaqService {
         this.faqs.next(response.faqs);
         this.faqResponse.next(response);
         this.loaded = true;
+      }),
+      map((response: FaqResponse) => {
+        return response.faqs;
       })
     );
   }

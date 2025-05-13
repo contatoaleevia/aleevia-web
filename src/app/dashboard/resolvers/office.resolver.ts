@@ -13,10 +13,10 @@ export const officeResolver: ResolveFn<Office[]> = () => {
   loadingService.loadingOn();
 
   return officeService.getMyOffices().pipe(
-    map((response: OfficeResponse[]) => {
+    map((response: Office[]) => {
       return response.map(item => {
-        localStorage.setItem('officeId', item.office.id || '');
-        return item.office;
+        localStorage.setItem('officeId', item.id || '');
+        return item;
       });
     }),
     catchError((error) => {

@@ -44,12 +44,11 @@ export class FaqComponent implements OnInit {
   }
 
   private loadFaqs(): void {
-    console.log('loadFaqs');
     this.loadingService.loadingOn();
     this.faqService.getAll().pipe(
       finalize(() => this.loadingService.loadingOff()),
     ).subscribe(faqs => {
-      this.faqs = faqs.faqs;
+      this.faqs = faqs;
       this.filteredFaqs = this.faqs;
     });
   }
