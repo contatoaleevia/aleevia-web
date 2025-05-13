@@ -4,6 +4,7 @@ export interface ClinicItem {
   count?: number;
   description?: string;
   route?: string;
+  link?: string;
 }
 
 export interface ClinicCardData {

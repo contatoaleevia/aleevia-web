@@ -2,6 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ClinicCardData } from './clinic-card.model';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ShareLinkComponent } from '../share-link/share-link.component';
 
 @Component({
   selector: 'app-clinic-card',
@@ -17,5 +19,18 @@ export class ClinicCardComponent implements OnInit {
     if (!this.clinicData.logo) {
       this.clinicData.logo = 'assets/images/logo-aleevia.png';
     }
+  }
+
+  constructor(private modalService: NgbModal) { }
+
+  openShareLinkModal(link: string) {
+    const modalRef = this.modalService.open(ShareLinkComponent, {
+      centered: true,
+      backdrop: true,
+      size: 'md',
+
+    });
+
+    modalRef.componentInstance.link = link;
   }
 }
