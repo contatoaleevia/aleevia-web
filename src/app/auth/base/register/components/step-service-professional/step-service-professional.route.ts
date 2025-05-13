@@ -10,7 +10,7 @@ export const stepServiceProfessionalRoute: Routes = [
         component: ViewNewComponent,
         data: {
           title: 'Serviços prestados',
-          subtitle: 'Adicione ou visualize os serviços oferecidos.'
+          subtitle: 'Cadastre aqui serviços que seu espaço de saúde oferece.'
         },
       },
       {
@@ -18,7 +18,7 @@ export const stepServiceProfessionalRoute: Routes = [
         component: RegisterComponent,
         data: {
           title: 'Adicionar serviço',
-          subtitle: 'Adicione um novo serviço para o espaço.'
+          subtitle: 'Insira aqui informações sobre o serviço que seu espaço de saúde oferece.'
         },
       },
       {
@@ -26,7 +26,7 @@ export const stepServiceProfessionalRoute: Routes = [
         component: RegisterComponent,
         data: {
           title: 'Adicionar profissional',
-          subtitle: 'Adicione um novo profissional para o espaço.'
+          subtitle: 'Insira as informações do profissional que deseja convidar para se juntar a Aleevia'
         },
       },
       {

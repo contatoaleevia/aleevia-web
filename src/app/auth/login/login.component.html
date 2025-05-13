@@ -3,8 +3,8 @@
   style="min-height: 80vh"
 >
   <div class="text-center text-md-start mb-5 w-100">
-    <h1 class="fw-semibold mb-2">Acesse sua conta</h1>
-    <p class="text-muted mb-4">Digite seu e-mail e senha para acessar</p>
+    <h1 class="fw-semibold mb-2">Que bom ter você por aqui!</h1>
+    <p class="text-muted mb-4">Insira seus dados para acessar sua conta com segurança.</p>
   </div>
 
   <div *ngIf="errorMessage" class="alert alert-danger mb-4 w-100" role="alert">
@@ -13,11 +13,11 @@
 
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="w-100">
     <div class="mb-4">
-      <label for="cpfCnpj" class="form-label fw-medium">CPF/CNPJ</label>
+      <label for="cpfCnpj" class="form-label fw-medium">CPF ou CNPJ</label>
       <app-input
         id="cpfCnpj"
         formControlName="cpfCnpj"
-        placeholder="Digite seu CPF ou CNPJ"
+        placeholder="123.456.789-00"
         [mask]="cpfCnpjMask"
         [required]="true"
       ></app-input>
@@ -78,7 +78,7 @@
         customClasses="w-100"
         class="w-100"
       >
-        Entrar
+        Continuar
       </app-button>
     </div>
   </form>

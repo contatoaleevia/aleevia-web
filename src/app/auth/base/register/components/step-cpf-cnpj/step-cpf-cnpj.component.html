@@ -9,6 +9,7 @@
         <app-input
           formControlName="cnpj"
           label="CNPJ"
+          placeholder="12.345.678/0001-97"
           [required]="true"
           inputType="text"
           mask="00.000.000/0000-00"
@@ -28,6 +29,7 @@
         <app-input
           formControlName="corporateName"
           label="Razão Social"
+          placeholder="Ex: Aleevia"
           [required]="true"
           inputType="text"
         ></app-input>
@@ -38,7 +40,7 @@
         <app-input
           formControlName="name"
           label="Nome do representante legal"
-          placeholder=""
+          placeholder="Insira seu nome completo"
           [required]="true"
           inputType="text"
         ></app-input>
@@ -47,6 +49,7 @@
         <app-input
           formControlName="cpf"
           label="CPF (representante legal)"
+          placeholder="123.456.789-00"
           [required]="true"
           inputType="text"
           mask="000.000.000-00"
@@ -82,7 +85,7 @@
         <app-input
           formControlName="cpf"
           [bgColor]="form.get('cpf')!.disabled ? '' : 'white'"
-          label="CPF (representante legal)"
+          label="CPF"
           [required]="true"
           inputType="text"
           mask="000.000.000-00"
@@ -176,7 +179,7 @@
     </div>
 
     <p class="text-center text-secondary mt-2 small">
-      Seus dados estão protegidos
+      Usamos seus dados para autenticação e melhorar sua experiência.
       <i class="bi bi-lock ms-1"></i>
     </p>
   </div>

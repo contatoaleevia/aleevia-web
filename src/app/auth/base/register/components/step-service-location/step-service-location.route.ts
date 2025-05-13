@@ -12,16 +12,16 @@ export const stepServiceLocationRoute: Routes = [
         path: '',
         component: AddressFormComponent,
         data: {
-          title: 'Endereço do local',
-          subtitle: 'Informe o endereço do seu local de atendimento'
+          title: 'Vamos cadastrar o endereço',
+          subtitle: 'Preencha as informações do seu espaço saúde.'
         }
       },
       {
         path: 'confirmation',
         component: ConfirmationViewComponent,
         data: {
-          title: 'Confirmação',
-          subtitle: 'Confira os dados do seu local de atendimento'
+          title: 'Local de atendimento',
+          subtitle: 'Informações sobre formato de atendimento e locais.'
         }
       }
     ]

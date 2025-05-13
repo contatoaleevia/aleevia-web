@@ -42,7 +42,7 @@ export class ForgotPasswordComponent {
       this.loading = false;
       await Swal.fire({
         title: 'Instruções enviadas',
-        html: `Enviamos as instruções de mudança de senha para o email <b>c******es13@gmail.com</b>. Verifique sua caixa de spam`,
+        html: `Enviamos as instruções de mudança de senha para o email c******es13@gmail.com. Verifique sua caixa de spam`,
         confirmButtonText: 'Continuar',
         customClass: {
           popup: 'rounded-4',
