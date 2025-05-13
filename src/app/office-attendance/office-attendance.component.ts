@@ -27,7 +27,7 @@ export class OfficeAttendanceComponent {
   private searchTermSubject = new BehaviorSubject<string>('');
   searchTerm$ = this.searchTermSubject.asObservable();
 
-  serviceTypes$ = this.officeAttendanceService.officeAttendance$;
+  serviceTypes$ = this.officeAttendanceService.officeAttendanceByOfficeId$;
   filteredServiceTypes$ = this.searchTerm$.pipe(
     switchMap(searchTerm =>
       this.serviceTypes$.pipe(

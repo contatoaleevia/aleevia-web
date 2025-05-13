@@ -7,7 +7,7 @@ export const officeAttendanceResolver: ResolveFn<any> = () => {
   const officeId = localStorage.getItem('officeId') || '{}';
   const officeAttendanceService = inject(OfficeAttendanceService);
 
-  return officeAttendanceService.getById(officeId).pipe(
+  return officeAttendanceService.getByOfficeId(officeId).pipe(
     map((officeAttendance) => {
       return officeAttendance;
     })

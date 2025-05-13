@@ -1,8 +1,8 @@
 import { inject } from '@angular/core';
 import { ResolveFn, Router } from '@angular/router';
-import { EMPTY, Observable, catchError, finalize, map } from 'rxjs';
+import { EMPTY, Observable, catchError, finalize } from 'rxjs';
 import { OfficeService } from '@shared/services/office.service';
-import { Office, OfficeResponse } from '@app/shared/models/office.model';
+import { Office } from '@app/shared/models/office.model';
 import { LoadingService } from '@app/core/services/loading.service';
 
 export const officeResolver: ResolveFn<Office[]> = () => {
@@ -13,14 +13,7 @@ export const officeResolver: ResolveFn<Office[]> = () => {
   loadingService.loadingOn();
 
   return officeService.getMyOffices().pipe(
-    map((response: Office[]) => {
-      return response.map(item => {
-        localStorage.setItem('officeId', item.id || '');
-        return item;
-      });
-    }),
     catchError((error) => {
-      console.error('Error fetching offices:', error);
       router.navigate(['/auth']);
       return EMPTY;
     }),

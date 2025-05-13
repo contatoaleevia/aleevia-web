@@ -28,8 +28,9 @@
           <thead>
             <tr>
               <th class="fw-bold fs-14 w-40">Nome do atendimento</th>
+              <th class="fw-bold fs-14 w-40">Descrição</th>
               <th class="fw-bold fs-14 w-15 text-secondary-table">Valor</th>
-              <th class="fw-bold fs-14 w-25 text-secondary-table">Data criação</th>
+              <th class="fw-bold fs-14 w-25 text-secondary-table text-nowrap">Data criação</th>
               <th class="fw-bold fs-14 w-20 text-secondary-table text-center">Ações</th>
             </tr>
           </thead>
@@ -43,7 +44,10 @@
                   {{ service.description }}
                 </td>
                 <td class="text-secondary-table">
-                  {{ service.duration }} min
+                  {{ service.price | currency:'BRL' }}
+                </td>
+                <td class="text-secondary-table">
+                  {{ service.createdAt | date : "dd/MM/yyyy" }}
                 </td>
                 <td class="pe-0">
                   <div class="d-flex gap-3 justify-content-center align-items-center">
