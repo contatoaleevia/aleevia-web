@@ -12,7 +12,7 @@ export class StartComponent {
   readonly REGISTRATION_TYPES = REGISTRATION_TYPES;
 
   navigateTo(type: string) {
-    this.router.navigate(['/auth/register', type, 'cpf-cnpj']);
     localStorage.setItem('registrationType', type);
+    this.router.navigate(['/auth/register/step/cpf-cnpj']);
   }
 }

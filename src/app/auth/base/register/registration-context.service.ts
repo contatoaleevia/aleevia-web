@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
-import { BehaviorSubject, filter } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { REGISTRATION_TYPES, RegistrationType } from '@auth/base/register/constants/registration-types';
 
 @Injectable({
@@ -10,7 +9,7 @@ export class RegistrationContextService {
   private contextSubject = new BehaviorSubject<RegistrationType>(REGISTRATION_TYPES.INDIVIDUAL);
   context$ = this.contextSubject.asObservable();
 
-  constructor(private router: Router) {
+  constructor() {
     const registrationType = localStorage.getItem('registrationType');
     if (registrationType) {
       this.contextSubject.next(registrationType as RegistrationType);

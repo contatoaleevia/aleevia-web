@@ -114,7 +114,6 @@ export class RegisterComponent implements OnInit {
   }
 
   handleSuccess() {
-    const registrationType: RegistrationType = this.registrationContext.getContext();
     Swal.fire({
       toast: true,
       position: 'top-end',
@@ -132,9 +131,9 @@ export class RegisterComponent implements OnInit {
     });
 
     if (this.context === 'services') {
-      this.router.navigate([`/auth/register/${registrationType}/service-professional/services`]);
+      this.router.navigate([`/auth/register/step/service-professional/services`]);
     } else {
-      this.router.navigate([`/auth/register/${registrationType}/service-professional/professionals`]);
+      this.router.navigate([`/auth/register/step/service-professional/professionals`]);
     }
   }
 }

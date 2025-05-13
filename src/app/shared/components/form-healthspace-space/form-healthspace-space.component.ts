@@ -40,7 +40,7 @@ export class FormHealthspaceSpaceComponent implements OnInit {
   }
 
   private prepareOfficeData(): Office {
-    return {
+    const formData = {
       name: this.form.value.name,
       phoneNumber: this.form.value.phoneNumber,
       whatsapp: this.form.value.whatsapp,
@@ -49,6 +49,8 @@ export class FormHealthspaceSpaceComponent implements OnInit {
       instagram: this.form.value.instagram,
       logo: this.form.value.logo
     };
+    console.log('Emitting form data:', formData);
+    return formData;
   }
 
   onSubmit() {

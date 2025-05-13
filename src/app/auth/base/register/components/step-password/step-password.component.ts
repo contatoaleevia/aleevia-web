@@ -111,7 +111,7 @@ export class StepPasswordComponent {
   private handleNavigation() {
     this.loadingService.loadingOff();
     if (!this.router.url.includes('reset-password')) {
-      this.router.navigate([`/auth/register/${this.context}/healthcare-space`]);
+      this.router.navigate([`/auth/register/step/healthcare-space`]);
     }
   }
 
@@ -123,7 +123,7 @@ export class StepPasswordComponent {
       icon: 'error',
       confirmButtonText: 'OK'
     })).pipe(
-      tap(() => this.router.navigate([`/auth/register/${this.context}/cpf-cnpj`]))
+      tap(() => this.router.navigate([`/auth/register/step/cpf-cnpj`]))
     );
   }
 
