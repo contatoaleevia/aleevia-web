@@ -28,16 +28,20 @@
           <thead>
             <tr>
               <th class="fw-bold fs-14 w-40">Nome do atendimento</th>
+              <th class="fw-bold fs-14 w-40">Descrição</th>
               <th class="fw-bold fs-14 w-15 text-secondary-table">Valor</th>
-              <th class="fw-bold fs-14 w-25 text-secondary-table">Data criação</th>
+              <th class="fw-bold fs-14 w-25 text-secondary-table text-nowrap">Data criação</th>
               <th class="fw-bold fs-14 w-20 text-secondary-table text-center">Ações</th>
             </tr>
           </thead>
-          <ng-container *ngIf="filteredServiceTypes && filteredServiceTypes.length > 0; else noServices">
+          <ng-container *ngIf="(filteredServiceTypes$ | async)?.length ?? 0 > 0; else noServices">
             <tbody class="fs-14">
-              <tr *ngFor="let service of filteredServiceTypes">
-                <td class="text-truncate overflow-hidden text-nowrap fw-medium">
+              <tr *ngFor="let service of filteredServiceTypes$ | async">
+                <td class="ps-3 text-truncate question-text overflow-hidden text-nowrap fw-medium">
                   {{ service.title }}
+                </td>
+                <td class="text-secondary-table">
+                  {{ service.description }}
                 </td>
                 <td class="text-secondary-table">
                   {{ service.price | currency:'BRL' }}
@@ -45,7 +49,7 @@
                 <td class="text-secondary-table">
                   {{ service.createdAt | date : "dd/MM/yyyy" }}
                 </td>
-                <td>
+                <td class="pe-0">
                   <div class="d-flex gap-3 justify-content-center align-items-center">
                     <button
                       class="btn btn-link p-1 text-decoration-none"

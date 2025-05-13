@@ -16,7 +16,7 @@ import { FormComponent } from '@shared/components/form/form.component';
 export class FormHealthspaceSpaceComponent implements OnInit {
   @Output() formSubmit: EventEmitter<Office> = new EventEmitter<Office>();
   @Input() initialData?: Office;
-  @Input() submitButtonText: string = 'Avançar';
+  @Input() submitButtonText: string = 'Continuar';
 
   private readonly fb = inject(FormBuilder);
   form: FormGroup = this.initializeForm();

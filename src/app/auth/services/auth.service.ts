@@ -112,6 +112,8 @@ export class AuthService {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('token');
       localStorage.removeItem('currentUser');
+      localStorage.removeItem('officeIds');
+      localStorage.removeItem('officeId');
     }
     
     this.router.navigate(['/login']);

@@ -6,8 +6,8 @@ export const stepHealthcareSpaceRoute: Routes = [
     path: 'healthcare-space',
     component: StepHealthcareSpaceComponent,
     data: {
-      title: 'Espaço de atendimento',
-      subtitle: 'Informações do seu espaço de atendimento.'
+      title: 'Seu perfil profissional',
+      subtitle: 'Insira informações do seu espaço de saúde individual.'
     }
   }
 ]; 

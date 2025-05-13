@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './auth/login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { authGuard } from './auth/guards/auth.guard';
 import { PageComponent } from './core/page/page.component';
@@ -10,7 +9,10 @@ import { ChatComponent } from './chat/chat.component';
 import { authRoutes } from './auth/auth.routes';
 import { configurationRoutes } from './configuration/configuration.route';
 import { OfficeAttendanceComponent } from './office-attendance/office-attendance.component';
-import { officeResolver } from './dashboard/resolvers/office.resolver';
+import { officeResolver } from './configuration/office/office.resolver';
+import { faqResolver } from './faq/faq.resolver';
+import { officeAttendanceResolver } from './office-attendance/office-attendance.resolver';
+
 
 export const routes: Routes = [
   {
@@ -26,15 +28,17 @@ export const routes: Routes = [
     path: '',
     component: PageComponent,
     canActivate: [authGuard],
+    resolve: {
+      offices: officeResolver,
+      faqs: faqResolver,
+      officeAttendance: officeAttendanceResolver
+    },
     children: [
       {
         path: 'dashboard',
         component: DashboardComponent,
-        resolve: {
-          offices: officeResolver
-        }
       },
-      { path: 'faq', component: FaqComponent, resolve: { offices: officeResolver } },
+      { path: 'faq', component: FaqComponent },
       { path: 'faq/new', component: FaqUpsertComponent },
       { path: 'faq/edit/:id', component: FaqUpsertComponent },
       { path: 'schedule', component: ScheduleComponent },
@@ -42,6 +46,13 @@ export const routes: Routes = [
       { path: 'configuration', children: configurationRoutes },
       { path: 'attendances', component: OfficeAttendanceComponent },
     ]
+  },
+  {
+    path: 'chat/:id',
+    component: ChatComponent,
+    resolve: {
+      faqs: faqResolver
+    }
   },
   { path: '**', redirectTo: 'auth' }
 ];

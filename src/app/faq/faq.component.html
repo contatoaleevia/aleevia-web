@@ -88,15 +88,19 @@
               </th>
             </tr>
           </thead>
-          <ng-container *ngIf="filteredFaqs.length > 0; else noFaqs">
+          <ng-container
+            *ngIf="(filteredFaqs$ | async)?.length ?? 0 > 0; else noFaqs"
+          >
             <tbody class="fs-14">
-              <tr *ngFor="let faq of filteredFaqs">
+              <tr *ngFor="let faq of filteredFaqs$ | async">
                 <td
                   class="ps-3 text-truncate question-text overflow-hidden text-nowrap fw-medium"
                 >
                   {{ faq.question }}
                 </td>
-                <td class="text-secondary-table">{{ faq.faqCategory.categoryTypeName }}</td>
+                <td class="text-secondary-table">
+                  {{ faq.faqCategory.categoryTypeName }}
+                </td>
                 <td class="text-secondary-table">
                   {{ faq.createdAt | date : "dd/MM/yyyy" }}
                 </td>

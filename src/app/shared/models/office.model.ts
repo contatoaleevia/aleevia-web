@@ -48,7 +48,6 @@ export interface Office {
   individual?: boolean;
   addresses?: OfficeAddress[];
   professionals?: OfficeProfessional[];
-  // Legacy fields to ensure backward compatibility
   phoneNumber?: string;
 }
 

@@ -8,7 +8,6 @@ import { FaqService } from '@shared/services/faq.service';
 import { LoadingService } from '@core/services/loading.service';
 import { ProfessionalService } from '@shared/services/professional.service';
 import { RegistrationContextService } from '@app/auth/base/register/registration-context.service';
-import { REGISTRATION_TYPES } from '@app/auth/base/register/constants/registration-types';
 import Swal from 'sweetalert2';
 import { finalize } from 'rxjs';
 @Component({
@@ -24,11 +23,8 @@ export class FaqUpsertComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly faqService = inject(FaqService);
   private readonly loadingService = inject(LoadingService);
-  private readonly professionalService = inject(ProfessionalService);
   private readonly officeId = localStorage.getItem('officeId') || '{}';
   private readonly registrationContext = inject(RegistrationContextService);
-  private professionalId: string = '';
-  private currentRegistrationType: string = '';
 
   form!: FormGroup;
   isEditing = false;
@@ -42,10 +38,6 @@ export class FaqUpsertComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    this.registrationContext.context$.subscribe(context => {
-      this.currentRegistrationType = context;
-    });
-
     this.initForm();
     this.loadFaqData();
   }
@@ -61,23 +53,13 @@ export class FaqUpsertComponent implements OnInit {
   }
 
   private loadFaqData(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
+    const faq = history.state.faq;
+    if (faq) {
       this.isEditing = true;
-      this.loading = true;
-      this.faqService.getById(id).subscribe({
-        next: (faq) => {
-          this.form.patchValue({
-            question: faq.question,
-            answer: faq.answer,
-            faqCategory: faq.faqCategory
-          });
-          this.loading = false;
-        },
-        error: () => {
-          this.loading = false;
-          this.router.navigate(['/faq']);
-        }
+      this.form.patchValue({
+        question: faq.question,
+        answer: faq.answer,
+        faqCategory: faq.faqCategory.categoryType
       });
     }
   }
@@ -96,7 +78,7 @@ export class FaqUpsertComponent implements OnInit {
       request.pipe(finalize(() => this.loadingService.loadingOff())).subscribe({
         next: () => {
           this.loading = false;
-          this.faqService.refreshCache();
+          this.faqService.getAll().subscribe();
           Swal.fire({
             toast: true,
             position: 'top-end',

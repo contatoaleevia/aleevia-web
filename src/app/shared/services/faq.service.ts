@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable, BehaviorSubject, tap, map, throwError, of } from 'rxjs';
+import { Observable, BehaviorSubject, tap, map, of } from 'rxjs';
 import { ApiService } from '@core/services/api.service';
 import { FAQ, CreateFaqDTO, UpdateFaqDTO, FaqResponse } from '@shared/models/faq.model';
 
@@ -8,102 +8,104 @@ import { FAQ, CreateFaqDTO, UpdateFaqDTO, FaqResponse } from '@shared/models/faq
 })
 export class FaqService {
   private readonly path = 'faq';
-  private faqs = new BehaviorSubject<FAQ[]>([]);
-  private faqResponse = new BehaviorSubject<FaqResponse | null>(null);
+  private faqsSubject = new BehaviorSubject<FAQ[]>([]);
+  faqs$ = this.faqsSubject.asObservable();
+
+  private faqByIdSubject = new BehaviorSubject<Map<string, FAQ>>(new Map());
+  faqById$ = this.faqByIdSubject.asObservable();
+
   private loaded = false;
   private officeId = localStorage.getItem('officeId') || '{}';
   private apiService = inject(ApiService);
 
-
-  getAll(): Observable<FaqResponse> {
-    if (this.loaded && this.faqResponse.getValue()) {
-      return of(this.faqResponse.getValue() as FaqResponse);
+  getAll(): Observable<FAQ[]> {
+    const currentFaqs = this.faqsSubject.getValue();
+    if (this.loaded && currentFaqs.length > 0) {
+      return of(currentFaqs);
     }
 
     return this.apiService.get<FaqResponse>(`${this.path}/${this.officeId}`).pipe(
       tap(response => {
-        this.faqs.next(response.faqs);
-        this.faqResponse.next(response);
+        this.faqsSubject.next(response.faqs);
         this.loaded = true;
+      }),
+      map((response: FaqResponse) => response.faqs)
+    );
+  }
+
+  getById(id: string): Observable<FAQ> {
+    const cachedFaq = this.faqByIdSubject.getValue().get(id);
+    if (cachedFaq) {
+      return of(cachedFaq);
+    }
+
+    return this.apiService.get<FAQ>(`${this.path}/${id}`).pipe(
+      tap(faq => {
+        const currentMap = this.faqByIdSubject.getValue();
+        currentMap.set(id, faq);
+        this.faqByIdSubject.next(currentMap);
       })
     );
   }
 
-  /**
-   * Busca uma FAQ específica
-   * @param id ID da FAQ
-   * @returns Observable com a FAQ encontrada
-   */
-  getById(id: string): Observable<FAQ> {
-    const faq = this.faqs.getValue().find(faq => faq.id === id);
-    if (faq) {
-      return new Observable<FAQ>(observer => {
-        observer.next(faq);
-        observer.complete();
-      });
-    }
-    return this.apiService.get<FAQ>(`${this.path}/${id}`);
-  }
-
-  /**
-   * Cria uma nova FAQ
-   * @param data Dados da nova FAQ
-   * @returns Observable com a FAQ criada
-   */
   create(data: CreateFaqDTO): Observable<FAQ> {
     return this.apiService.post<FAQ>(`${this.path}/`, data).pipe(
       tap(newFaq => {
-        const currentFaqs = this.faqs.getValue();
-        this.faqs.next([...currentFaqs, newFaq]);
+        const currentFaqs = this.faqsSubject.getValue();
+        const completeFaq = {
+          ...newFaq,
+          faqCategory: {
+            ...data.faqCategory,
+            categoryTypeName: data.faqCategory.categoryTypeName
+          }
+        };
+        this.faqsSubject.next([...currentFaqs, completeFaq]);
+
+        const currentMap = this.faqByIdSubject.getValue();
+        currentMap.set(completeFaq.id, completeFaq);
+        this.faqByIdSubject.next(currentMap);
       })
     );
   }
 
-  /**
-   * Atualiza uma FAQ existente
-   * @param id ID da FAQ
-   * @param data Dados a serem atualizados
-   * @returns Observable com a FAQ atualizada
-   */
   update(id: string, data: UpdateFaqDTO): Observable<FAQ> {
     return this.apiService.patch<FAQ>(`${this.path}`, {
       id,
       ...data
     }).pipe(
       tap(updatedFaq => {
-        const currentFaqs = this.faqs.getValue();
+        const currentFaqs = this.faqsSubject.getValue();
         const index = currentFaqs.findIndex(faq => faq.id === id);
         if (index !== -1) {
           currentFaqs[index] = updatedFaq;
-          this.faqs.next([...currentFaqs]);
+          this.faqsSubject.next([...currentFaqs]);
         }
+
+        const currentMap = this.faqByIdSubject.getValue();
+        currentMap.set(id, updatedFaq);
+        this.faqByIdSubject.next(currentMap);
       })
     );
   }
 
-  /**
-   * Remove uma FAQ
-   * @param id ID da FAQ
-   * @returns Observable com a resposta da deleção
-   */
   delete(id: string): Observable<void> {
     return this.apiService.delete<void>(`${this.path}`, {
-      body: {
-        id
-      }
+      body: { id }
     }).pipe(
       tap(() => {
-        const currentFaqs = this.faqs.getValue();
-        this.faqs.next(currentFaqs.filter(faq => faq.id !== id));
+        const currentFaqs = this.faqsSubject.getValue();
+        this.faqsSubject.next(currentFaqs.filter(faq => faq.id !== id));
+
+        const currentMap = this.faqByIdSubject.getValue();
+        currentMap.delete(id);
+        this.faqByIdSubject.next(currentMap);
       })
     );
   }
 
-  /**
-   * Força uma atualização dos dados do cache
-   */
-  refreshCache(): void {
+  clearCache(): void {
+    this.faqsSubject.next([]);
+    this.faqByIdSubject.next(new Map());
     this.loaded = false;
-    this.getAll();
   }
 }

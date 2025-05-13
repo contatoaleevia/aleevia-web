@@ -14,9 +14,8 @@ export class OfficeAttendanceService {
   private officeAttendanceSubject = new BehaviorSubject<OfficeAttendance[]>([]);
   officeAttendance$ = this.officeAttendanceSubject.asObservable();
 
-  create(officeAttendance: OfficeAttendance): Observable<OfficeAttendance> {
-    return this.apiService.post<OfficeAttendance>(this.routeUrl, officeAttendance);
-  }
+  private officeAttendanceByOfficeIdSubject = new BehaviorSubject<OfficeAttendance[]>([]);
+  officeAttendanceByOfficeId$ = this.officeAttendanceByOfficeIdSubject.asObservable();
 
   get(officeID: string): Observable<OfficeAttendance[]> {
     const currentData = this.officeAttendanceSubject.getValue();
@@ -27,21 +26,43 @@ export class OfficeAttendanceService {
     return this.apiService.get<OfficeAttendance[]>(`${this.routeUrl}/office/${officeID}`).pipe(
       tap(attendances => {
         this.officeAttendanceSubject.next(attendances);
+        this.officeAttendanceByOfficeIdSubject.next(attendances);
       })
     );
   }
 
-  update(id: string, officeAttendance: OfficeAttendance):
-  Observable<OfficeAttendance> {
-    console.log('id', id);
-    console.log('officeAttendance', officeAttendance);
+  getByOfficeId(officeId: string): Observable<OfficeAttendance[]> {
+    const cachedAttendances = this.officeAttendanceByOfficeIdSubject.getValue();
+    if (cachedAttendances.length > 0) {
+      return of(cachedAttendances);
+    }
+
+    return this.apiService.get<OfficeAttendance[]>(`${this.routeUrl}/office/${officeId}`).pipe(
+      tap(attendances => {
+        this.officeAttendanceByOfficeIdSubject.next(attendances);
+      })
+    );
+  }
+
+  create(officeAttendance: OfficeAttendance): Observable<OfficeAttendance> {
+    return this.apiService.post<OfficeAttendance>(this.routeUrl, officeAttendance).pipe(
+      tap(newAttendance => {
+        const currentAttendances = this.officeAttendanceByOfficeIdSubject.getValue();
+        this.officeAttendanceSubject.next([...currentAttendances, newAttendance]);
+        this.officeAttendanceByOfficeIdSubject.next([...currentAttendances, newAttendance]);
+      })
+    );
+  }
+
+  update(id: string, officeAttendance: OfficeAttendance): Observable<OfficeAttendance> {
     return this.apiService.patch<OfficeAttendance>(`${this.routeUrl}/${id}`, officeAttendance).pipe(
-      tap(() => {
+      tap(updatedAttendance => {
         const currentAttendances = this.officeAttendanceSubject.getValue();
         const updatedAttendances = currentAttendances.map(item =>
-          item.id === officeAttendance.id ? officeAttendance : item
+          item.id === id ? updatedAttendance : item
         );
         this.officeAttendanceSubject.next(updatedAttendances);
+        this.officeAttendanceByOfficeIdSubject.next(updatedAttendances);
       })
     );
   }
@@ -52,7 +73,13 @@ export class OfficeAttendanceService {
         const currentAttendances = this.officeAttendanceSubject.getValue();
         const filteredAttendances = currentAttendances.filter(item => item.id !== id);
         this.officeAttendanceSubject.next(filteredAttendances);
+        this.officeAttendanceByOfficeIdSubject.next(filteredAttendances);
       })
     );
+  }
+
+  clearCache(): void {
+    this.officeAttendanceSubject.next([]);
+    this.officeAttendanceByOfficeIdSubject.next([]);
   }
 }
