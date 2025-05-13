@@ -88,6 +88,13 @@
               "buildTarget": "aleevia-web:build:development"
             }
           },
+          "options":{
+            "allowedHosts": [
+              "aleevia.cloud",
+              "admin.aleevia.cloud",
+              "localhost"
+            ]
+          },
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
