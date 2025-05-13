@@ -6,7 +6,10 @@ import { InputComponent } from '@shared/components/input/input.component';
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { FaqService } from '@shared/services/faq.service';
 import { LoadingService } from '@core/services/loading.service';
-import Swal from 'sweetalert2';
+import { ProfessionalService } from '@shared/services/professional.service';
+import { RegistrationContextService } from '@app/auth/base/register/registration-context.service';
+import { REGISTRATION_TYPES } from '@app/auth/base/register/constants/registration-types';
+
 @Component({
   selector: 'app-faq-upsert',
   standalone: true,
@@ -19,8 +22,12 @@ export class FaqUpsertComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly faqService = inject(FaqService);
-  private readonly currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
   private readonly loadingService = inject(LoadingService);
+  private readonly professionalService = inject(ProfessionalService);
+  private readonly officeId = localStorage.getItem('officeId') || '{}';
+  private readonly registrationContext = inject(RegistrationContextService);
+  private professionalId: string = '';
+  private currentRegistrationType: string = '';
 
   form!: FormGroup;
   isEditing = false;
@@ -34,6 +41,10 @@ export class FaqUpsertComponent implements OnInit {
   ];
 
   ngOnInit(): void {
+    this.registrationContext.context$.subscribe(context => {
+      this.currentRegistrationType = context;
+    });
+
     this.initForm();
     this.loadFaqData();
   }
@@ -43,8 +54,8 @@ export class FaqUpsertComponent implements OnInit {
       question: ['', [Validators.required]],
       answer: ['', [Validators.required]],
       faqCategory: ['', [Validators.required]],
-      sourceId: [this.currentUser.id],
-      sourceType: [0]
+      sourceId: [this.officeId],
+      sourceType: [1]
     });
   }
 

@@ -9,7 +9,8 @@ import { DeleteModalConfig } from '../shared/components/delete-modal/delete-moda
 import { ButtonComponent } from '../shared/components/button/button.component';
 import { InputComponent } from '../shared/components/input/input.component';
 import Swal from 'sweetalert2';
-
+import { finalize, shareReplay } from 'rxjs';
+import { LoadingService } from '@app/core/services/loading.service';
 @Component({
   selector: 'app-faq',
   standalone: true,
@@ -21,6 +22,8 @@ export class FaqComponent implements OnInit {
   private faqService = inject(FaqService);
   private router = inject(Router);
   private modalService = inject(NgbModal);
+  private loadingService = inject(LoadingService);
+
 
   faqs: FAQ[] = [];
   selectedFaq?: FAQ;
@@ -41,7 +44,11 @@ export class FaqComponent implements OnInit {
   }
 
   private loadFaqs(): void {
-    this.faqService.getAll().subscribe(faqs => {
+    this.loadingService.loadingOn();
+    this.faqService.getAll().pipe(
+      finalize(() => this.loadingService.loadingOff()),
+      shareReplay(1)
+    ).subscribe(faqs => {
       this.faqs = faqs.faqs;
       this.filteredFaqs = this.faqs;
     });

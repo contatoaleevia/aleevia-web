@@ -42,8 +42,8 @@ export class WelcomeComponent {
     ).subscribe((response: IsRegisteredResponse) => {
       if (response.isRegistered) {
         this.router.navigate(['/auth/login']);
-        localStorage.setItem('cpfCnpj', formattedCpfCnpj);
       } else {
+        localStorage.setItem('cpfCnpj', formattedCpfCnpj);
         this.router.navigate(['/auth/register']);
       }
     });

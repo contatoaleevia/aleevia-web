@@ -22,7 +22,6 @@ import Swal from 'sweetalert2';
 export class OfficeAttendanceComponent implements OnInit {
   private readonly loadingService = inject(LoadingService);
   private readonly modalService = inject(NgbModal);
-  private readonly router = inject(Router);
 
   serviceTypes: OfficeAttendance[] = [];
   filteredServiceTypes: OfficeAttendance[] = [];
@@ -36,6 +35,7 @@ export class OfficeAttendanceComponent implements OnInit {
   loadData(): void {
     this.loadingService.loadingOn();
     const officeID = localStorage.getItem('officeId') || '{}';
+    console.log('officeID', officeID);
     this.officeAttendanceService.get(officeID).pipe(
       tap(data => {
         console.log('data', data);
