@@ -14,5 +14,4 @@ export class CongratulationsComponent implements OnInit {
     localStorage.removeItem('serviceLocation');
     localStorage.removeItem('registrationData');
   }
-
 }

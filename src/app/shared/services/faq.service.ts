@@ -66,7 +66,10 @@ export class FaqService {
    * @returns Observable com a FAQ atualizada
    */
   update(id: string, data: UpdateFaqDTO): Observable<FAQ> {
-    return this.apiService.put<FAQ>(`${this.path}/${id}`, data).pipe(
+    return this.apiService.patch<FAQ>(`${this.path}`, {
+      id,
+      ...data
+    }).pipe(
       tap(updatedFaq => {
         const currentFaqs = this.faqs.getValue();
         const index = currentFaqs.findIndex(faq => faq.id === id);
@@ -84,7 +87,11 @@ export class FaqService {
    * @returns Observable com a resposta da deleção
    */
   delete(id: string): Observable<void> {
-    return this.apiService.delete<void>(`${this.path}/${id}`).pipe(
+    return this.apiService.delete<void>(`${this.path}`, {
+      body: {
+        id
+      }
+    }).pipe(
       tap(() => {
         const currentFaqs = this.faqs.getValue();
         this.faqs.next(currentFaqs.filter(faq => faq.id !== id));

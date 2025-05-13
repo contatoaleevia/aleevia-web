@@ -9,6 +9,7 @@ import { OfficeAttendanceComponent } from './components/office-attendance/office
 import { Observable, switchMap, of, finalize } from 'rxjs';
 import { Office } from '@shared/models/office.model';
 import { LoadingService } from '@app/core/services/loading.service';
+import { ProfessionalComponent } from './components/professional/professional.component';
 @Component({
   selector: 'app-office',
   standalone: true,
@@ -18,7 +19,8 @@ import { LoadingService } from '@app/core/services/loading.service';
     ReactiveFormsModule,
     DataComponent,
     AddressComponent,
-    OfficeAttendanceComponent
+    OfficeAttendanceComponent,
+    ProfessionalComponent
   ],
   templateUrl: './office.component.html',
   styleUrl: './office.component.scss'
