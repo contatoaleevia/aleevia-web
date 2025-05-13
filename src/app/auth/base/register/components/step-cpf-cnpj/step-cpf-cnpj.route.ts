@@ -6,8 +6,8 @@ export const stepCpfCnpjRoute: Routes = [
     path: 'cpf-cnpj',
     component: StepCpfCnpjComponent,
     data: {
-      title: 'Seus dados',
-      subtitle: 'Informações do seu espaço de saúde.'
+      title: 'Dados',
+      subtitle: 'Insira aqui informações sobre você'
     }
   }
 ]; 
