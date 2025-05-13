@@ -1,0 +1,95 @@
+<div class="container py-4">
+  <div class="card custom-card">
+    <div class="p-24">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 row g-2">
+        <div class="col-md-3">
+          <app-input
+            placeholder="Buscar"
+            inputType="text"
+            class="w-100"
+            (onChange)="onSearch($event)"
+          ></app-input>
+        </div>
+
+        <div class="col-auto ms-auto">
+          <app-button
+            type="primary"
+            icon="plus-lg"
+            iconPosition="left"
+            (clicked)="onAdd()"
+          >
+            Novo serviço
+          </app-button>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table mb-0">
+          <thead>
+            <tr>
+              <th class="fw-bold fs-14 w-40">Nome do atendimento</th>
+              <th class="fw-bold fs-14 w-15 text-secondary-table">Valor</th>
+              <th class="fw-bold fs-14 w-25 text-secondary-table">Data criação</th>
+              <th class="fw-bold fs-14 w-20 text-secondary-table text-center">Ações</th>
+            </tr>
+          </thead>
+          <ng-container *ngIf="filteredServiceTypes && filteredServiceTypes.length > 0; else noServices">
+            <tbody class="fs-14">
+              <tr *ngFor="let service of filteredServiceTypes">
+                <td class="text-truncate overflow-hidden text-nowrap fw-medium">
+                  {{ service.title }}
+                </td>
+                <td class="text-secondary-table">
+                  {{ service.price | currency:'BRL' }}
+                </td>
+                <td class="text-secondary-table">
+                  {{ service.createdAt | date : "dd/MM/yyyy" }}
+                </td>
+                <td>
+                  <div class="d-flex gap-3 justify-content-center align-items-center">
+                    <button
+                      class="btn btn-link p-1 text-decoration-none"
+                      (click)="onEdit(service.id!)"
+                    >
+                      <i class="bi bi-pencil text-primary fs-5"></i>
+                    </button>
+                    <button
+                      class="btn btn-link p-1 text-decoration-none"
+                      (click)="openDeleteModal(service)"
+                    >
+                      <i class="bi bi-trash text-danger fs-5"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </ng-container>
+          <ng-template #noServices>
+            <tbody>
+              <tr>
+                <td colspan="4" class="text-center">
+                  <img
+                    src="assets/images/empty.png"
+                    alt="Nenhum atendimento encontrado"
+                    class="w-auto"
+                  />
+                  <p class="text-secondary">
+                    Cadastre seus atendimentos para melhor organizar sua agenda.
+                  </p>
+                  <app-button
+                    type="primary"
+                    icon="plus-lg"
+                    iconPosition="left"
+                    (clicked)="onAdd()"
+                  >
+                    Novo atendimento
+                  </app-button>
+                </td>
+              </tr>
+            </tbody>
+          </ng-template>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

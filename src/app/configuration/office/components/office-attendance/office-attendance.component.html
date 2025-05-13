@@ -1,0 +1,10 @@
+<div class="container py-4">
+  <app-view-office-attendance
+    [attendances]="attendances"
+    actionText="Vincular"
+    [enableAddNew]="true"
+    (edit)="editAttendance($event)"
+    (delete)="deleteAttendance($event)"
+    (addNew)="addNewAttendance()"
+  ></app-view-office-attendance>
+</div>

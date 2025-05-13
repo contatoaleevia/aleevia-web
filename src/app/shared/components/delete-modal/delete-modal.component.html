@@ -1,0 +1,51 @@
+<div class="modal d-block" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0" *ngIf="showHeader">
+        <h5 class="modal-title">{{ config.title || 'Confirmar exclusão' }}</h5>
+        <button type="button" class="btn-close" (click)="onCancel()"></button>
+      </div>
+      <div class="modal-body">
+        <p class="mb-4">{{ config.message }}</p>
+
+        <div class="preview-content p-3 bg-light rounded mb-4" *ngIf="config.showPreview">
+          <ng-container *ngIf="config.previewTitle">
+            <h6 class="mb-3">{{ config.previewTitle }}</h6>
+          </ng-container>
+
+          <ng-container *ngIf="config.previewContent">
+            <div class="mb-3" *ngIf="config.previewContent.question">
+              <label class="fw-semibold mb-2">Pergunta:</label>
+              <p class="mb-0">{{ config.previewContent.question }}</p>
+            </div>
+            <div *ngIf="config.previewContent.answer">
+              <label class="fw-semibold mb-2">Resposta:</label>
+              <p class="mb-0">{{ config.previewContent.answer }}</p>
+            </div>
+            <div *ngIf="config.previewContent.address">
+              <p class="mb-0">{{ config.previewContent.address }}</p>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="config.customContent">
+            <div [innerHTML]="config.customContent"></div>
+          </ng-container>
+        </div>
+      </div>
+      <div class="modal-footer border-top-0" *ngIf="showFooter">
+        <app-button
+          type="secondary"
+          variant="outline"
+          (clicked)="onCancel()">
+          {{ config.cancelText }}
+        </app-button>
+        <app-button
+          type="primary"
+          (clicked)="onConfirm()">
+          {{ config.confirmText }}
+        </app-button>
+      </div>
+    </div>
+  </div>
+</div>
+

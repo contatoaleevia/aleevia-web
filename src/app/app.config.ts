@@ -4,8 +4,8 @@ import { provideHttpClient, withInterceptors, withFetch } from '@angular/common/
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideNgxMask } from 'ngx-mask';
-import { authInterceptor } from './core/interceptors/auth.interceptor';
-import { environment } from '../environments/environment';
+import { authInterceptor } from '@core/interceptors/auth.interceptor';
+import { LoadingService } from '@core/services/loading.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,6 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withFetch(),
       withInterceptors([authInterceptor])
-    )
+    ),
+    LoadingService
   ]
 };

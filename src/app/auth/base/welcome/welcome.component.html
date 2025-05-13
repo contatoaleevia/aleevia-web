@@ -1,0 +1,48 @@
+<ng-container *ngIf="step === 1">
+  <div class="d-flex flex-column justify-content-center align-items-start h-100 w-100" style="min-height: 80vh; max-width: 450px;">
+    <h2 class="fw-bold mb-5" style="font-size: 2rem;">Seja bem-vindo(a) à</h2>
+    <img src="assets/images/logo-aleevia.png" alt="aleevia" style="height: 50px;" class="mb-5">
+    <p class="text-secondary mb-2 fs-5 mb-4">
+      Aqui você organiza seus atendimentos com praticidade e foco no cuidado com seus pacientes.
+    </p>
+    <p class="text-secondary mb-4 fs-5 mb-4">
+      Vamos começar?
+    </p>
+    <div class="d-flex justify-content-end w-100 mt-3">
+      <app-button type="primary" [fullWidth]="false" class="px-5 py-3" [isNext]="true" (click)="nextStep()">
+        Começar
+      </app-button>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="step === 2">
+  <div class="d-flex flex-column justify-content-center h-100 w-100" style="min-height: 80vh; max-width: 450px;">
+    <h2 class="fw-bold fs-4 mb-3">Vamos começar pelo seu CPF ou CNPJ</h2>
+    <p class="text-secondary mb-4" style="max-width: 480px;">
+      Usamos esse dado para garantir mais segurança e verificar se já temos alguma informação sua por aqui.
+    </p>
+    <form [formGroup]="cpfCnpjForm" (ngSubmit)="onContinue()" class="w-100">
+      <div class="mb-4">
+        <label for="cpfCnpj" class="form-label fw-medium">CPF/CNPJ</label>
+        <app-input
+          id="cpfCnpj"
+          formControlName="cpfCnpj"
+          [mask]="cpfCnpjMask"
+          [required]="true"
+        ></app-input>
+      </div>
+      <div class="d-flex justify-content-end w-100 mt-3">
+        <app-button
+          type="primary"
+          [fullWidth]="false"
+          class="py-3"
+          [isNext]="true"
+          [disabled]="cpfCnpjForm.invalid"
+        >
+          Continuar
+        </app-button>
+      </div>
+    </form>
+  </div>
+</ng-container>

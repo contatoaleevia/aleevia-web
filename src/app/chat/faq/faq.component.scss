@@ -1,0 +1,24 @@
+.faq-questions {
+  padding-right: 0.5rem;
+}
+
+@keyframes typing {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.question-card {
+  transition: all 0.2s ease;
+  cursor: pointer;
+  background: rgba(202, 202, 202, 0.25);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+}

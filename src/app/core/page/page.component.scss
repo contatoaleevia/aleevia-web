@@ -1,0 +1,31 @@
+.main-content {
+  margin-left: 80px;
+  padding: 24px;
+  min-height: calc(100vh - 76px);
+  margin-top: 76px;
+  background-color: #f8f9fa;
+}
+
+.page-title {
+  color: #3D4146;
+}
+
+.btn-icon {
+  background: transparent;
+  border: none;
+  padding: 0.25rem;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease-in-out;
+
+  i {
+    color: #333;
+  }
+
+  &:active {
+    background: none;
+  }
+}

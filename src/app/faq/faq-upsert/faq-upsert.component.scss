@@ -1,0 +1,27 @@
+@use '../../shared/styles/variables.scss' as vars;
+
+.preview-section {
+  margin: 0 -(vars.$spacer * 0.25);
+}
+
+.info-section {
+  .bi {
+    color: vars.$faq-upsert-icon-color;
+    font-size: vars.$faq-upsert-icon-size;
+  }
+  
+  .text-muted {
+    font-size: vars.$faq-upsert-text-size;
+  }
+}
+
+.card {
+  border-radius: vars.$border-radius;
+  border: vars.$border-width solid vars.$faq-border-color;
+  
+  .card-title {
+    color: vars.$faq-upsert-title-color;
+    font-size: vars.$font-size-lg;
+    font-weight: vars.$font-weight-medium;
+  }
+}

@@ -3,11 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { finalize } from 'rxjs';
-import { InputComponent } from '../../shared/components/input/input.component';
-import { ButtonComponent } from '../../shared/components/button/button.component';
-import { AuthService } from '../services/auth.service';
-import { LoginRequest } from '../models/auth.model';
-
+import { InputComponent } from '@shared/components/input/input.component';
+import { ButtonComponent } from '@shared/components/button/button.component';
+import { AuthService } from '@auth/services/auth.service';
+import { LoginRequest } from '@auth/models/auth.model';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -31,7 +30,7 @@ export class LoginComponent implements OnInit {
     this.initForm();
 
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
-    
+
     const error = this.route.snapshot.queryParams['error'];
     if (error) {
       this.errorMessage = error;
@@ -46,7 +45,7 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.fb.group({
       cpfCnpj: ['', [Validators.required]],
       password: ['', [Validators.required]],
-      fromApp: [false]
+      rememberMe: [false]
     });
   }
 
@@ -59,12 +58,12 @@ export class LoginComponent implements OnInit {
     this.errorMessage = '';
 
     const cpfCnpj = this.loginForm.value.cpfCnpj.replace(/\D/g, '');
-    const fromApp = this.loginForm.value.fromApp;
+    const rememberMe = this.loginForm.value.rememberMe;
 
     const loginRequest: LoginRequest = {
-      cpf: cpfCnpj,
+      username: cpfCnpj,
       password: this.loginForm.value.password,
-      fromApp: fromApp
+      rememberMe: rememberMe
     };
 
     this.authService.login(loginRequest)
@@ -74,16 +73,16 @@ export class LoginComponent implements OnInit {
           this.router.navigate([this.returnUrl]);
         },
         error: (error) => {
-          this.errorMessage = error.error.detail;
+          if (error.error && error.error.Errors && error.error.Errors.length > 0) {
+            this.errorMessage = error.error.Errors[0].Message;
+          } else {
+            this.errorMessage = 'Ocorreu um erro ao tentar fazer login. Por favor, tente novamente.';
+          }
         }
       });
   }
 
   forgotPassword(): void {
-    console.log('Esqueceu a senha');
-  }
-
-  loginWithGoogle(): void {
-    this.authService.loginWithGoogle();
+    this.router.navigate(['/auth/reset-password']);
   }
 }

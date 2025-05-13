@@ -1,0 +1,106 @@
+.satisfaction-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 0;
+  width: 100%;
+  max-width: 320px;
+  margin: 1rem auto 0;
+  overflow: hidden;
+
+  .card-header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.75rem 1.25rem 0;
+
+    .month-selector {
+      display: flex;
+      align-items: center;
+      font-size: 0.75rem;
+      color: #666;
+      cursor: pointer;
+      user-select: none;
+
+      .current-month {
+        margin-right: 0.3rem;
+      }
+
+      i {
+        font-size: 0.7rem;
+      }
+
+      &:hover {
+        color: #333;
+      }
+    }
+  }
+
+  .rating-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid #f0f0f0;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .icon {
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 0.75rem;
+      color: #ffc107;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+      i {
+        font-size: 0.9rem;
+      }
+    }
+
+    .rating-content {
+      flex: 1;
+
+      .rating-label {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: #333;
+      }
+
+      .rating-subtitle {
+        font-size: 0.75rem;
+        color: #888;
+        margin-top: 0.1rem;
+      }
+    }
+
+    .rating-score {
+      text-align: right;
+
+      .score-value {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .rating-trend {
+        font-size: 0.7rem;
+        font-weight: 500;
+        margin-top: 0.1rem;
+
+        &.positive {
+          color: #10b981;
+        }
+
+        &.negative {
+          color: #ef4444;
+        }
+      }
+    }
+  }
+}

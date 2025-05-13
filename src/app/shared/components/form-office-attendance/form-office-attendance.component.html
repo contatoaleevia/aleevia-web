@@ -1,0 +1,49 @@
+<app-form [formGroup]="form" [submitButtonText]="submitButtonText" [isNextButton]="true" [showPreviousButton]="false" (formSubmit)="onSubmit()">
+  <div class="mb-3">
+    <app-input
+      label="Tipo de serviço"
+      inputType="select"
+      [options]="serviceTypes"
+      optionLabel="name"
+      optionValue="id"
+      formControlName="serviceTypeId"
+      [errorMessage]="form.get('serviceTypeId')?.touched && form.get('serviceTypeId')?.invalid ? 'Selecione o tipo de serviço' : null"
+    ></app-input>
+  </div>
+  <div class="mb-3">
+    <app-input
+      label="Nome do serviço"
+      inputType="text"
+      formControlName="title"
+      [errorMessage]="form.get('title')?.touched && form.get('title')?.invalid ? 'Nome obrigatório (máx. 100 caracteres)' : null"
+    ></app-input>
+  </div>
+  <div class="mb-3">
+    <app-input
+      label="Tempo de atendimento"
+      placeholder="00:00"
+      mask="00:00"
+      inputType="text"
+      formControlName="duration"
+      [errorMessage]="form.get('duration')?.touched && form.get('duration')?.invalid ? 'Formato 00:00' : null"
+    ></app-input>
+  </div>
+  <div class="mb-3">
+    <app-input
+      label="Valor"
+      placeholder="Digite o valor R$"
+      inputType="text"
+      formControlName="price"
+      [errorMessage]="form.get('price')?.touched && form.get('price')?.invalid ? 'Valor obrigatório. Ex: 100,00' : null"
+    ></app-input>
+  </div>
+  <div class="mb-3">
+    <app-input
+      label="Descrição"
+      placeholder="Digite a descrição da sua clínica para seus clientes"
+      inputType="textarea"
+      formControlName="description"
+      [errorMessage]="form.get('description')?.touched && form.get('description')?.invalid ? 'Descrição obrigatória (máx. 500 caracteres)' : null"
+    ></app-input>
+  </div>
+</app-form>

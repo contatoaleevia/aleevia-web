@@ -1,0 +1,118 @@
+@use '../shared/styles/variables.scss' as vars;
+
+.custom-card {
+  border-radius: vars.$border-radius-xl;
+  border: vars.$border-width solid vars.$faq-border-color;
+}
+
+.p-24 {
+  padding: vars.$spacer * 1.5;
+}
+
+.plus-button-container,
+span {
+  cursor: pointer;
+}
+
+.plus-button-container {
+  border-radius: vars.$border-radius-lg;
+  border: vars.$border-width solid vars.$faq-plus-button-border;
+  background: vars.$white;
+  padding: vars.$spacer * 0.25;
+  width: 36px;
+  height: 36px;
+
+  .bi-plus-lg {
+    font-size: vars.$font-size-base;
+    color: vars.$faq-plus-button-icon;
+  }
+}
+
+.add-content-text {
+  color: vars.$faq-text-primary;
+  font-size: vars.$font-size-base;
+  line-height: 1.25;
+}
+
+.table {
+  th {
+    color: vars.$faq-text-dark;
+    padding: vars.$spacer * 0.75 0;
+  }
+
+  td {
+    padding: vars.$spacer 0;
+  }
+}
+
+.question-text {
+  color: vars.$faq-text-question;
+  max-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-secondary-table {
+  color: vars.$faq-text-secondary;
+}
+
+.badge {
+  font-size: vars.$font-size-sm;
+}
+
+.btn-link {
+  text-decoration: none;
+  color: vars.$primary;
+  padding: 0;
+  transition: vars.$transition-base;
+
+  &:hover {
+    text-decoration: none;
+    opacity: vars.$faq-action-hover-opacity;
+    transform: scale(vars.$faq-action-hover-scale);
+  }
+
+  .bi {
+    font-size: vars.$font-size-base;
+  }
+}
+
+h2 {
+  font-size: vars.$font-size-lg;
+  font-weight: vars.$font-weight-semibold;
+  color: vars.$faq-text-dark;
+}
+
+button span {
+  font-size: vars.$font-size-sm;
+}
+
+.w-30 {
+  width: 30% !important;
+}
+
+.w-20 {
+  width: 20% !important;
+}
+
+.w-15 {
+  width: 15% !important;
+}
+
+
+th {
+  background: rgba(218, 231, 254, 0.40);
+  font-weight: 600;
+  border: none;
+
+  &:first-of-type {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+  }
+
+  &:last-of-type {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+  }
+}

@@ -1,0 +1,12 @@
+<div *ngIf="!dataLoaded" class="d-flex justify-content-center my-5">
+  <div class="spinner-border text-primary" role="status">
+  </div>
+</div>
+
+<app-form-healthspace-space
+  *ngIf="dataLoaded"
+  [initialData]="formData"
+  submitButtonText="Salvar"
+  (formSubmit)="saveOffice($event)"
+>
+</app-form-healthspace-space>

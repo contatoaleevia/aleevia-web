@@ -1,0 +1,15 @@
+<ng-container *ngIf="context === 'services'; else professionals">
+  <app-form-office-attendance
+    [officeId]="officeId"
+    [submitButtonText]="'Continuar'"
+    (formSubmit)="handleServiceFormSubmit($event)"
+  ></app-form-office-attendance>
+</ng-container>
+
+<ng-template #professionals>
+  <app-form-professional
+    [officeId]="officeId"
+    [submitButtonText]="'Continuar'"
+    (formSubmit)="handleProfessionalFormSubmit($event)"
+  ></app-form-professional>
+</ng-template>

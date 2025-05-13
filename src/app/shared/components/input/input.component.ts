@@ -2,11 +2,12 @@ import { AfterViewInit, Component, Input, forwardRef, OnInit, OnChanges, SimpleC
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskDirective } from 'ngx-mask';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-input',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxMaskDirective],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxMaskDirective, MatSelectModule],
   templateUrl: './input.component.html',
   styleUrl: './input.component.scss',
   providers: [
@@ -29,36 +30,39 @@ export class InputComponent implements ControlValueAccessor, OnInit, OnChanges, 
   @Input() class: string = '';
   @Input() maxLength: number | null = null;
   @Input() value: string | boolean = '';
-  @Input() bgColor: string = '';
+  @Input() bgColor: string = 'white';
   @Input() options: any[] = [];
   @Input() optionLabel: string = 'name';
   @Input() optionValue: string = 'id';
-  @Input() inputType: 'text' | 'select' | 'textarea' | 'checkbox' = 'text';
+  @Input() inputType: 'text' | 'select' | 'multiselect' | 'textarea' | 'checkbox' = 'text';
   @Input() rows: number = 4;
   @Input() errorMessage: string | null = null;
   @Input() checkboxLabel: string = '';
+  @Input() variant: 'default' | 'outline' = 'default';
+  @Input() showErrorOnTouched: boolean = true;
   @Output() onChange = new EventEmitter<any>();
-  
-  internalValue: string | boolean = '';
+
+  internalValue: string | boolean | any[] = '';
   isDisabled: boolean = false;
   isFocused: boolean = false;
   showPassword: boolean = false;
-  
+  isTouched: boolean = false;
+
   private onChangeCallback: (_: any) => void = () => {};
   private onTouchedCallback: () => void = () => {};
-  
+
   constructor(
     private cdr: ChangeDetectorRef,
   ) {}
-  
+
   get isTextarea(): boolean {
     return this.inputType === 'textarea';
   }
-  
+
   get isSelectInput(): boolean {
-    return this.inputType === 'select';
+    return this.inputType === 'select' || this.inputType === 'multiselect';
   }
-  
+
   get isRegularInput(): boolean {
     return !this.isSelectInput && !this.isTextarea && !this.isCheckbox;
   }
@@ -70,25 +74,25 @@ export class InputComponent implements ControlValueAccessor, OnInit, OnChanges, 
   ngOnInit(): void {
     this.updateInternalValue();
   }
-  
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['value'] && changes['value'].currentValue !== undefined) {
       this.internalValue = changes['value'].currentValue;
       this.cdr.detectChanges();
     }
-    
+
     if (changes['options'] && changes['options'].currentValue) {
       this.cdr.detectChanges();
     }
   }
-  
+
   ngAfterViewInit(): void {
     if (this.value) {
       this.internalValue = this.value;
       this.cdr.detectChanges();
     }
   }
-  
+
   private updateInternalValue(): void {
     if (this.value !== undefined && this.value !== null) {
       this.internalValue = this.value;
@@ -113,7 +117,7 @@ export class InputComponent implements ControlValueAccessor, OnInit, OnChanges, 
   setDisabledState(isDisabled: boolean): void {
     this.isDisabled = isDisabled;
   }
-  
+
   get inputStyle() {
     if (this.isDisabled || this.disabled) {
       return { 'background-color': '#e9ecef' };
@@ -128,11 +132,19 @@ export class InputComponent implements ControlValueAccessor, OnInit, OnChanges, 
 
   onBlur(): void {
     this.isFocused = false;
+    this.isTouched = true;
     this.onTouchedCallback();
   }
 
   updateValue(event: any): void {
-    const value = this.isCheckbox ? event.target.checked : event.target.value;
+    let value;
+    if (this.isCheckbox) {
+      value = event.target.checked;
+    } else if (this.inputType === 'multiselect') {
+      value = event.value;
+    } else {
+      value = event.value !== undefined ? event.value : event.target?.value;
+    }
     this.internalValue = value;
     this.onChangeCallback(value);
     this.onChange.emit(value);
@@ -147,5 +159,31 @@ export class InputComponent implements ControlValueAccessor, OnInit, OnChanges, 
 
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
+  }
+
+  get selectedOptions(): any[] {
+    if (this.inputType === 'multiselect') {
+      if (Array.isArray(this.internalValue)) {
+        return this.internalValue;
+      } else if (typeof this.internalValue === 'string' && this.internalValue) {
+        return this.internalValue.split(',');
+      } else {
+        return [];
+      }
+    }
+    return [];
+  }
+
+  getOptionLabel(value: any): string {
+    const found = this.options.find(opt => opt[this.optionValue] == value);
+    return found ? found[this.optionLabel] : value;
+  }
+
+  removeSelectedOption(value: any): void {
+    if (this.inputType === 'multiselect' && Array.isArray(this.internalValue)) {
+      this.internalValue = this.internalValue.filter((v: any) => v !== value);
+      this.onChangeCallback(this.internalValue);
+      this.onChange.emit(this.internalValue);
+    }
   }
 }

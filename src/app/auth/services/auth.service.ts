@@ -2,10 +2,10 @@ import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { LoginRequest, LoginResponse } from '../models/auth.model';
-import { User } from '../../shared/models/user.model';
-import { ApiService } from '../../core/services/api.service';
-import { environment } from '../../../environments/environment';
+import { LoginRequest, LoginResponse } from '@auth/models/auth.model';
+import { User } from '@shared/models/user.model';
+import { ApiService } from '@core/services/api.service';
+import { environment } from '@environments/environment';
 import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
@@ -22,11 +22,12 @@ export class AuthService {
   public currentUser$ = this.currentUserSubject.asObservable();
 
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly apiService = inject(ApiService);
+  private readonly router = inject(Router);
 
-  constructor(
-    private apiService: ApiService,
-    private router: Router
-  ) {
+  private readonly routeUrl = 'auth/';
+
+  constructor() {
     if (isPlatformBrowser(this.platformId)) {
       this.checkAuthStatus();
     }
@@ -56,16 +57,13 @@ export class AuthService {
   }
 
   login(credentials: LoginRequest): Observable<LoginResponse> {
-    const cpf = credentials.cpf.replace(/[.-]/g, '');
-    
-    const formData = new FormData();
-    formData.append('username', cpf);
-    formData.append('password', credentials.password);
-    formData.append('fromApp', credentials.fromApp ? 'true' : 'false');
-    return this.apiService.post<LoginResponse>('/login', formData).pipe(
+    const cpf = credentials.username.replace(/[.-]/g, '');
+    credentials.username = cpf;
+
+    return this.apiService.post<LoginResponse>(this.routeUrl + 'login', credentials).pipe(
       tap(response => {
-        if (response && response.access_token) {
-          this.setAuthState(response.user, response.access_token);
+        if (response && response.token) {
+          this.setAuthState(response.user, response.token);
         }
       }),
       catchError(error => {
@@ -77,7 +75,7 @@ export class AuthService {
 
   loginWithGoogle(): void {
     if (isPlatformBrowser(this.platformId)) {
-      window.location.href = `${environment.apiUrl}/auth/google/login`;
+      window.location.href = `${this.routeUrl}google/login`;
     }
   }
 

@@ -1,0 +1,26 @@
+<div class="clinic-card">
+  <div class="header">
+    <div class="logo" *ngIf="clinicData.logo">
+      <img [src]="clinicData.logo" alt="Clinic Logo">
+    </div>
+    <h2 class="title">{{ clinicData.title }}</h2>
+  </div>
+
+  <div class="items">
+    <div *ngFor="let item of clinicData.items" class="item" [routerLink]="item.route">
+      <div class="icon">
+        <i [class]="item.icon"></i>
+      </div>
+      <div class="content">
+        <div class="label">{{ item.label }}</div>
+        <div class="description" *ngIf="item.description || item.count !== undefined">
+          <ng-container *ngIf="item.count !== undefined">{{ item.count }} </ng-container>
+          <ng-container *ngIf="item.description">{{ item.description }}</ng-container>
+        </div>
+      </div>
+      <div class="arrow" *ngIf="item.route">
+        <i class="bi bi-chevron-right"></i>
+      </div>
+    </div>
+  </div>
+</div>

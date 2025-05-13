@@ -1,0 +1,18 @@
+<div class="categories-chart-card">
+  <div class="chart-header">
+    <div class="chart-title">{{ chartData.title }}</div>
+  </div>
+
+  <div class="chart-container">
+    <canvas #donutChart></canvas>
+  </div>
+
+  <div class="legend-container">
+    <div *ngFor="let category of chartData.categories" class="legend-item">
+      <div class="legend-marker" [style.backgroundColor]="category.color"></div>
+      <div class="legend-label">{{ category.name }}</div>
+      <div class="legend-count">{{ category.count }}</div>
+      <div class="legend-percentage">{{ category.percentage }}%</div>
+    </div>
+  </div>
+</div>

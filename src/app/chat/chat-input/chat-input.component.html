@@ -1,0 +1,19 @@
+<div class="chat-input bg-white p-3 border-top">
+    <div class="d-flex gap-2">
+      <app-input
+        class="flex-grow-1"
+        placeholder="Digite sua dúvida"
+        [(ngModel)]="message"
+        (keyup.enter)="sendMessageHandler()"
+      >
+      </app-input>
+      <app-button
+        icon="send"
+        type="primary"
+        iconPosition="right"
+        (click)="sendMessageHandler()"
+      >
+        Enviar
+      </app-button>
+    </div>
+  </div>

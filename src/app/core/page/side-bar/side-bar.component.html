@@ -1,0 +1,31 @@
+<aside class="sidebar bg-white d-flex flex-column align-items-center py-4">
+  <nav class="nav flex-column gap-4">
+    <a routerLink="/dashboard" routerLinkActive="active" class="nav-link d-flex justify-content-center">
+      <i class="bi bi-house"></i>
+    </a>
+
+    <a routerLink="/attendances" routerLinkActive="active" class="nav-link d-flex justify-content-center">
+      <i class="bi bi-pencil-square"></i>
+    </a>
+
+    <a routerLink="/configuration" routerLinkActive="active" class="nav-link d-flex justify-content-center">
+      <i class="bi bi-building"></i>
+    </a>
+
+    <a routerLink="/faq" routerLinkActive="active" class="nav-link d-flex justify-content-center">
+      <i class="bi bi-journal-plus"></i>
+    </a>
+
+    <a routerLinkActive="active" class="nav-link d-flex justify-content-center">
+      <i class="bi bi-person"></i>
+    </a>
+
+    <a class="nav-link d-flex justify-content-center">
+      <i class="bi bi-sliders"></i>
+    </a>
+
+    <a (click)="logout()" class="nav-link d-flex justify-content-center mt-auto">
+      <i class="bi bi-box-arrow-right"></i>
+    </a>
+  </nav>
+</aside>

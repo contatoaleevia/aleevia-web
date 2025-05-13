@@ -1,0 +1,22 @@
+.option-card {
+    border-radius: 12px;
+    transition: background 0.2s, color 0.2s;
+  
+    &:hover, &:focus {
+      background: #2563eb;
+      border-color: #2563eb;
+    }
+    &:hover .option-icon,
+    &:focus .option-icon {
+      color: #fff !important;
+    }
+    &:hover .option-subtitle,
+    &:focus .option-subtitle {
+      color: #fff !important;
+    }
+    &:hover .option-arrow,
+    &:focus .option-arrow {
+      color: #fff !important;
+    }
+  }
+  

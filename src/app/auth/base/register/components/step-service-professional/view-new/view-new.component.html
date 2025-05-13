@@ -1,0 +1,34 @@
+<div class="mx-auto">
+  <ng-container *ngIf="context === 'service'">
+    <app-view-office-attendance
+      [attendances]="services"
+      [enableAddNew]="true"
+      (addNew)="addNewService()"
+      (edit)="editService($event)"
+      (delete)="deleteService($event.id!)"
+    ></app-view-office-attendance>
+  </ng-container>
+  <ng-container *ngIf="context === 'professional'">
+    <app-view-professional
+      [professionals]="professionals"
+      [enableAddNew]="true"
+      (addNew)="addNewProfessional()"
+      (edit)="editProfessional($event)"
+      (delete)="deleteProfessional($event.id || '')"
+    ></app-view-professional>
+  </ng-container>
+
+  <div class="d-flex justify-content-between align-items-center">
+    <a routerLink="/auth/register/step/congratulations" class="btn-skip-link"
+      >Pular</a
+    >
+    <app-button
+      type="primary"
+      variant="pill"
+      class="fw-semibold"
+      (click)="goToNextStep()"
+    >
+      Continuar <i class="bi bi-arrow-right ms-2"></i>
+    </app-button>
+  </div>
+</div>

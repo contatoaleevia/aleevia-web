@@ -1,0 +1,155 @@
+<div class="container py-4">
+  <div class="card custom-card">
+    <div class="p-24">
+      <h2 class="mb-4 fw-semibold text-dark fs-8">Seus conteúdos</h2>
+
+      <div
+        class="d-flex flex-wrap justify-content-between align-items-center mb-4 row g-2"
+      >
+        <div class="col-md-2">
+          <app-input
+            placeholder="Buscar"
+            inputType="text"
+            class="w-100"
+            (onChange)="onSearch($event)"
+          ></app-input>
+        </div>
+
+        <div class="col-md-2 col-lg-2 mt-4">
+          <app-input
+            inputType="select"
+            placeholder="Status"
+            [options]="statusOptions"
+            class="w-100"
+          ></app-input>
+        </div>
+
+        <div class="col-auto">
+          <app-button
+            type="secondary"
+            icon="upload"
+            iconPosition="left"
+            (clicked)="soon()"
+          >
+            Importar .xsv
+          </app-button>
+        </div>
+
+        <div class="col-auto">
+          <app-button
+            type="secondary"
+            icon="download"
+            iconPosition="left"
+            (clicked)="soon()"
+          >
+            Baixar modelo
+          </app-button>
+        </div>
+
+        <div class="col-auto">
+          <app-button
+            type="secondary"
+            icon="robot"
+            iconPosition="left"
+            (clicked)="preview()"
+          >
+            Conversar com a minha IA
+          </app-button>
+        </div>
+
+        <div class="col-auto ms-auto">
+          <app-button
+            type="primary"
+            icon="plus-lg"
+            iconPosition="left"
+            (clicked)="onAdd()"
+          >
+            Criar conteúdo
+          </app-button>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table mb-0">
+          <thead>
+            <tr>
+              <th class="ps-3 fw-bold fs-14 w-30">Assunto</th>
+              <th class="fw-bold fs-14 w-20 text-secondary-table">Categoria</th>
+              <th class="fw-bold fs-14 w-20 text-secondary-table">
+                Data criação
+              </th>
+              <th class="fw-bold fs-14 w-15 text-secondary-table">
+                Última atualização
+              </th>
+              <th
+                class="pe-0 fw-bold fs-14 w-15 text-secondary-table text-center"
+              >
+                Ações
+              </th>
+            </tr>
+          </thead>
+          <ng-container *ngIf="filteredFaqs.length > 0; else noFaqs">
+            <tbody class="fs-14">
+              <tr *ngFor="let faq of filteredFaqs">
+                <td
+                  class="ps-3 text-truncate question-text overflow-hidden text-nowrap fw-medium"
+                >
+                  {{ faq.question }}
+                </td>
+                <td class="text-secondary-table">{{ faq.faqCategory.categoryTypeName }}</td>
+                <td class="text-secondary-table">
+                  {{ faq.createdAt | date : "dd/MM/yyyy" }}
+                </td>
+                <td class="text-secondary-table">
+                  {{ faq.updatedAt | date : "dd/MM/yyyy" }}
+                </td>
+                <td class="pe-0">
+                  <div
+                    class="d-flex gap-3 justify-content-center align-items-center"
+                  >
+                    <button
+                      class="btn btn-link p-1 text-decoration-none"
+                      (click)="onEdit(faq.id)"
+                    >
+                      <i class="bi bi-pencil text-primary fs-5"></i>
+                    </button>
+                    <button
+                      class="btn btn-link p-1 text-decoration-none"
+                      (click)="openDeleteModal(faq)"
+                    >
+                      <i class="bi bi-trash text-danger fs-5"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </ng-container>
+          <ng-template #noFaqs>
+            <tbody>
+              <tr>
+                <td colspan="5" class="text-center">
+                  <img
+                    src="assets/images/empty.png"
+                    alt="Nenhum conteúdo encontrado"
+                    class="w-auto"
+                  />
+                  <p class="text-secondary">
+                    Construa o conhecimento da Livia com a sua experiência.
+                    Cadastre um treinamento!
+                  </p>
+                  <app-button
+                    type="primary"
+                    iconPosition="left"
+                    (clicked)="onAdd()"
+                  >
+                    Treinar a Lívia
+                  </app-button>
+                </td>
+              </tr>
+            </tbody>
+          </ng-template>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

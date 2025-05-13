@@ -1,0 +1,56 @@
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link fs-6" [class.active]="activeTab === 'dados'" (click)="switchTab('dados')">Dados</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link fs-6" [class.active]="activeTab === 'endereco'" (click)="switchTab('endereco')">Endereço</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link fs-6" [class.active]="activeTab === 'servicos'" (click)="switchTab('servicos')">Serviços</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link fs-6" [class.active]="activeTab === 'profissionais'" (click)="switchTab('profissionais')">Profissionais</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link fs-6" [class.active]="activeTab === 'convenios'" (click)="switchTab('convenios')">Convênios</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link fs-6" [class.active]="activeTab === 'redes-sociais'" (click)="switchTab('redes-sociais')">Redes sociais</a>
+      </li>
+    </ul>
+
+    <div class="p-4">
+      <ng-container *ngIf="office$ | async as office">
+        <div [ngSwitch]="activeTab">
+          <ng-container *ngSwitchCase="'dados'">
+            <app-data [office]="office"></app-data>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="'endereco'">
+            <app-address [office]="office"></app-address>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="'servicos'">
+            <app-office-attendance></app-office-attendance>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="'profissionais'">
+            <app-professional [office]="office"></app-professional>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="'redes-sociais'">
+            <app-social-media></app-social-media>
+          </ng-container>
+        </div>
+      </ng-container>
+
+      <div *ngIf="activeTab === 'convenios'">
+        <div class="py-5 text-center text-muted">
+          <p>Conteúdo da aba {{ activeTab }} em desenvolvimento</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

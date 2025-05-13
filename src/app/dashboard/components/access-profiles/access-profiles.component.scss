@@ -1,0 +1,82 @@
+.access-profiles-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 400px;
+  margin-top: 1rem;
+
+  .title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 1rem 0;
+    color: #333;
+  }
+
+  .profiles-list {
+    .profile-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid #f0f0f0;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .profile-info {
+        .profile-name {
+          font-weight: 500;
+          color: #333;
+          margin-bottom: 0.2rem;
+        }
+
+        .profile-role {
+          font-size: 0.8rem;
+          color: #888;
+        }
+      }
+
+      .profile-status {
+        display: flex;
+        align-items: center;
+        color: #888;
+
+        &.active {
+          color: #10b981;
+
+          .status-indicator {
+            background-color: #10b981;
+          }
+        }
+
+        .status-indicator {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background-color: #ccc;
+          margin-right: 0.4rem;
+        }
+
+        .status-text {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+
+  .view-all {
+    margin-top: 1rem;
+    text-align: right;
+    color: #4c84ff;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
