@@ -96,12 +96,12 @@
                 >
                   {{ faq.question }}
                 </td>
-                <td class="text-secondary-table">{{ faq.faqCategory }}</td>
+                <td class="text-secondary-table">{{ faq.faqCategory.categoryTypeName }}</td>
                 <td class="text-secondary-table">
-                  {{ faq.created_at | date : "dd/MM/yyyy" }}
+                  {{ faq.createdAt | date : "dd/MM/yyyy" }}
                 </td>
                 <td class="text-secondary-table">
-                  {{ faq.updated_at | date : "dd/MM/yyyy" }}
+                  {{ faq.updatedAt | date : "dd/MM/yyyy" }}
                 </td>
                 <td class="pe-0">
                   <div

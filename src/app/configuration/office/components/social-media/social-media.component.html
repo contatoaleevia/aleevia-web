@@ -1,0 +1,41 @@
+<app-form [formGroup]="form" [submitButtonText]="'Salvar'" [isNextButton]="false" [showPreviousButton]="false" (formSubmit)="onSubmit()">
+  <div class="container">
+    <div class="row mb-4">
+      <div class="col-md-6 mb-3 mb-md-0">
+        <app-input
+          formControlName="site"
+          label="Site"
+          placeholder="Insira um link"
+          inputType="text"
+        ></app-input>
+      </div>
+      <div class="col-md-6">
+        <app-input
+          formControlName="instagram"
+          label="Instagram"
+          placeholder="Insira um link"
+          inputType="text"
+        ></app-input>
+      </div>
+    </div>
+
+    <div class="row mb-4">
+      <div class="col-md-6 mb-3 mb-md-0">
+        <app-input
+          formControlName="youtube"
+          label="Youtube"
+          placeholder="Insira um link"
+          inputType="text"
+        ></app-input>
+      </div>
+      <div class="col-md-6">
+        <app-input
+          formControlName="facebook"
+          label="Facebook"
+          placeholder="Insira um link"
+          inputType="text"
+        ></app-input>
+      </div>
+    </div>
+  </div>
+</app-form>

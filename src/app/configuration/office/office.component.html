@@ -37,12 +37,16 @@
           </ng-container>
 
           <ng-container *ngSwitchCase="'profissionais'">
-            <app-professional></app-professional>
+            <app-professional [office]="office"></app-professional>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="'redes-sociais'">
+            <app-social-media></app-social-media>
           </ng-container>
         </div>
       </ng-container>
 
-      <div *ngIf="activeTab !== 'dados' && activeTab !== 'endereco' && activeTab !== 'servicos' && activeTab !== 'profissionais'">
+      <div *ngIf="activeTab === 'convenios'">
         <div class="py-5 text-center text-muted">
           <p>Conteúdo da aba {{ activeTab }} em desenvolvimento</p>
         </div>

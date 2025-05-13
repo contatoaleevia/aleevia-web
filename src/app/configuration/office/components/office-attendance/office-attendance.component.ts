@@ -5,6 +5,10 @@ import { CommonModule } from '@angular/common';
 import { OfficeAttendanceService } from '@app/shared/services/office-attendance.service';
 import { LoadingService } from '@app/core/services/loading.service';
 import { finalize } from 'rxjs';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import Swal from 'sweetalert2';
+import { CreateComponent } from './create/create.component';
+
 @Component({
   selector: 'app-office-attendance',
   standalone: true,
@@ -15,6 +19,8 @@ import { finalize } from 'rxjs';
 export class OfficeAttendanceComponent implements OnInit {
   private readonly officeAttendanceService = inject(OfficeAttendanceService);
   private readonly loadingService = inject(LoadingService);
+  private readonly modalService = inject(NgbModal);
+
   attendances: OfficeAttendance[] = [];
   officeId: string = '';
 
@@ -40,9 +46,54 @@ export class OfficeAttendanceComponent implements OnInit {
 
   editAttendance(attendance: OfficeAttendance): void {
     console.log('Edit attendance:', attendance);
+
+    // Mostrar Swal de funcionalidade em desenvolvimento
+    Swal.fire({
+      title: 'Funcionalidade em desenvolvimento',
+      icon: 'info',
+      showConfirmButton: true,
+    });
   }
 
   deleteAttendance(attendance: OfficeAttendance): void {
     console.log('Delete attendance:', attendance);
+
+    // Mostrar Swal de funcionalidade em desenvolvimento
+    Swal.fire({
+      title: 'Funcionalidade em desenvolvimento',
+      icon: 'info',
+      showConfirmButton: true,
+    });
+  }
+
+  addNewAttendance(): void {
+    try {
+      const modalRef = this.modalService.open(CreateComponent, {
+        size: 'lg',
+        centered: true,
+        backdrop: 'static'
+      });
+
+      modalRef.result.then(
+        (result) => {
+          console.log('Modal result:', result);
+          if (result) {
+            this.loadAttendances();
+          }
+        },
+        (reason) => {
+          console.log('Modal dismissed:', reason);
+        }
+      );
+    } catch (error) {
+      console.error('Error opening modal:', error);
+
+      // Caso ocorra erro ao abrir o modal, mostra o Swal
+      Swal.fire({
+        title: 'Funcionalidade em desenvolvimento',
+        icon: 'info',
+        showConfirmButton: true,
+      });
+    }
   }
 }

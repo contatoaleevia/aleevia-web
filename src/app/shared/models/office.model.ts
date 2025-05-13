@@ -30,6 +30,10 @@ export interface OfficeProfessional {
   };
 }
 
+export interface OfficeProfessionalResponse {
+  professionals: OfficeProfessional[];
+}
+
 export interface Office {
   id?: string;
   ownerId?: string;

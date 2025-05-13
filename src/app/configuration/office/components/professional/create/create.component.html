@@ -1,0 +1,14 @@
+<div class="container p-4">
+  <div class="d-flex justify-content-between align-items-center">
+    <h1 class="text-center fw-bold fs-4">{{ title }}</h1>
+    <div class="d-flex justify-content-end">
+      <i class="bi bi-x fs-3" (click)="close()" style="cursor: pointer"></i>
+    </div>
+  </div>
+  <hr class="border-bottom border-2 mb-4" />
+  <app-form-professional
+    [initialData]="initialData"
+    [officeId]="officeId"
+    (formSubmit)="onSubmit($event)"
+  ></app-form-professional>
+</div>

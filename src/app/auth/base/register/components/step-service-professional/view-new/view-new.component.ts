@@ -7,11 +7,10 @@ import { RegistrationType } from '@auth/base/register/constants/registration-typ
 import { OfficeAttendance } from '@app/shared/models/office-attendance.model';
 import { ViewOfficeAttendanceComponent } from '@shared/components/view-office-attendance/view-office-attendance.component';
 import { ViewProfessionalComponent } from '@shared/components/view-professional/view-professional.component';
-import { Professional } from '@shared/components/form-professional/form-professional.component';
 import { LoadingService } from '@app/core/services/loading.service';
 import { OfficeAttendanceService } from '@app/shared/services/office-attendance.service';
-import { ProfessionalService } from '@app/shared/services/professional.service';
-import { finalize } from 'rxjs';
+import { OfficeService } from '@app/shared/services/office.service';
+import { OfficeProfessional } from '@app/shared/models/office.model';
 @Component({
   selector: 'app-view-new',
   standalone: true,
@@ -28,7 +27,7 @@ import { finalize } from 'rxjs';
 export class ViewNewComponent implements OnInit {
   private readonly loadingService = inject(LoadingService);
   private readonly officeAttendanceService = inject(OfficeAttendanceService);
-  private readonly professionalService = inject(ProfessionalService);
+  private readonly officeService = inject(OfficeService);
   private readonly registrationContext = inject(RegistrationContextService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -36,10 +35,10 @@ export class ViewNewComponent implements OnInit {
   registrationType: RegistrationType = this.registrationContext.getContext();
   context: 'service' | 'professional' = 'service';
   services: OfficeAttendance[] = [];
-  professionals: Professional[] = [];
+  professionals: OfficeProfessional[] = [];
   showServiceForm = false;
   editingService: OfficeAttendance | null = null;
-  editingProfessional: Professional | null = null;
+  editingProfessional: OfficeProfessional | null = null;
   keyword: string = '';
   officeID: string = localStorage.getItem('officeId') || '{}';
 
@@ -59,7 +58,6 @@ export class ViewNewComponent implements OnInit {
     }
 
     if (this.context === 'professional') {
-      console.log(localStorage.getItem('professionalData'));
       this.professionals = JSON.parse(localStorage.getItem('professionalData') || '[]');
       this.getProfessionals();
     }
@@ -82,21 +80,22 @@ export class ViewNewComponent implements OnInit {
   }
 
   getProfessionals() {
-    this.professionalService.getMyProfessional().pipe(
-      finalize(() => this.loadingService.loadingOff())
-    ).subscribe({
-      next: (professionals) => {
-        this.professionals = professionals;
+    this.officeService.getProfessionals(this.officeID).subscribe({
+      next: (professionals: any) => {
+        this.professionals = professionals.professionals;
       },
       error: (error: any) => {
         console.error('Error saving office data:', error);
-      },
-
+      }
     });
   }
 
   addNewService() {
     this.router.navigate([`/auth/register/step/service-professional/add-service`]);
+  }
+
+  addNewProfessional() {
+    this.router.navigate([`/auth/register/step/service-professional/add-professional`]);
   }
 
   deleteService(id: string) {
@@ -108,7 +107,7 @@ export class ViewNewComponent implements OnInit {
     console.log('Editing service:', service);
   }
 
-  editProfessional(professional: Professional) {
+  editProfessional(professional: OfficeProfessional) {
     this.editingProfessional = professional;
     console.log('Editing professional:', professional);
   }

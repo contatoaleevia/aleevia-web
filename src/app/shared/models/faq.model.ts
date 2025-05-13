@@ -1,15 +1,20 @@
 export interface FAQ extends CreateFaqDTO {
   id: string;
-  created_at: string;
-  updated_at: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface CreateFaqDTO {
   question: string;
   answer: string;
-  faqCategory: string;
+  faqCategory: FaqCategory;
   sourceId: string;
   sourceType: number;
+}
+
+export interface FaqCategory {
+  categoryType: string;
+  categoryTypeName: string;
 }
 
 export interface UpdateFaqDTO {

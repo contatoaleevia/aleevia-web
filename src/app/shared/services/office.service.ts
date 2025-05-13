@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { ApiService } from '@core/services/api.service';
 import { Observable, of } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
-import { Office, OfficeResponse } from '@shared/models/office.model';
+import { Office, OfficeProfessional, OfficeResponse } from '@shared/models/office.model';
 import { Professional } from '@shared/components/form-professional/form-professional.component';
 
 @Injectable({
@@ -11,8 +11,9 @@ import { Professional } from '@shared/components/form-professional/form-professi
 export class OfficeService {
   private readonly apiService = inject(ApiService);
   private readonly routeUrl = 'office';
-  private cachedOffices: OfficeResponse[] | null = null;
+  private cachedOffices: OfficeResponse[] = [];
   private cachedOfficeById: Map<string, Office> = new Map();
+  private cachedProfessionals: OfficeProfessional[] = [];
 
   getOfficeById(id: string): Observable<Office> {
     if (this.cachedOfficeById.has(id)) {
@@ -32,7 +33,8 @@ export class OfficeService {
   }
 
   getMyOffices(): Observable<OfficeResponse[]> {
-    if (this.cachedOffices) {
+    console.log('getMyOffices', this.cachedOffices);
+    if (this.cachedOffices.length > 0) {
       return of(this.cachedOffices);
     }
 
@@ -43,8 +45,20 @@ export class OfficeService {
     );
   }
 
+  getProfessionals(officeId: string): Observable<any> {
+    return this.apiService.get<any>(`${this.routeUrl}/${officeId}/professionals`).pipe(
+      tap((response: any) => {
+        if (Array.isArray(response)) {
+          this.cachedProfessionals = response;
+        } else if (response && typeof response === 'object' && Array.isArray(response.professionals)) {
+          this.cachedProfessionals = response.professionals;
+        }
+      })
+    );
+  }
+
   createOffice(office: Office): Observable<Office> {
-    this.cachedOffices = null;
+    this.cachedOffices = [];
     this.cachedOfficeById.delete(office.id || '');
 
     return this.apiService.post<Office>(this.routeUrl, office).pipe(
@@ -57,7 +71,7 @@ export class OfficeService {
   }
 
   bindAddress(payload: { officeId: string, addressId: string }): Observable<Office> {
-    this.cachedOffices = null;
+    this.cachedOffices = [];
     this.cachedOfficeById.delete(payload.officeId);
 
     return this.apiService.post<Office>(`${this.routeUrl}/bind-address`, payload).pipe(
@@ -70,8 +84,10 @@ export class OfficeService {
   }
 
   bindProfessional(payload: { officeId: string, professional: Professional }): Observable<Office> {
-    this.cachedOffices = null;
+    // Limpar todos os caches relacionados
+    this.cachedOffices = [];
     this.cachedOfficeById.delete(payload.officeId);
+    this.cachedProfessionals = []; // Limpar o cache de profissionais
 
     return this.apiService.post<Office>(`${this.routeUrl}/bind-professional`, payload).pipe(
       tap((updatedOffice: Office) => {
@@ -83,7 +99,14 @@ export class OfficeService {
   }
 
   clearCache(): void {
-    this.cachedOffices = null;
+    this.cachedOffices = [];
     this.cachedOfficeById.clear();
+  }
+
+  deleteOffice(officeId: string): Observable<void> {
+    this.cachedOffices = [];
+    this.cachedOfficeById.delete(officeId);
+
+    return this.apiService.delete<void>(`${this.routeUrl}/${officeId}`);
   }
 }
