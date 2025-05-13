@@ -15,6 +15,13 @@ export class AiAssistantComponent extends BaseChatComponent implements AfterView
   private readonly router = inject(Router);
   @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
 
+  override ngOnInit() {
+    this.chatId = this.chatService.chatIdSubject.getValue() || '';
+    if (this.chatId) {
+      this.loadExistingMessages();
+    }
+  }
+
   ngAfterViewChecked() {
     if (this.messagesChanged) {
       this.scrollToBottom();

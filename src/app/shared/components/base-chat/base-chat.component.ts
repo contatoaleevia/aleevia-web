@@ -17,8 +17,6 @@ export class BaseChatComponent implements OnInit {
   protected readonly soundService = inject(SoundService);
 
   @Input() chatId: string = '';
-  @Input() showWelcomeSection: boolean = true;
-  @Output() welcomeSectionChange = new EventEmitter<boolean>();
 
   messages$: Observable<Message[]> = this.chatService.messages$;
   message: string = '';
@@ -29,32 +27,11 @@ export class BaseChatComponent implements OnInit {
   ngOnInit() {
     if (this.chatId) {
       this.loadExistingMessages();
-    } else {
-      this.createChat();
     }
-    this.messagesSub = this.messages$.subscribe(messages => {
-      if (messages && messages.length > 0) {
-        this.soundService.playMessageSound();
-      }
-    });
   }
 
   ngOnDestroy() {
     this.messagesSub?.unsubscribe();
-  }
-
-  protected createChat() {
-    this.chatService.createChat().subscribe({
-      next: chatData => {
-        this.chatId = chatData.id;
-        this.loadExistingMessages();
-      },
-      error: error => {
-        console.error('Erro ao criar chat:', error);
-        this.chatId = 'local-' + Date.now().toString();
-        this.loadExistingMessages();
-      }
-    });
   }
 
   protected loadExistingMessages() {
@@ -71,6 +48,7 @@ export class BaseChatComponent implements OnInit {
               sent_at: new Date().toISOString()
             };
             this.chatService.messagesSubject.next([welcomeMsg]);
+            this.soundService.playMessageSound();
           }
         },
         error: () => {
@@ -91,10 +69,6 @@ export class BaseChatComponent implements OnInit {
   sendMessage(content?: string) {
     const messageContent = content || this.message;
     if (!messageContent?.trim() || !this.chatId) return;
-    if (this.showWelcomeSection) {
-      this.showWelcomeSection = false;
-      this.welcomeSectionChange.emit(false);
-    }
 
     const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
     const userId = currentUser?.id || 'local-user';

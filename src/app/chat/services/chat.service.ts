@@ -11,7 +11,7 @@ export class ChatService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = environment.apiUrl;
 
-  private chatIdSubject = new BehaviorSubject<string | null>(null);
+  public chatIdSubject = new BehaviorSubject<string | null>(null);
   chatId$ = this.chatIdSubject.asObservable();
 
   public messagesSubject = new BehaviorSubject<Message[]>([]);

@@ -23,11 +23,12 @@ import { BaseChatComponent } from '@app/shared/components/base-chat/base-chat.co
 })
 export class ChatComponent extends BaseChatComponent implements OnInit {
   private readonly authService = inject(AuthService);
-  private readonly route = inject(ActivatedRoute);
   private readonly faqService = inject(FaqService);
+  private readonly route = inject(ActivatedRoute);
 
   currentUser$ = this.authService.getCurrentUser();
   faqs$: Observable<FAQ[]> = new Observable<FAQ[]>();
+  showWelcomeSection: boolean = this.route.snapshot.params['id'] === '';
 
   constructor() {
     super();
@@ -35,13 +36,11 @@ export class ChatComponent extends BaseChatComponent implements OnInit {
   }
 
   override ngOnInit() {
-    if(this.route.snapshot.params['id']) {
-      this.chatId = this.route.snapshot.params['id'];
+    this.chatId = this.chatService.chatIdSubject.getValue() || '';
+    if (this.chatId) {
       this.loadExistingMessages();
-      this.loadSuggestedQuestions();
-    } else {
-      this.createChat();
     }
+    this.loadSuggestedQuestions();
   }
 
   private async loadSuggestedQuestions() {
