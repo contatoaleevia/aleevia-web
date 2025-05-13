@@ -13,7 +13,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, FormProfessionalComponent, ReactiveFormsModule],
   templateUrl: './create.component.html',
-  styleUrl: './create.component.scss'
+  styleUrls: ['./create.component.scss']
 })
 export class CreateComponent implements OnInit {
   private readonly activeModal = inject(NgbActiveModal);
