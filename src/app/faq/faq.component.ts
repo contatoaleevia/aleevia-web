@@ -9,7 +9,7 @@ import { DeleteModalConfig } from '../shared/components/delete-modal/delete-moda
 import { ButtonComponent } from '../shared/components/button/button.component';
 import { InputComponent } from '../shared/components/input/input.component';
 import Swal from 'sweetalert2';
-import { finalize, shareReplay } from 'rxjs';
+import { finalize } from 'rxjs';
 import { LoadingService } from '@app/core/services/loading.service';
 @Component({
   selector: 'app-faq',
@@ -35,7 +35,7 @@ export class FaqComponent implements OnInit {
 
   ngOnInit(): void {
     const faq = localStorage.getItem('faq');
-    if(faq) {
+    if (faq) {
       this.faqs = JSON.parse(faq);
       this.filteredFaqs = this.faqs;
     } else {
@@ -44,10 +44,10 @@ export class FaqComponent implements OnInit {
   }
 
   private loadFaqs(): void {
+    console.log('loadFaqs');
     this.loadingService.loadingOn();
     this.faqService.getAll().pipe(
       finalize(() => this.loadingService.loadingOff()),
-      shareReplay(1)
     ).subscribe(faqs => {
       this.faqs = faqs.faqs;
       this.filteredFaqs = this.faqs;
@@ -82,17 +82,40 @@ export class FaqComponent implements OnInit {
     modalRef.result.then(
       () => {
         if (this.selectedFaq) {
-          const faq = localStorage.getItem('faq');
-          if(faq) {
-            const faqArray = JSON.parse(faq);
-            const index = faqArray.findIndex((faq: any) => faq.id === this.selectedFaq?.id);
-            faqArray.splice(index, 1);
-            localStorage.setItem('faq', JSON.stringify(faqArray));
-            this.faqs = faqArray;
-          }
-          // this.faqService.delete(this.selectedFaq.id).subscribe(() => {
-          //   this.loadFaqs();
-          // });
+          this.loadingService.loadingOn();
+          this.faqService.delete(this.selectedFaq.id).pipe(
+            finalize(() => this.loadingService.loadingOff())
+          ).subscribe({
+            next: () => {
+              this.faqs = this.faqs.filter(f => f.id !== this.selectedFaq?.id);
+              this.filteredFaqs = this.filteredFaqs.filter(f => f.id !== this.selectedFaq?.id);
+
+              Swal.fire({
+                toast: true,
+                position: 'top-right',
+                title: 'Sucesso',
+                text: 'FAQ excluída com sucesso',
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false,
+                background: '#22c55e',
+                color: '#fff',
+                timerProgressBar: true,
+                iconColor: '#fff',
+                customClass: {
+                  popup: 'swal2-toast-green'
+                }
+              });
+            },
+            error: (error) => {
+              console.error('Error deleting FAQ:', error);
+              Swal.fire({
+                title: 'Erro',
+                text: 'Não foi possível excluir a FAQ',
+                icon: 'error'
+              });
+            }
+          });
         }
       },
       () => {
@@ -103,7 +126,7 @@ export class FaqComponent implements OnInit {
 
   onSearch(value: any): void {
     const searchTerm = typeof value === 'string' ? value :
-                      value.target && value.target.value ? value.target.value : '';
+      value.target && value.target.value ? value.target.value : '';
 
     if (!searchTerm.trim()) {
       this.filteredFaqs = [...this.faqs];

@@ -10,6 +10,7 @@ import { ChatComponent } from './chat/chat.component';
 import { authRoutes } from './auth/auth.routes';
 import { configurationRoutes } from './configuration/configuration.route';
 import { OfficeAttendanceComponent } from './office-attendance/office-attendance.component';
+import { officeResolver } from './dashboard/resolvers/office.resolver';
 
 export const routes: Routes = [
   {
@@ -26,8 +27,14 @@ export const routes: Routes = [
     component: PageComponent,
     canActivate: [authGuard],
     children: [
-      { path: 'dashboard', component: DashboardComponent },
-      { path: 'faq', component: FaqComponent },
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
+        resolve: {
+          offices: officeResolver
+        }
+      },
+      { path: 'faq', component: FaqComponent, resolve: { offices: officeResolver } },
       { path: 'faq/new', component: FaqUpsertComponent },
       { path: 'faq/edit/:id', component: FaqUpsertComponent },
       { path: 'schedule', component: ScheduleComponent },

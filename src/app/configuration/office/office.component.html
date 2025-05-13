@@ -35,10 +35,14 @@
           <ng-container *ngSwitchCase="'servicos'">
             <app-office-attendance></app-office-attendance>
           </ng-container>
+
+          <ng-container *ngSwitchCase="'profissionais'">
+            <app-professional></app-professional>
+          </ng-container>
         </div>
       </ng-container>
 
-      <div *ngIf="activeTab !== 'dados' && activeTab !== 'endereco' && activeTab !== 'servicos'">
+      <div *ngIf="activeTab !== 'dados' && activeTab !== 'endereco' && activeTab !== 'servicos' && activeTab !== 'profissionais'">
         <div class="py-5 text-center text-muted">
           <p>Conteúdo da aba {{ activeTab }} em desenvolvimento</p>
         </div>
