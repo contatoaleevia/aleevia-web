@@ -10,7 +10,6 @@ export class AddressService {
     private readonly apiService = inject(ApiService);
     private readonly apiUrl = 'address';
 
-
     getAddressById(id: string): Observable<AddressResponse> {
         return this.apiService.get(`${this.apiUrl}/${id}`);
     }
