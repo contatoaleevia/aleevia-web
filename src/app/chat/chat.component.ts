@@ -28,7 +28,7 @@ export class ChatComponent extends BaseChatComponent implements OnInit {
 
   currentUser$ = this.authService.getCurrentUser();
   faqs$: Observable<FAQ[]> = new Observable<FAQ[]>();
-  showWelcomeSection: boolean = this.route.snapshot.params['id'] === '';
+  showWelcomeSection: boolean = this.route.snapshot.params['id'];
 
   constructor() {
     super();
@@ -40,7 +40,9 @@ export class ChatComponent extends BaseChatComponent implements OnInit {
     if (this.chatId) {
       this.loadExistingMessages();
     }
-    this.loadSuggestedQuestions();
+    if (this.showWelcomeSection) {
+      this.loadSuggestedQuestions();
+    }
   }
 
   private async loadSuggestedQuestions() {

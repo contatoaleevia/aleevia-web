@@ -1,10 +1,10 @@
-import { Component, Input, Output, EventEmitter, OnInit, inject } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ChatService } from '@app/chat/services/chat.service';
 import { Message } from '@app/chat/models/chat.model';
 import { SoundService } from '@app/core/services/sound.service';
-import { Observable, of, Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-base-chat',
