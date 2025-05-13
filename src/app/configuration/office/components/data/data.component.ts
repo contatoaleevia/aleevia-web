@@ -1,8 +1,7 @@
 import { Component, Input, OnInit, inject, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormHealthspaceSpaceComponent } from '@shared/components/form-healthspace-space/form-healthspace-space.component';
-import { Office, OfficeResponse } from '@app/shared/models/office.model';
-import { OfficeService } from '@shared/services/office.service';
+import { Office } from '@app/shared/models/office.model';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -32,7 +31,7 @@ export class DataComponent implements OnInit, OnChanges {
     if (this.office && this.office.id) {
       this.formData = {
         name: this.office.name,
-        phoneNumber: this.office.phone || '',
+        phoneNumber: this.office.phoneNumber || '',
         whatsapp: this.office.whatsapp || '',
         email: this.office.email || '',
         site: this.office.site || '',

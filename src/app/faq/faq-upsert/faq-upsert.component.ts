@@ -8,7 +8,6 @@ import { FaqService } from '@shared/services/faq.service';
 import { LoadingService } from '@core/services/loading.service';
 import { ProfessionalService } from '@shared/services/professional.service';
 import { RegistrationContextService } from '@app/auth/base/register/registration-context.service';
-import { REGISTRATION_TYPES } from '@app/auth/base/register/constants/registration-types';
 import Swal from 'sweetalert2';
 import { finalize } from 'rxjs';
 @Component({
@@ -24,11 +23,8 @@ export class FaqUpsertComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly faqService = inject(FaqService);
   private readonly loadingService = inject(LoadingService);
-  private readonly professionalService = inject(ProfessionalService);
   private readonly officeId = localStorage.getItem('officeId') || '{}';
   private readonly registrationContext = inject(RegistrationContextService);
-  private professionalId: string = '';
-  private currentRegistrationType: string = '';
 
   form!: FormGroup;
   isEditing = false;
@@ -42,10 +38,6 @@ export class FaqUpsertComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    this.registrationContext.context$.subscribe(context => {
-      this.currentRegistrationType = context;
-    });
-
     this.initForm();
     this.loadFaqData();
   }
@@ -70,7 +62,7 @@ export class FaqUpsertComponent implements OnInit {
           this.form.patchValue({
             question: faq.question,
             answer: faq.answer,
-            faqCategory: faq.faqCategory
+            faqCategory: faq.faqCategory.categoryType
           });
           this.loading = false;
         },

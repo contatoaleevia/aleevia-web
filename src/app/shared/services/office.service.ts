@@ -11,13 +11,12 @@ import { Professional } from '@shared/components/form-professional/form-professi
 export class OfficeService {
   private readonly apiService = inject(ApiService);
   private readonly routeUrl = 'office';
-  private cachedOffices: OfficeResponse[] = [];
+  private cachedOffices: Office[] = [];
   private cachedOfficeById: Map<string, Office> = new Map();
   private cachedProfessionals: OfficeProfessional[] = [];
 
   getOfficeById(id: string): Observable<Office> {
     if (this.cachedOfficeById.has(id)) {
-      console.log('Returning office from cache:', id);
       return of(this.cachedOfficeById.get(id) as Office);
     }
 
@@ -26,21 +25,21 @@ export class OfficeService {
         return response.office;
       }),
       tap((office: Office) => {
-        console.log('Caching office:', id);
         this.cachedOfficeById.set(id, office);
       })
     );
   }
 
-  getMyOffices(): Observable<OfficeResponse[]> {
-    console.log('getMyOffices', this.cachedOffices);
+  getMyOffices(): Observable<Office[]> {
     if (this.cachedOffices.length > 0) {
       return of(this.cachedOffices);
     }
 
     return this.apiService.get<OfficeResponse[]>(`${this.routeUrl}/my-offices`).pipe(
-      tap((response: OfficeResponse[]) => {
-        this.cachedOffices = response;
+      map((response: OfficeResponse[]) => response.map(officeResp => officeResp.office)),
+      tap((offices: Office[]) => {
+        localStorage.setItem('officeIds', JSON.stringify(offices.map(office => office.id)));
+        this.cachedOffices = offices;
       })
     );
   }

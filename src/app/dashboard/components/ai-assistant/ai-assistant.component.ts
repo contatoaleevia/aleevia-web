@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ChatService } from '../../../chat/services/chat.service';
 import { Message } from '../../../chat/models/chat.model';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-ai-assistant',
   standalone: true,
@@ -13,6 +13,7 @@ import { Message } from '../../../chat/models/chat.model';
 })
 export class AiAssistantComponent implements OnInit, AfterViewChecked {
   private readonly chatService = inject(ChatService);
+  private readonly router = inject(Router);
   @ViewChild('messagesContainer') private messagesContainer!: ElementRef;
 
   messages: Message[] = [];
@@ -53,19 +54,61 @@ export class AiAssistantComponent implements OnInit, AfterViewChecked {
     }
   }
 
+  getChatHistory() {
+    this.chatService.getChatHistory(this.chatId).then((messages) => {
+      this.messages = messages;
+    });
+  }
+
+  private adaptMessages(rawMessages: any[]): Message[] {
+    return rawMessages.map((msg: any) => {
+      const isAssistant = msg.senderType === 'IA';
+      return {
+        chat_id: msg.iaChatId || msg.chat_id || '',
+        id: msg.id,
+        message: msg.message,
+        role: isAssistant ? 'assistant' : 'user',
+        sent_at: msg.createdAt || msg.sent_at || new Date().toISOString(),
+        content: isAssistant
+          ? { source: 'assistant', sourceId: 'system' }
+          : { source: 'user', sourceId: 'user' }
+      };
+    });
+  }
+
   private async loadInitialMessage() {
     if (this.chatId && this.messages.length === 0) {
-      this.messages = [
-        {
-          content: { source: 'assistant', sourceId: 'system' },
-          role: 'assistant',
-          message: 'Olá! Sou sua assistente virtual. Como posso ajudar com sua clínica hoje?',
-          chat_id: this.chatId,
-          id: '1',
-          sent_at: new Date().toISOString()
+      try {
+        const rawMessages = await this.chatService.getChatHistory(this.chatId);
+        const messages = this.adaptMessages(rawMessages);
+        if (messages && messages.length > 0) {
+          this.messages = messages;
+        } else {
+          this.messages = [
+            {
+              content: { source: 'assistant', sourceId: 'system' },
+              role: 'assistant',
+              message: 'Olá! Sou sua assistente virtual. Como posso ajudar com sua clínica hoje?',
+              chat_id: this.chatId,
+              id: '1',
+              sent_at: new Date().toISOString()
+            }
+          ];
         }
-      ];
-      this.messagesChanged = true;
+        this.messagesChanged = true;
+      } catch (error) {
+        this.messages = [
+          {
+            content: { source: 'assistant', sourceId: 'system' },
+            role: 'assistant',
+            message: 'Olá! Sou sua assistente virtual. Como posso ajudar com sua clínica hoje?',
+            chat_id: this.chatId,
+            id: '1',
+            sent_at: new Date().toISOString()
+          }
+        ];
+        this.messagesChanged = true;
+      }
     }
   }
 
@@ -139,5 +182,9 @@ export class AiAssistantComponent implements OnInit, AfterViewChecked {
     } finally {
       this.loading = false;
     }
+  }
+
+  onExpand() {
+    this.router.navigate(['/chat', this.chatId]);
   }
 }
