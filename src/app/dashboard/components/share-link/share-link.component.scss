@@ -1,0 +1,49 @@
+.share-dialog {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  width: 100%;
+  max-width: 628px;
+
+  .title {
+    font-family: Nunito;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 30px;
+    letter-spacing: 0%;
+  }
+
+  .close-dialog {
+    width: 15px;
+    height: 15px;
+    padding: 0;
+    background-size: 10px 10px;
+  }
+
+  .icon-list {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1rem;
+
+    .icon-btn {
+      width: 50px;
+      height: 44px;
+      gap: 12px;
+      border-radius: 8px;
+      padding: 10px;
+      background: #FFF;
+      border-width: 1px;
+      border: 1px solid #D0D5DD;
+      align-items: center;
+      box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+      justify-content: center;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #f2f4f7;
+      }
+    }
+  }
+
+
+}

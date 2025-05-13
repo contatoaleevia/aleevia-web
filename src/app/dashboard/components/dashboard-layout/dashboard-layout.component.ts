@@ -49,6 +49,7 @@ export class DashboardLayoutComponent implements OnInit {
       {
         icon: 'bi bi-robot',
         label: 'Minha assistente virtual',
+        link: 'https://aleevia.com/assistente-virtual',
       },
       {
         icon: 'bi bi-person-plus',

@@ -7,7 +7,8 @@
   </div>
 
   <div class="items">
-    <div *ngFor="let item of clinicData.items" class="item" [routerLink]="item.route">
+    <div *ngFor="let item of clinicData.items" class="item" [routerLink]="!item.link ? item.route : null"
+      (click)="item.link && openShareLinkModal(item.link)">
       <div class="icon">
         <i [class]="item.icon"></i>
       </div>

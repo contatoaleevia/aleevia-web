@@ -1,0 +1,28 @@
+<div class="share-dialog">
+  <div class="d-flex justify-content-between align-items-start">
+    <h4 class="title">Compartilhe o link de atendimento da sua agente</h4>
+    <button type="button" class="btn-close close-dialog" (click)="close()"></button>
+  </div>
+
+  <p class="mt-3">Compartilhe através do link</p>
+
+  <div class="icon-list">
+    <button *ngFor="let icon of socialIcons" class="icon-btn" (click)="shareTo(icon.name)"
+      [attr.aria-label]="'Compartilhar no ' + icon.name">
+      <i [class]="icon.class" [ngStyle]="{ color: icon.color }"></i>
+    </button>
+  </div>
+
+  <p>ou copie o link</p>
+
+  <div class="d-flex align-items-center gap-2">
+    <input type="text" class="form-control" [value]="link" (click)="copyLink()" readonly />
+
+    <button class="btn btn-primary" (click)="openLink()">VISUALIZAR</button>
+    <button class="btn btn-primary d-flex align-items-center gap-1" (click)="copyLink()">
+      <i class="bi bi-copy"></i> Copiar
+    </button>
+  </div>
+
+
+</div>
