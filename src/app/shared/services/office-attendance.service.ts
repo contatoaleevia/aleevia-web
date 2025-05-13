@@ -20,7 +20,6 @@ export class OfficeAttendanceService {
 
   get(officeID: string): Observable<OfficeAttendance[]> {
     const currentData = this.officeAttendanceSubject.getValue();
-    console.log('currentData', currentData);
     if (currentData.length > 0) {
       return of(currentData);
     }

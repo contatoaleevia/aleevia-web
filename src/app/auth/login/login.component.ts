@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
     this.initForm();
 
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
-    
+
     const error = this.route.snapshot.queryParams['error'];
     if (error) {
       this.errorMessage = error;
@@ -73,7 +73,6 @@ export class LoginComponent implements OnInit {
           this.router.navigate([this.returnUrl]);
         },
         error: (error) => {
-          console.log('Full error object:', error);
           if (error.error && error.error.Errors && error.error.Errors.length > 0) {
             this.errorMessage = error.error.Errors[0].Message;
           } else {
@@ -85,9 +84,5 @@ export class LoginComponent implements OnInit {
 
   forgotPassword(): void {
     this.router.navigate(['/auth/reset-password']);
-  }
-
-  loginWithGoogle(): void {
-    this.authService.loginWithGoogle();
   }
 }

@@ -25,7 +25,8 @@ export class StepCpfCnpjComponent implements OnInit {
     private registrationContext: RegistrationContextService
   ) {
     this.form = this.initializeForm();
-    // this.setupFormListeners();
+    this.setupFormListeners();
+    this.loadSavedData();
   }
 
   private initializeForm(): FormGroup {

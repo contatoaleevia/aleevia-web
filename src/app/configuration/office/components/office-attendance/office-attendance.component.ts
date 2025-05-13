@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ViewOfficeAttendanceComponent } from '@shared/components/view-office-attendance/view-office-attendance.component';
 import { OfficeAttendance } from '@shared/models/office-attendance.model';
 import { CommonModule } from '@angular/common';
 import { OfficeAttendanceService } from '@app/shared/services/office-attendance.service';
-
+import { LoadingService } from '@app/core/services/loading.service';
+import { finalize } from 'rxjs';
 @Component({
   selector: 'app-office-attendance',
   standalone: true,
@@ -12,10 +13,10 @@ import { OfficeAttendanceService } from '@app/shared/services/office-attendance.
   styleUrl: './office-attendance.component.scss'
 })
 export class OfficeAttendanceComponent implements OnInit {
+  private readonly officeAttendanceService = inject(OfficeAttendanceService);
+  private readonly loadingService = inject(LoadingService);
   attendances: OfficeAttendance[] = [];
   officeId: string = '';
-
-  constructor(private officeAttendanceService: OfficeAttendanceService) {}
 
   ngOnInit(): void {
     this.officeId = localStorage.getItem('officeId') || '{}';
@@ -23,8 +24,10 @@ export class OfficeAttendanceComponent implements OnInit {
   }
 
   loadAttendances(): void {
+    this.loadingService.loadingOn();
+    console.log('this.officeId', this.officeId);
     if (this.officeId) {
-      this.officeAttendanceService.get(this.officeId).subscribe({
+      this.officeAttendanceService.get(this.officeId).pipe(finalize(() => this.loadingService.loadingOff())).subscribe({
         next: (attendances) => {
           this.attendances = attendances;
         },
