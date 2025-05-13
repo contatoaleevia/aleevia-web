@@ -1,0 +1,156 @@
+import { Component, Input, Output, EventEmitter, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { ChatService } from '@app/chat/services/chat.service';
+import { Message } from '@app/chat/models/chat.model';
+import { SoundService } from '@app/core/services/sound.service';
+import { Observable, of, Subscription } from 'rxjs';
+
+@Component({
+  selector: 'app-base-chat',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  template: ''
+})
+export class BaseChatComponent implements OnInit {
+  protected readonly chatService = inject(ChatService);
+  protected readonly soundService = inject(SoundService);
+
+  @Input() chatId: string = '';
+  @Input() showWelcomeSection: boolean = true;
+  @Output() welcomeSectionChange = new EventEmitter<boolean>();
+
+  messages$: Observable<Message[]> = this.chatService.messages$;
+  message: string = '';
+  loading: boolean = false;
+  messagesChanged: boolean = false;
+  private messagesSub?: Subscription;
+
+  ngOnInit() {
+    if (this.chatId) {
+      this.loadExistingMessages();
+    } else {
+      this.createChat();
+    }
+    this.messagesSub = this.messages$.subscribe(messages => {
+      if (messages && messages.length > 0) {
+        this.soundService.playMessageSound();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.messagesSub?.unsubscribe();
+  }
+
+  protected createChat() {
+    this.chatService.createChat().subscribe({
+      next: chatData => {
+        this.chatId = chatData.id;
+        this.loadExistingMessages();
+      },
+      error: error => {
+        console.error('Erro ao criar chat:', error);
+        this.chatId = 'local-' + Date.now().toString();
+        this.loadExistingMessages();
+      }
+    });
+  }
+
+  protected loadExistingMessages() {
+    if (this.chatId) {
+      this.chatService.getChatHistory(this.chatId).subscribe({
+        next: (messages) => {
+          if (!messages || messages.length === 0) {
+            const welcomeMsg: Message = {
+              content: { source: 'assistant', sourceId: 'system' },
+              role: 'assistant',
+              message: 'Olá! Sou sua assistente virtual. Como posso ajudar com sua clínica hoje?',
+              chat_id: this.chatId,
+              id: '1',
+              sent_at: new Date().toISOString()
+            };
+            this.chatService.messagesSubject.next([welcomeMsg]);
+          }
+        },
+        error: () => {
+          const fallbackMsg: Message = {
+            content: { source: 'assistant', sourceId: 'system' },
+            role: 'assistant',
+            message: 'Olá! Sou sua assistente virtual. Como posso ajudar com sua clínica hoje?',
+            chat_id: this.chatId,
+            id: '1',
+            sent_at: new Date().toISOString()
+          };
+          this.chatService.messagesSubject.next([fallbackMsg]);
+        }
+      });
+    }
+  }
+
+  sendMessage(content?: string) {
+    const messageContent = content || this.message;
+    if (!messageContent?.trim() || !this.chatId) return;
+    if (this.showWelcomeSection) {
+      this.showWelcomeSection = false;
+      this.welcomeSectionChange.emit(false);
+    }
+
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    const userId = currentUser?.id || 'local-user';
+
+    const userMessage: Message = {
+      content: { source: 'user', sourceId: userId },
+      message: messageContent.trim(),
+      role: 'user',
+      chat_id: this.chatId,
+      id: Date.now().toString(),
+      sent_at: new Date().toISOString()
+    };
+
+    const placeholderMessage: Message = {
+      message: 'Digitando...',
+      content: { source: 'assistant', sourceId: 'system' },
+      role: 'assistant',
+      chat_id: this.chatId,
+      id: (Date.now() + 1).toString(),
+      sent_at: new Date().toISOString(),
+      isPlaceholder: true
+    };
+
+    const current = this.chatService.messagesSubject.getValue();
+    this.chatService.messagesSubject.next([...current, userMessage, placeholderMessage]);
+    this.messagesChanged = true;
+    this.message = '';
+    this.loading = true;
+
+    this.chatService.sendMessage(this.chatId, messageContent).subscribe({
+      next: (messageData) => {
+        const updated = this.chatService.messagesSubject.getValue().map(msg =>
+          msg.isPlaceholder ? { ...messageData, isPlaceholder: false } : msg
+        );
+        this.chatService.messagesSubject.next(updated);
+        this.messagesChanged = true;
+      },
+      error: (error) => {
+        console.error('Erro ao enviar mensagem:', error);
+        const fallbackResponse: Message = {
+          content: { source: 'assistant', sourceId: 'system' },
+          message: 'Erro ao responder, tente novamente mais tarde.',
+          role: 'assistant',
+          chat_id: this.chatId,
+          id: Date.now().toString(),
+          sent_at: new Date().toISOString()
+        };
+        const updated = this.chatService.messagesSubject.getValue().map(msg =>
+          msg.isPlaceholder ? fallbackResponse : msg
+        );
+        this.chatService.messagesSubject.next(updated);
+        this.messagesChanged = true;
+      },
+      complete: () => {
+        this.loading = false;
+      }
+    });
+  }
+}

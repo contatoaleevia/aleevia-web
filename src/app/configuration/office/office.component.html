@@ -22,7 +22,7 @@
     </ul>
 
     <div class="p-4">
-      <ng-container *ngIf="office$ | async as office">
+      <ng-container *ngIf="office$ | async as office; else loading">
         <div [ngSwitch]="activeTab">
           <ng-container *ngSwitchCase="'dados'">
             <app-data [office]="office"></app-data>
@@ -45,6 +45,14 @@
           </ng-container>
         </div>
       </ng-container>
+
+      <ng-template #loading>
+        <div class="d-flex justify-content-center align-items-center py-5">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Carregando...</span>
+          </div>
+        </div>
+      </ng-template>
 
       <div *ngIf="activeTab === 'convenios'">
         <div class="py-5 text-center text-muted">
