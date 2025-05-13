@@ -32,10 +32,10 @@
               </div>
 
               <div>
-                <button class="btn btn-link text-primary p-1 me-1">
+                <button class="btn btn-link text-primary p-1 me-1" (click)="editOffice($event, office)">
                   <i class="bi bi-pencil"></i>
                 </button>
-                <button class="btn btn-link text-danger p-1">
+                <button class="btn btn-link text-danger p-1" (click)="deleteOffice($event, office)">
                   <i class="bi bi-trash"></i>
                 </button>
               </div>
@@ -76,6 +76,7 @@
           iconPosition="left"
           [fullWidth]="true"
           class="w-100"
+          (click)="createNewSpace()"
         >
           Criar novo espaço
         </app-button>

@@ -12,17 +12,14 @@
     <app-view-professional
       [professionals]="professionals"
       [enableAddNew]="true"
-      [addNewPath]="'/auth/register/step/service-professional/add-professional'"
-      [addNewText]="keyword"
+      (addNew)="addNewProfessional()"
       (edit)="editProfessional($event)"
       (delete)="deleteProfessional($event.id || '')"
     ></app-view-professional>
   </ng-container>
 
   <div class="d-flex justify-content-between align-items-center">
-    <a
-      routerLink="/auth/register/step/congratulations"
-      class="btn-skip-link"
+    <a routerLink="/auth/register/step/congratulations" class="btn-skip-link"
       >Pular</a
     >
     <app-button

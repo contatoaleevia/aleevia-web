@@ -10,6 +10,8 @@ import { Observable, switchMap, of, finalize } from 'rxjs';
 import { Office } from '@shared/models/office.model';
 import { LoadingService } from '@app/core/services/loading.service';
 import { ProfessionalComponent } from './components/professional/professional.component';
+import { SocialMediaComponent } from './components/social-media/social-media.component';
+
 @Component({
   selector: 'app-office',
   standalone: true,
@@ -20,7 +22,8 @@ import { ProfessionalComponent } from './components/professional/professional.co
     DataComponent,
     AddressComponent,
     OfficeAttendanceComponent,
-    ProfessionalComponent
+    ProfessionalComponent,
+    SocialMediaComponent
   ],
   templateUrl: './office.component.html',
   styleUrl: './office.component.scss'

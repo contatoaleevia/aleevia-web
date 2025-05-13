@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AccessProfilesComponent } from '../access-profiles/access-profiles.component';
 import { AccessProfilesData } from '../access-profiles/access-profiles.model';
@@ -15,6 +15,8 @@ import { SatisfactionRatingComponent } from '../satisfaction-rating/satisfaction
 import { SatisfactionRatingData } from '../satisfaction-rating/satisfaction-rating.model';
 import { StatisticsCardComponent } from '../statistics-card/statistics-card.component';
 import { StatisticsCardData } from '../statistics-card/statistics-card.model';
+import { AuthService } from '@auth/services/auth.service';
+import { User } from '@shared/models/user.model';
 
 
 @Component({
@@ -35,6 +37,11 @@ import { StatisticsCardData } from '../statistics-card/statistics-card.model';
   styleUrl: './dashboard-layout.component.scss'
 })
 export class DashboardLayoutComponent implements OnInit {
+  private readonly authService = inject(AuthService);
+
+  currentUser: User = {} as User;
+  shouldShowProfessionals = false;
+
   clinicCardData: ClinicCardData = {
     title: 'Medical Clinic',
     logo: 'assets/images/logo-aleevia.png',
@@ -48,6 +55,7 @@ export class DashboardLayoutComponent implements OnInit {
         label: 'Profissionais',
         count: 25,
         description: 'cadastrados',
+        route: '/professionals'
       },
       {
         icon: 'bi bi-clipboard2-pulse',
@@ -61,6 +69,7 @@ export class DashboardLayoutComponent implements OnInit {
         label: 'Central de ajuda',
         count: 26,
         description: 'artigos publicados',
+        route: '/faq'
       },
       {
         icon: 'bi bi-people',
@@ -180,8 +189,12 @@ export class DashboardLayoutComponent implements OnInit {
     ]
   };
 
-  constructor() { }
-
   ngOnInit(): void {
+    this.currentUser = this.authService.currentUser!;
+    this.shouldShowProfessionals = this.currentUser?.user_type === '2';
+
+    if (!this.shouldShowProfessionals) {
+      this.clinicCardData.items = this.clinicCardData.items.filter(item => item.label !== 'Profissionais');
+    }
   }
 }

@@ -1,1 +1,9 @@
-<p>professional works!</p>
+<div class="container">
+  <app-view-professional
+    [professionals]="professionals"
+    (edit)="editProfessional($event)"
+    (delete)="deleteProfessional($event)"
+    (addNew)="addNewProfessional()"
+    actionText="Vincular"
+  ></app-view-professional>
+</div>
