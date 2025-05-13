@@ -38,14 +38,10 @@ export class ProfessionalComponent implements OnInit {
   }
 
   loadProfessionals(): void {
-    this.loadingService.loadingOn();
-
     if (this.office && this.office.professionals) {
       this.refreshProfessionalsFromServer();
     } else if (this.officeId) {
       this.refreshProfessionalsFromServer();
-    } else {
-      this.loadingService.loadingOff();
     }
   }
 
@@ -54,8 +50,8 @@ export class ProfessionalComponent implements OnInit {
       takeUntil(this.destroy$),
       finalize(() => this.loadingService.loadingOff())
     ).subscribe({
-      next: (response: OfficeProfessionalResponse) => {
-        this.professionals = response.professionals;
+      next: (professionals: OfficeProfessional[]) => {
+        this.professionals = professionals;
       },
       error: (error) => {
         console.error('Error loading professionals:', error);

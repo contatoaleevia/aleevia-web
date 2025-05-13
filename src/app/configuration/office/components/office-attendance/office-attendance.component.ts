@@ -47,7 +47,6 @@ export class OfficeAttendanceComponent implements OnInit {
   editAttendance(attendance: OfficeAttendance): void {
     console.log('Edit attendance:', attendance);
 
-    // Mostrar Swal de funcionalidade em desenvolvimento
     Swal.fire({
       title: 'Funcionalidade em desenvolvimento',
       icon: 'info',
@@ -58,7 +57,6 @@ export class OfficeAttendanceComponent implements OnInit {
   deleteAttendance(attendance: OfficeAttendance): void {
     console.log('Delete attendance:', attendance);
 
-    // Mostrar Swal de funcionalidade em desenvolvimento
     Swal.fire({
       title: 'Funcionalidade em desenvolvimento',
       icon: 'info',

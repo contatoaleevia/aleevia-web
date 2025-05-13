@@ -53,23 +53,13 @@ export class FaqUpsertComponent implements OnInit {
   }
 
   private loadFaqData(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
+    const faq = history.state.faq;
+    if (faq) {
       this.isEditing = true;
-      this.loading = true;
-      this.faqService.getById(id).subscribe({
-        next: (faq) => {
-          this.form.patchValue({
-            question: faq.question,
-            answer: faq.answer,
-            faqCategory: faq.faqCategory.categoryType
-          });
-          this.loading = false;
-        },
-        error: () => {
-          this.loading = false;
-          this.router.navigate(['/faq']);
-        }
+      this.form.patchValue({
+        question: faq.question,
+        answer: faq.answer,
+        faqCategory: faq.faqCategory.categoryType
       });
     }
   }
@@ -88,7 +78,7 @@ export class FaqUpsertComponent implements OnInit {
       request.pipe(finalize(() => this.loadingService.loadingOff())).subscribe({
         next: () => {
           this.loading = false;
-          this.faqService.refreshCache();
+          this.faqService.getAll().subscribe();
           Swal.fire({
             toast: true,
             position: 'top-end',
