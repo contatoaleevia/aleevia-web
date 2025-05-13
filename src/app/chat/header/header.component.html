@@ -1,42 +1,33 @@
-<div class="doctor-info bg-white p-3 rounded-top border-bottom">
-  <div class="d-flex align-items-center">
+<div class="bg-white p-3 rounded-top">
+  <div class="d-flex flex-column align-items-center justify-content-center w-100">
     <img
       *ngIf="currentUser.picture_url"
       [src]="currentUser.picture_url || 'assets/images/default-avatar.png'"
-      alt="Doctor photo"
-      class="rounded-circle me-3"
+      alt="Logo ou foto"
+      class="rounded mb-2"
       width="48"
       height="48"
     />
     <i *ngIf="!currentUser.picture_url"
-      class="bi bi-building-fill fs-1 me-3"
+      class="bi bi-building-fill fs-1 mb-2"
     ></i>
-    <div>
-      <h2 class="h5 mb-0">
-        {{ currentUser.name || "Dr. Nome do Médico" }}
-      </h2>
-      <!-- <p class="text-muted small mb-0">
-        {{ currentUser.specialty || "Especialidade" }} - CRM:
-        {{ currentUser.crm_number }}
-      </p> -->
-    </div>
-    <div class="ms-auto">
-      <div class="social-icons d-flex gap-2 w-25">
-        <a
-          *ngIf="currentUser.website"
-          [href]="currentUser.website"
-          target="_blank"
-          class="text-muted"
-        >
-          <i class="bi bi-globe2"></i>
+    <div class="text-center w-100">
+      <div class="d-flex align-items-center justify-content-center mb-1">
+        <h2 class="h6 mb-0 me-2">{{ currentUser.name || 'Nome da Clínica' }}</h2>
+        <span class="d-flex align-items-center ms-1">
+          <i class="bi bi-star-fill text-warning me-1" style="font-size: 1rem;"></i>
+          <span class="fw-semibold">{{ currentUser.rating || '4.8' }}</span>
+        </span>
+      </div>
+      <div class="text-muted small text-truncate mx-auto" style="max-width: 220px;">
+        {{ currentUser.specialty || 'Especialidade, especialista em ...' }}
+      </div>
+      <div class="d-flex align-items-center justify-content-center gap-2 mt-2">
+        <a *ngIf="currentUser.youtube" [href]="currentUser.youtube" target="_blank" class="btn btn-light p-2 border-0">
+          <i class="bi bi-youtube" style="font-size: 1.2rem;"></i>
         </a>
-        <a
-          *ngIf="currentUser.instagram"
-          [href]="currentUser.instagram"
-          target="_blank"
-          class="text-muted"
-        >
-          <i class="bi bi-instagram"></i>
+        <a *ngIf="currentUser.instagram" [href]="currentUser.instagram" target="_blank" class="btn btn-light p-2 border-0">
+          <i class="bi bi-instagram" style="font-size: 1.2rem;"></i>
         </a>
       </div>
     </div>

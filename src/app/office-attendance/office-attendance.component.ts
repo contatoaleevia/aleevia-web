@@ -1,13 +1,12 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { OfficeAttendanceService } from '@app/shared/services/office-attendance.service';
 import { OfficeAttendance } from '@shared/models/office-attendance.model';
 import { InputComponent } from '@app/shared/components/input/input.component';
 import { ButtonComponent } from '@app/shared/components/button/button.component';
-import { tap, catchError, of, finalize } from 'rxjs';
+import { finalize, BehaviorSubject, map, switchMap, first } from 'rxjs';
 import { LoadingService } from '@app/core/services/loading.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Router } from '@angular/router';
 import { CreateComponent } from './create/create.component';
 import { DeleteModalComponent, DeleteModalConfig } from '@app/shared/components/delete-modal/delete-modal.component';
 import Swal from 'sweetalert2';
@@ -15,52 +14,41 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-office-attendance',
   standalone: true,
-  imports: [CommonModule, DatePipe, InputComponent, ButtonComponent],
+  imports: [CommonModule, InputComponent, ButtonComponent],
   templateUrl: './office-attendance.component.html',
   styleUrl: './office-attendance.component.scss'
 })
-export class OfficeAttendanceComponent implements OnInit {
+export class OfficeAttendanceComponent {
   private readonly loadingService = inject(LoadingService);
   private readonly modalService = inject(NgbModal);
+  private readonly officeAttendanceService = inject(OfficeAttendanceService);
+  private readonly officeId = localStorage.getItem('officeId') || '{}';
 
-  serviceTypes: OfficeAttendance[] = [];
-  filteredServiceTypes: OfficeAttendance[] = [];
+  private searchTermSubject = new BehaviorSubject<string>('');
+  searchTerm$ = this.searchTermSubject.asObservable();
 
-  constructor(private officeAttendanceService: OfficeAttendanceService) { }
+  serviceTypes$ = this.officeAttendanceService.officeAttendanceByOfficeId$;
+  filteredServiceTypes$ = this.searchTerm$.pipe(
+    switchMap(searchTerm =>
+      this.serviceTypes$.pipe(
+        map(services => {
+          if (!searchTerm) {
+            return services;
+          }
+          return services.filter(service =>
+            service.title.toLowerCase().includes(searchTerm.toLowerCase())
+          );
+        })
+      )
+    )
+  );
 
-  ngOnInit(): void {
-    this.loadData();
-  }
+  constructor() {
 
-  loadData(): void {
-    this.loadingService.loadingOn();
-    const officeID = localStorage.getItem('officeId') || '{}';
-    console.log('officeID', officeID);
-    this.officeAttendanceService.get(officeID).pipe(
-      tap(data => {
-        console.log('data', data);
-        this.serviceTypes = data;
-        this.filteredServiceTypes = [...data];
-      }),
-      catchError(error => {
-        console.error('Error loading services:', error);
-        return of([]);
-      }),
-      finalize(() => {
-        this.loadingService.loadingOff();
-      })
-    ).subscribe();
   }
 
   onSearch(searchTerm: string): void {
-    if (!searchTerm) {
-      this.filteredServiceTypes = [...this.serviceTypes];
-      return;
-    }
-
-    this.filteredServiceTypes = this.serviceTypes.filter(service =>
-      service.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    this.searchTermSubject.next(searchTerm);
   }
 
   onAdd(): void {
@@ -72,9 +60,8 @@ export class OfficeAttendanceComponent implements OnInit {
 
     modalRef.result.then(
       (result) => {
-        console.log('result', result);
         if (result) {
-          this.loadData();
+          this.officeAttendanceService.get(this.officeId).subscribe();
         }
       },
       () => { }
@@ -82,26 +69,29 @@ export class OfficeAttendanceComponent implements OnInit {
   }
 
   onEdit(id: string): void {
-    const serviceToEdit = this.serviceTypes.find(service => service.id === id);
+    this.serviceTypes$.pipe(
+      first(),
+      map(services => services.find(service => service.id === id))
+    ).subscribe(service => {
+      if (service) {
+        const modalRef = this.modalService.open(CreateComponent, {
+          size: 'lg',
+          centered: true,
+          backdrop: 'static'
+        });
 
-    if (serviceToEdit) {
-      const modalRef = this.modalService.open(CreateComponent, {
-        size: 'lg',
-        centered: true,
-        backdrop: 'static'
-      });
+        modalRef.componentInstance.initialData = { ...service };
 
-      modalRef.componentInstance.initialData = { ...serviceToEdit };
-
-      modalRef.result.then(
-        (result) => {
-          if (result) {
-            this.loadData();
-          }
-        },
-        () => { }
-      );
-    }
+        modalRef.result.then(
+          (result) => {
+            if (result) {
+              this.officeAttendanceService.get(this.officeId).subscribe();
+            }
+          },
+          () => { }
+        );
+      }
+    });
   }
 
   openDeleteModal(service: OfficeAttendance): void {
@@ -121,19 +111,8 @@ export class OfficeAttendanceComponent implements OnInit {
 
     modalRef.result.then(
       () => {
-
         this.loadingService.loadingOn();
-        const officeID = localStorage.getItem('officeId') || '{}';
-
-        this.officeAttendanceService.delete(officeID, service.id!).pipe(
-          tap(() => {
-            console.log('Service deleted successfully');
-            this.loadData();
-          }),
-          catchError(error => {
-            console.error('Error deleting service:', error);
-            return of(null);
-          }),
+        this.officeAttendanceService.delete(this.officeId, service.id!).pipe(
           finalize(() => {
             Swal.fire({
               toast: true,
@@ -153,10 +132,6 @@ export class OfficeAttendanceComponent implements OnInit {
             this.loadingService.loadingOff();
           })
         ).subscribe();
-      },
-      () => {
-
-        console.log('Deletion cancelled');
       }
     );
   }

@@ -43,9 +43,10 @@ export interface SocialInfo {
   website?: string;
   instagram?: string;
   bio?: string;
+  rating?: number;
+  youtube?: string;
 }
 
-// Extended interfaces
 export interface UpdateAddress extends Address {
   id?: string;
 }
@@ -54,7 +55,6 @@ export interface User extends BaseUser, Address, ProfessionalInfo, SocialInfo {
   birth_date?: string;
 }
 
-// API Request/Response interfaces
 export interface UserUpdateRequest extends Partial<BaseUser>, Partial<Address>, Partial<ProfessionalInfo>, Partial<SocialInfo> {
   password?: string;
   password_confirmation?: string;

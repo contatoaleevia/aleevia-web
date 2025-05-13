@@ -31,6 +31,7 @@
 
 .messages {
   overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -90,8 +91,20 @@
   }
 
   .message-text {
+    position: relative;
     background-color: #f1f7fe;
     color: #0056b3;
+    &::after {
+      content: '';
+      position: absolute;
+      right: -10px;
+      top: 12px;
+      width: 0;
+      height: 0;
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-left: 10px solid #f1f7fe;
+    }
   }
 
   .avatar-circle {
@@ -104,13 +117,28 @@
   align-self: flex-start;
 
   .message-text {
+    position: relative;
     background-color: #f7f7f7;
     color: #333;
+    &::before {
+      content: '';
+      position: absolute;
+      left: -10px;
+      top: 12px;
+      width: 0;
+      height: 0;
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-right: 10px solid #f7f7f7;
+    }
   }
 
   .avatar-circle {
     background-color: #7b68ee;
     color: white;
+    width: 40px;
+    height: 40px;
+    box-shadow: 0 2px 8px rgba(123, 104, 238, 0.15);
   }
 }
 
