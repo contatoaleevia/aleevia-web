@@ -8,8 +8,9 @@ import { FaqService } from '@shared/services/faq.service';
 import { LoadingService } from '@core/services/loading.service';
 import { ProfessionalService } from '@shared/services/professional.service';
 import { RegistrationContextService } from '@app/auth/base/register/registration-context.service';
-import Swal from 'sweetalert2';
+import { AlertService } from '@app/shared/services/alert.service';
 import { finalize } from 'rxjs';
+
 @Component({
   selector: 'app-faq-upsert',
   standalone: true,
@@ -25,6 +26,7 @@ export class FaqUpsertComponent implements OnInit {
   private readonly loadingService = inject(LoadingService);
   private readonly officeId = localStorage.getItem('officeId') || '{}';
   private readonly registrationContext = inject(RegistrationContextService);
+  private readonly alertService = inject(AlertService);
 
   form!: FormGroup;
   isEditing = false;
@@ -79,20 +81,8 @@ export class FaqUpsertComponent implements OnInit {
         next: () => {
           this.loading = false;
           this.faqService.getAll().subscribe();
-          Swal.fire({
-            toast: true,
-            position: 'top-end',
-            icon: 'success',
-            title: 'Pergunta salva com sucesso!',
-            showConfirmButton: false,
-            timer: 2000,
-            timerProgressBar: true,
-            background: '#22c55e',
-            color: '#fff',
-            iconColor: '#fff',
-            customClass: {
-              popup: 'swal2-toast-green'
-            }
+          this.alertService.success({
+            title: 'Pergunta salva com sucesso!'
           }).then(() => {
             this.router.navigate(['/faq']);
           });

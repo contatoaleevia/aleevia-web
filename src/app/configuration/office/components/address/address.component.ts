@@ -1,12 +1,11 @@
 import { Component, Input, OnInit, inject, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Address, AddressResponse } from '@shared/models/address.model';
+import { Address } from '@shared/models/address.model';
 import { FormAddressComponent } from '@shared/components/form-address/form-address.component';
 import { AddressService } from '@shared/services/adress.service';
 import { OfficeService } from '@shared/services/office.service';
 import { Office, OfficeAddress } from '@shared/models/office.model';
-import { catchError, of } from 'rxjs';
-import Swal from 'sweetalert2';
+import { AlertService } from '@app/shared/services/alert.service';
 
 @Component({
   selector: 'app-address',
@@ -22,6 +21,7 @@ export class AddressComponent implements OnInit, OnChanges {
   formData: any = {};
   dataLoaded = false;
   officeAddress: OfficeAddress | null = null;
+  private readonly alertService = inject(AlertService);
 
   ngOnInit(): void {
     this.processOfficeAddress();
@@ -63,11 +63,7 @@ export class AddressComponent implements OnInit, OnChanges {
   }
 
   saveAddress(updatedAddress: Address): void {
-    Swal.fire({
-      title: 'Funcionalidade em desenvolvimento',
-      icon: 'info',
-      showConfirmButton: true,
-    });
+    this.alertService.comingSoon();
 
     // Commented out for now as per the data component pattern
     /*

@@ -38,8 +38,6 @@ export class OfficeService {
 
   getMyOffices(): Observable<Office[]> {
     const currentOffices = this.officesSubject.getValue();
-    console.log('Current offices in cache:', currentOffices);
-
     if (currentOffices.length > 0) {
       return of(currentOffices);
     }
@@ -47,7 +45,6 @@ export class OfficeService {
     return this.apiService.get<OfficeResponse[]>(`${this.routeUrl}/my-offices`).pipe(
       map((response: OfficeResponse[]) => response.map(officeResp => officeResp.office)),
       tap((offices: Office[]) => {
-        console.log('Offices from API:', offices);
         localStorage.setItem('officeIds', JSON.stringify(offices.map(office => office.id)));
         this.officesSubject.next(offices);
       })

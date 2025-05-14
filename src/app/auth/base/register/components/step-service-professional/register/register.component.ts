@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { InputComponent } from '@shared/components/input/input.component';
-import { ButtonComponent } from '@shared/components/button/button.component';
 import { NgIf } from '@angular/common';
-import Swal from 'sweetalert2';
 import { RegistrationContextService } from '@auth/base/register/registration-context.service';
-import { RegistrationType } from '@auth/base/register/constants/registration-types';
 import { inject } from '@angular/core';
 import { LoadingService } from '@app/core/services/loading.service';
 import { OfficeAttendanceService } from '@app/shared/services/office-attendance.service';
@@ -15,6 +11,7 @@ import { FormOfficeAttendanceComponent } from '@shared/components/form-office-at
 import { FormProfessionalComponent, Professional } from '@shared/components/form-professional/form-professional.component';
 import { ServiceType } from '@app/shared/models/service-type.model';
 import { OfficeService } from '@app/shared/services/office.service';
+import { AlertService } from '@app/shared/services/alert.service';
 
 @Component({
   selector: 'app-register',
@@ -35,6 +32,7 @@ export class RegisterComponent implements OnInit {
   private readonly loadingService = inject(LoadingService);
   private readonly officeAttendanceService = inject(OfficeAttendanceService);
   private readonly officeService = inject(OfficeService);
+  private readonly alertService = inject(AlertService);
 
 
   context: 'services' | 'professionals' = 'services';
@@ -72,8 +70,7 @@ export class RegisterComponent implements OnInit {
       },
       error: (err) => {
         this.loadingService.loadingOff();
-        Swal.fire({
-          icon: 'error',
+        this.alertService.error({
           title: 'Erro ao salvar serviço',
           text: err?.error?.message || 'Tente novamente mais tarde.'
         });
@@ -104,8 +101,7 @@ export class RegisterComponent implements OnInit {
       },
       error: (err) => {
         this.loadingService.loadingOff();
-        Swal.fire({
-          icon: 'error',
+        this.alertService.error({
           title: 'Erro ao salvar profissional',
           text: err?.error?.message || 'Tente novamente mais tarde.'
         });
@@ -114,20 +110,8 @@ export class RegisterComponent implements OnInit {
   }
 
   handleSuccess() {
-    Swal.fire({
-      toast: true,
-      position: 'top-end',
-      icon: 'success',
-      title: this.context === 'services' ? 'Serviço salvo com sucesso!' : 'Profissional salvo com sucesso!',
-      showConfirmButton: false,
-      timer: 2000,
-      timerProgressBar: true,
-      background: '#22c55e',
-      color: '#fff',
-      iconColor: '#fff',
-      customClass: {
-        popup: 'swal2-toast-green'
-      }
+    this.alertService.success({
+      title: this.context === 'services' ? 'Serviço salvo com sucesso!' : 'Profissional salvo com sucesso!'
     });
 
     if (this.context === 'services') {

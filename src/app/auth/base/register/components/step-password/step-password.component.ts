@@ -5,13 +5,15 @@ import { InputComponent } from '@shared/components/input/input.component';
 import { ButtonComponent } from '@shared/components/button/button.component';
 import { Router } from '@angular/router';
 import { RegistrationContextService } from '@auth/base/register/registration-context.service';
-import { RegistrationType } from '@auth/base/register/constants/registration-types';
-import Swal from 'sweetalert2';
+import { REGISTRATION_TYPES, RegistrationType } from '@auth/base/register/constants/registration-types';
 import { UserService } from '@shared/services/user.service';
 import { RegisterUserPayload } from '@auth/models/register.model';
 import { AuthService } from '@auth/services/auth.service';
 import { switchMap, from, tap, map, catchError, finalize } from 'rxjs';
 import { LoadingService } from '@core/services/loading.service';
+import { AlertService } from '@app/shared/services/alert.service';
+import { PasswordResetService } from '@auth/base/reset-password/password-reset.service';
+import { FormValidators } from '@shared/validators/form.validators';
 
 @Component({
   selector: 'app-step-password',
@@ -27,26 +29,24 @@ export class StepPasswordComponent {
   private userService = inject(UserService);
   private authService = inject(AuthService);
   private loadingService = inject(LoadingService);
+  private alertService = inject(AlertService);
+  private passwordResetService = inject(PasswordResetService);
 
   form: FormGroup;
   submitted = false;
   context: RegistrationType = this.registrationContext.getContext();
+  isResetPassword = false;
 
   constructor() {
     this.form = this.initializeForm();
+    this.isResetPassword = this.router.url.includes('reset-password');
   }
 
   private initializeForm(): FormGroup {
     return this.fb.group({
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]]
-    }, { validators: this.passwordsMatchValidator });
-  }
-
-  private passwordsMatchValidator(form: FormGroup) {
-    const password = form.get('password')?.value;
-    const confirmPassword = form.get('confirmPassword')?.value;
-    return password === confirmPassword ? null : { passwordMismatch: true };
+    }, { validators: FormValidators.passwordMatchValidator });
   }
 
   get password() { return this.form.get('password'); }
@@ -63,7 +63,7 @@ export class StepPasswordComponent {
       phoneNumber: registrationData.phoneNumber,
       email: registrationData.email,
       manager: {
-        typeId: this.context === 'clinic' ? 1 : 0,
+        typeId: this.context === REGISTRATION_TYPES.CLINIC ? 1 : 0,
         corporateName: registrationData.corporateName || ''
       }
     };
@@ -86,8 +86,8 @@ export class StepPasswordComponent {
   }
 
   private handleSuccess() {
-    if (this.router.url.includes('reset-password')) {
-      return from(Swal.fire({
+    if (this.isResetPassword) {
+      return from(this.alertService.custom({
         title: 'Senha atualizada',
         html: `Sua senha foi redefinida com êxito.<br>Você já pode acessar sua conta normalmente com a nova credencial.`,
         confirmButtonText: 'Acessar conta',
@@ -110,20 +110,25 @@ export class StepPasswordComponent {
 
   private handleNavigation() {
     this.loadingService.loadingOff();
-    if (!this.router.url.includes('reset-password')) {
+    if (!this.isResetPassword) {
       this.router.navigate([`/auth/register/step/healthcare-space`]);
     }
   }
 
   private handleError(error: any) {
     this.loadingService.loadingOff();
-    return from(Swal.fire({
+    return from(this.alertService.error({
       title: 'Erro',
       text: error.error.Errors.map((err: any) => err.Message).join('\n'),
-      icon: 'error',
       confirmButtonText: 'OK'
     })).pipe(
-      tap(() => this.router.navigate([`/auth/register/step/cpf-cnpj`]))
+      tap(() => {
+        if (this.isResetPassword) {
+          this.router.navigate(['/auth/login']);
+        } else {
+          this.router.navigate([`/auth/register/step/cpf-cnpj`]);
+        }
+      })
     );
   }
 
@@ -131,11 +136,37 @@ export class StepPasswordComponent {
     this.submitted = true;
     if (this.form.valid) {
       const password = this.form.get('password')?.value;
-      this.userService.registerUser(this.preparePayload(password)).pipe(
-        switchMap(() => this.handleSuccess()),
-        tap(() => this.handleNavigation()),
-        catchError(error => this.handleError(error)),
-      ).subscribe();
+      const confirmPassword = this.form.get('confirmPassword')?.value;
+
+      if (this.isResetPassword) {
+        const token = localStorage.getItem('resetPasswordToken');
+        const document = localStorage.getItem('documentResetPassword');
+
+        if (!token || !document) {
+          this.alertService.error({
+            title: 'Erro',
+            text: 'Token ou documento não encontrado',
+            confirmButtonText: 'OK'
+          });
+          return;
+        }
+
+        this.passwordResetService.resetPassword({
+          document,
+          token,
+          newPassword: password,
+          confirmPassword
+        }).pipe(
+          switchMap(() => this.handleSuccess()),
+          catchError(error => this.handleError(error))
+        ).subscribe();
+      } else {
+        this.userService.registerUser(this.preparePayload(password)).pipe(
+          switchMap(() => this.handleSuccess()),
+          tap(() => this.handleNavigation()),
+          catchError(error => this.handleError(error))
+        ).subscribe();
+      }
     }
   }
 }

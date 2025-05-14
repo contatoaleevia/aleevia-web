@@ -7,7 +7,7 @@ import { Office, OfficeProfessional, OfficeProfessionalResponse } from '@app/sha
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CreateComponent } from './create/create.component';
 import { DeleteModalComponent, DeleteModalConfig } from '@app/shared/components/delete-modal/delete-modal.component';
-import Swal from 'sweetalert2';
+import { AlertService } from '@app/shared/services/alert.service';
 import { OfficeService } from '@app/shared/services/office.service';
 
 @Component({
@@ -21,6 +21,7 @@ export class ProfessionalComponent implements OnInit {
   private readonly loadingService = inject(LoadingService);
   private readonly modalService = inject(NgbModal);
   private readonly officeService = inject(OfficeService);
+  private readonly alertService = inject(AlertService);
   private destroy$ = new Subject<void>();
 
   @Input() office: Office = {} as Office;
@@ -141,25 +142,7 @@ export class ProfessionalComponent implements OnInit {
     modalRef.result.then(
       () => {
         this.loadingService.loadingOn();
-
-
-        Swal.fire({
-          toast: true,
-          position: 'top-end',
-          icon: 'info',
-          title: 'Em breve!',
-          text: 'Esta funcionalidade estará disponível em breve.',
-          showConfirmButton: false,
-          timer: 2000,
-          timerProgressBar: true,
-          background: '#3b82f6',
-          color: '#fff',
-          iconColor: '#fff',
-          customClass: {
-            popup: 'swal2-toast-blue'
-          }
-        });
-
+        this.alertService.comingSoon();
         this.loadingService.loadingOff();
       },
       () => {

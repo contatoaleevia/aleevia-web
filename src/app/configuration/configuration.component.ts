@@ -8,7 +8,7 @@ import { finalize } from 'rxjs';
 import { LoadingService } from '@app/core/services/loading.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CreateComponent } from './office/create/create.component';
-import Swal from 'sweetalert2';
+import { AlertService } from '@app/shared/services/alert.service';
 
 @Component({
   selector: 'app-configuration',
@@ -20,7 +20,7 @@ import Swal from 'sweetalert2';
 export class ConfigurationComponent {
   private readonly officeService = inject(OfficeService);
   private readonly router = inject(Router);
-  private readonly loadingService = inject(LoadingService);
+  private readonly alertService = inject(AlertService);
   private officeId = localStorage.getItem('officeId') || '{}';
   private readonly modalService = inject(NgbModal);
 
@@ -56,42 +56,11 @@ export class ConfigurationComponent {
   }
 
   editOffice(event: Event, office: Office): void {
-    Swal.fire({
-      toast: true,
-      position: 'top-end',
-      icon: 'info',
-      title: 'Em breve!',
-      text: 'Esta funcionalidade estará disponível em breve.',
-      showConfirmButton: false,
-      timer: 2000,
-      timerProgressBar: true,
-      background: '#3b82f6',
-      color: '#fff',
-      iconColor: '#fff',
-      customClass: {
-        popup: 'swal2-toast-blue'
-      }
-    });
+    this.alertService.comingSoon();
   }
 
   deleteOffice(event: Event, office: Office): void {
     event.stopPropagation();
-
-    Swal.fire({
-      toast: true,
-      position: 'top-end',
-      icon: 'info',
-      title: 'Em breve!',
-      text: 'Esta funcionalidade estará disponível em breve.',
-      showConfirmButton: false,
-      timer: 2000,
-      timerProgressBar: true,
-      background: '#3b82f6',
-      color: '#fff',
-      iconColor: '#fff',
-      customClass: {
-        popup: 'swal2-toast-blue'
-      }
-    });
+    this.alertService.comingSoon();
   }
 }

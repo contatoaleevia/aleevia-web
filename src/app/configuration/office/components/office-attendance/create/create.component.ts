@@ -6,7 +6,6 @@ import { FormOfficeAttendanceComponent } from '@shared/components/form-office-at
 import { OfficeAttendanceService } from '@app/shared/services/office-attendance.service';
 import { LoadingService } from '@app/core/services/loading.service';
 import { finalize } from 'rxjs/operators';
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-create',

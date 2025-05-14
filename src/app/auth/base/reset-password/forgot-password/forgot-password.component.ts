@@ -3,10 +3,12 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router } from '@angular/router';
 import { InputComponent } from 'src/app/shared/components/input/input.component';
 import { ButtonComponent } from 'src/app/shared/components/button/button.component';
-import Swal from 'sweetalert2';
 import { PasswordResetService } from '../password-reset.service';
 import { LoadingService } from '@app/core/services/loading.service';
 import { finalize } from 'rxjs';
+import { ForgotPasswordResponse } from '@app/auth/models/auth.model';
+import { AlertService } from '@app/shared/services/alert.service';
+
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
@@ -17,11 +19,12 @@ import { finalize } from 'rxjs';
 export class ForgotPasswordComponent {
   private readonly passwordResetService = inject(PasswordResetService);
   private readonly loadingService = inject(LoadingService);
+  private readonly alertService = inject(AlertService);
 
   form: FormGroup;
   loading = false;
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
       document: ['', [Validators.required]]
     });
@@ -45,23 +48,15 @@ export class ForgotPasswordComponent {
     this.passwordResetService.requestResetPassword(this.document?.value).pipe(
       finalize(() => this.loadingService.loadingOff())
     ).subscribe({
-      next: async () => {
-        await Swal.fire({
-          title: 'Instruções enviadas',
-          html: `Enviamos as instruções de mudança de senha para o email da conta. Verifique sua caixa de spam`,
-          confirmButtonText: 'Continuar',
-          customClass: {
-            popup: 'rounded-4',
-            title: 'fw-bold fs-2',
-            htmlContainer: 'text-secondary fs-5',
-            confirmButton: 'btn btn-primary btn-lg w-100 mt-4'
-          },
-          buttonsStyling: false,
-          allowOutsideClick: false,
-          allowEscapeKey: false
-        });
-        this.router.navigate(['/auth/reset-password/new-password']);
+      next: async (response: ForgotPasswordResponse) => {
+        await this.alertService.passwordResetInstructions(this.formatEmail(response.email));
       }
     });
+  }
+
+  private formatEmail(email: string): string {
+    const [username, domain] = email.split('@');
+    const maskedUsername = '*'.repeat(username.length);
+    return `${maskedUsername}@${domain}`;
   }
 }

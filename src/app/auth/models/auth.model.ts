@@ -12,3 +12,9 @@ export interface LoginResponse {
   userName: string;
   user: User;
 }
+
+export interface ForgotPasswordResponse {
+  email: string;
+  message: string;
+  document: string;
+}

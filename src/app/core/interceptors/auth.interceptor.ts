@@ -10,9 +10,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
   const token = authService.getToken();
 
-  console.log('Auth Interceptor - URL:', req.url);
-  console.log('Auth Interceptor - Token:', token ? 'Present' : 'Missing');
-
   if (req.url.includes('viacep')) {
     return next(req);
   }
@@ -27,8 +24,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      console.log('Auth Interceptor - Error:', error.status);
-
       if (error.status === 401) {
         authService.logout();
         router.navigate(['/login'], {

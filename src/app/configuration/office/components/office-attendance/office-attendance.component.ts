@@ -5,8 +5,8 @@ import { CommonModule } from '@angular/common';
 import { OfficeAttendanceService } from '@app/shared/services/office-attendance.service';
 import { Observable } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import Swal from 'sweetalert2';
 import { CreateComponent } from './create/create.component';
+import { AlertService } from '@app/shared/services/alert.service';
 
 @Component({
   selector: 'app-office-attendance',
@@ -18,7 +18,7 @@ import { CreateComponent } from './create/create.component';
 export class OfficeAttendanceComponent implements OnInit {
   private readonly officeAttendanceService = inject(OfficeAttendanceService);
   private readonly modalService = inject(NgbModal);
-
+  private readonly alertService = inject(AlertService);
   attendances$: Observable<OfficeAttendance[]> = this.officeAttendanceService.officeAttendanceByOfficeId$;
   officeId: string = '';
 
@@ -29,21 +29,13 @@ export class OfficeAttendanceComponent implements OnInit {
   editAttendance(attendance: OfficeAttendance): void {
     console.log('Edit attendance:', attendance);
 
-    Swal.fire({
-      title: 'Funcionalidade em desenvolvimento',
-      icon: 'info',
-      showConfirmButton: true,
-    });
+    this.alertService.comingSoon();
   }
 
   deleteAttendance(attendance: OfficeAttendance): void {
     console.log('Delete attendance:', attendance);
 
-    Swal.fire({
-      title: 'Funcionalidade em desenvolvimento',
-      icon: 'info',
-      showConfirmButton: true,
-    });
+    this.alertService.comingSoon();
   }
 
   addNewAttendance(): void {
@@ -65,11 +57,7 @@ export class OfficeAttendanceComponent implements OnInit {
     } catch (error) {
       console.error('Error opening modal:', error);
 
-      Swal.fire({
-        title: 'Funcionalidade em desenvolvimento',
-        icon: 'info',
-        showConfirmButton: true,
-      });
+      this.alertService.comingSoon();
     }
   }
 }

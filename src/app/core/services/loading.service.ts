@@ -12,7 +12,6 @@ export class LoadingService {
   }
 
   loadingOff() {
-    console.log('loadingOff');
     this.loadingSubject.next(false);
   }
 }

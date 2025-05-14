@@ -9,7 +9,7 @@ import { LoadingService } from '@app/core/services/loading.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CreateComponent } from './create/create.component';
 import { DeleteModalComponent, DeleteModalConfig } from '@app/shared/components/delete-modal/delete-modal.component';
-import Swal from 'sweetalert2';
+import { AlertService } from '@app/shared/services/alert.service';
 
 @Component({
   selector: 'app-office-attendance',
@@ -22,6 +22,7 @@ export class OfficeAttendanceComponent {
   private readonly loadingService = inject(LoadingService);
   private readonly modalService = inject(NgbModal);
   private readonly officeAttendanceService = inject(OfficeAttendanceService);
+  private readonly alertService = inject(AlertService);
   private readonly officeId = localStorage.getItem('officeId') || '{}';
 
   private searchTermSubject = new BehaviorSubject<string>('');
@@ -114,20 +115,8 @@ export class OfficeAttendanceComponent {
         this.loadingService.loadingOn();
         this.officeAttendanceService.delete(this.officeId, service.id!).pipe(
           finalize(() => {
-            Swal.fire({
-              toast: true,
-              position: 'top-end',
-              icon: 'success',
-              title: 'Serviço excluído com sucesso!',
-              showConfirmButton: false,
-              timer: 2000,
-              timerProgressBar: true,
-              background: '#22c55e',
-              color: '#fff',
-              iconColor: '#fff',
-              customClass: {
-                popup: 'swal2-toast-green'
-              }
+            this.alertService.success({
+              title: 'Serviço excluído com sucesso!'
             });
             this.loadingService.loadingOff();
           })

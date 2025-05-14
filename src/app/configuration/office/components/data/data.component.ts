@@ -1,8 +1,8 @@
-import { Component, Input, OnInit, inject, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormHealthspaceSpaceComponent } from '@shared/components/form-healthspace-space/form-healthspace-space.component';
 import { Office } from '@app/shared/models/office.model';
-import Swal from 'sweetalert2';
+import { AlertService } from '@app/shared/services/alert.service';
 
 @Component({
   selector: 'app-data',
@@ -13,6 +13,8 @@ import Swal from 'sweetalert2';
 })
 export class DataComponent implements OnInit, OnChanges {
   @Input() office: Office = {} as Office;
+  private readonly alertService = inject(AlertService);
+
 
   formData: any = {};
   dataLoaded = false;
@@ -44,11 +46,7 @@ export class DataComponent implements OnInit, OnChanges {
   }
 
   saveOffice(updatedOffice: Office): void {
-    Swal.fire({
-      title: 'Funcionalidade em desenvolvimento',
-      icon: 'info',
-      showConfirmButton: true,
-    });
+    this.alertService.comingSoon();
     // if (this.office && this.office.id) {
     //   console.log('Updated office from form:', updatedOffice);
 

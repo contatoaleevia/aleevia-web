@@ -7,7 +7,7 @@ import { OfficeService } from '@app/shared/services/office.service';
 import { Office } from '@app/shared/models/office.model';
 import { LoadingService } from '@app/core/services/loading.service';
 import { finalize } from 'rxjs';
-import Swal from 'sweetalert2';
+import { AlertService } from '@app/shared/services/alert.service';
 
 @Component({
   selector: 'app-social-media',
@@ -20,6 +20,7 @@ export class SocialMediaComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly officeService = inject(OfficeService);
   private readonly loadingService = inject(LoadingService);
+  private readonly alertService = inject(AlertService);
 
   form: FormGroup = this.fb.group({
     site: [''],
@@ -62,11 +63,8 @@ export class SocialMediaComponent implements OnInit {
 
   onSubmit(): void {
     if (this.form.valid) {
-      // Mostrar Swal de funcionalidade em desenvolvimento
-      Swal.fire({
-        title: 'Funcionalidade em desenvolvimento',
-        icon: 'info',
-        showConfirmButton: true,
+      this.alertService.info({
+        title: 'Funcionalidade em desenvolvimento'
       });
 
       // Código anterior comentado para preservação
@@ -85,38 +83,14 @@ export class SocialMediaComponent implements OnInit {
         finalize(() => this.loadingService.loadingOff())
       ).subscribe({
         next: () => {
-          Swal.fire({
-            toast: true,
-            position: 'top-end',
-            icon: 'success',
-            title: 'Redes sociais salvas com sucesso!',
-            showConfirmButton: false,
-            timer: 2000,
-            timerProgressBar: true,
-            background: '#22c55e',
-            color: '#fff',
-            iconColor: '#fff',
-            customClass: {
-              popup: 'swal2-toast-green'
-            }
+          this.alertService.success({
+            title: 'Redes sociais salvas com sucesso!'
           });
         },
         error: (error) => {
           console.error('Error saving social media:', error);
-          Swal.fire({
-            toast: true,
-            position: 'top-end',
-            icon: 'error',
-            title: 'Erro ao salvar redes sociais',
-            showConfirmButton: false,
-            timer: 2000,
-            timerProgressBar: true,
-            background: '#ef4444',
-            color: '#fff',
-            iconColor: '#fff',
-            customClass: {
-              popup: 'swal2-toast-red'
-            }
+          this.alertService.error({
+            title: 'Erro ao salvar redes sociais'
           });
         }
       });

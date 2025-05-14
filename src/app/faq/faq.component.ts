@@ -8,7 +8,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DeleteModalConfig } from '../shared/components/delete-modal/delete-modal.component';
 import { ButtonComponent } from '../shared/components/button/button.component';
 import { InputComponent } from '../shared/components/input/input.component';
-import Swal from 'sweetalert2';
+import { AlertService } from '@app/shared/services/alert.service';
 import { finalize, BehaviorSubject, Observable, map, switchMap, first } from 'rxjs';
 import { LoadingService } from '@app/core/services/loading.service';
 
@@ -24,6 +24,7 @@ export class FaqComponent {
   private router = inject(Router);
   private modalService = inject(NgbModal);
   private loadingService = inject(LoadingService);
+  private alertService = inject(AlertService);
 
   private searchTermSubject = new BehaviorSubject<string>('');
   searchTerm$ = this.searchTermSubject.asObservable();
@@ -85,29 +86,14 @@ export class FaqComponent {
           finalize(() => this.loadingService.loadingOff())
         ).subscribe({
           next: () => {
-            Swal.fire({
-              toast: true,
-              position: 'top-right',
-              title: 'Sucesso',
-              text: 'FAQ excluída com sucesso',
-              icon: 'success',
-              timer: 2000,
-              showConfirmButton: false,
-              background: '#22c55e',
-              color: '#fff',
-              timerProgressBar: true,
-              iconColor: '#fff',
-              customClass: {
-                popup: 'swal2-toast-green'
-              }
+            this.alertService.success({
+              title: 'FAQ excluída com sucesso'
             });
           },
           error: (error) => {
             console.error('Error deleting FAQ:', error);
-            Swal.fire({
-              title: 'Erro',
-              text: 'Não foi possível excluir a FAQ',
-              icon: 'error'
+            this.alertService.error({
+              title: 'Não foi possível excluir a FAQ'
             });
           }
         });
@@ -122,10 +108,9 @@ export class FaqComponent {
   }
 
   soon(): void {
-    Swal.fire({
+    this.alertService.info({
       title: 'Em breve',
-      text: 'Esta funcionalidade ainda não está disponível',
-      icon: 'info'
+      text: 'Esta funcionalidade ainda não está disponível'
     });
   }
 
