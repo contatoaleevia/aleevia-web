@@ -46,26 +46,22 @@ export class ChatService {
       },
       senderType: 1
     }).pipe(
-      map(msg => this.adaptMessages([msg])[0]),
-      tap((msg: Message) => {
-        const current = this.messagesSubject.getValue();
-        this.messagesSubject.next([...current, msg]);
-      })
+      map(msg => this.adaptMessages([msg])[0])
     );
   }
 
   private adaptMessages(rawMessages: any[]): Message[] {
     return rawMessages.map((msg: any) => {
-      const isAssistant = msg.senderType === 'IA';
+      const isAssistant = msg.senderType === 'IA' || !msg.senderType;
       return {
         chat_id: msg.iaChatId || msg.chat_id || '',
         id: msg.id,
         message: msg.message,
         role: isAssistant ? 'assistant' : 'user',
         sent_at: msg.createdAt || msg.sent_at || new Date().toISOString(),
-        content: isAssistant
+        content: msg.content || (isAssistant
           ? { source: 'assistant', sourceId: 'system' }
-          : { source: 'user', sourceId: 'user' }
+          : { source: 'user', sourceId: 'user' })
       };
     });
   }

@@ -43,23 +43,3 @@
 .bi-circle-fill {
   color: #0d6efd;
 }
-
-.clinics-container {
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: #fff;
-    border-radius: 4px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: #0d6efd;
-    border-radius: 4px;
-
-    &:hover {
-      background: #0d6efd;
-    }
-  }
-}

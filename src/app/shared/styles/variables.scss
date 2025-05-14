@@ -54,11 +54,18 @@ $stepper-line-active: #1a56db;
 $modal-backdrop: rgba(0, 0, 0, 0.5);
 
 // Cores específicas
-$placeholder-color: #A6A6A6;
+$placeholder-color: #B8BCCA;
+$input-text-color: #3B4256;
+$input-label-color: #6F7482;
+$input-background: #F8FAFC;
+$input-border-color: #E2E8F0;
+$input-error-color: #ED0131;
+$input-active-border: #0048D9;
 $text-muted-60: rgba(32, 34, 36, 0.6);
 $text-muted-80: rgba(32, 34, 36, 0.8);
 $input-focus-border: #86b7fe;
 $input-focus-shadow: rgba(13, 110, 253, 0.25);
+$input-border-radius: 4px;
 
 // Espaçamento
 $spacer: 1rem;
@@ -72,7 +79,7 @@ $spacers: (
 );
 
 // Tipografia
-$font-family-base: 'Nunito', 'Helvetica Neue', Arial, sans-serif;
+$font-family-base: 'Nunito', sans-serif;
 $font-size-base: 1rem;
 $font-size-sm: $font-size-base * 0.875;
 $font-size-lg: $font-size-base * 1.25;
@@ -81,6 +88,13 @@ $font-weight-normal: 400;
 $font-weight-medium: 500;
 $font-weight-semibold: 600;
 $font-weight-bold: 700;
+$line-height-base: 150%;
+$letter-spacing-base: 0.16px;
+
+// Fontes
+$font-family-error: "IBM Plex Sans", sans-serif;
+$font-size-error: 12px;
+$font-size-error-mobile: 10px;
 
 // Bordas
 $border-radius-sm: 0.25rem;
@@ -106,4 +120,4 @@ $zindex-fixed: 1030;
 $zindex-modal-backdrop: 1040;
 $zindex-modal: 1050;
 $zindex-popover: 1060;
-$zindex-tooltip: 1070; 
+$zindex-tooltip: 1070;

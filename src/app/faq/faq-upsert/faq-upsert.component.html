@@ -10,7 +10,6 @@
               [required]="true"
               [errorMessage]="form.get('question')?.errors?.['required'] ? 'Campo obrigatório' : null"
               placeholder="Digite a pergunta"
-              bgColor="#FFFFFF"
               [showErrorOnTouched]="true"
               (onChange)="form.get('question')?.setValue($event)">
             </app-input>
@@ -25,7 +24,6 @@
               [rows]="4"
               [errorMessage]="form.get('answer')?.errors?.['required'] ? 'Campo obrigatório' : null"
               placeholder="Digite a resposta"
-              bgColor="#FFFFFF"
               [showErrorOnTouched]="true"
               (onChange)="form.get('answer')?.setValue($event)">
             </app-input>
@@ -42,7 +40,6 @@
               optionValue="value"
               [errorMessage]="form.get('faqCategory')?.errors?.['required'] ? 'Campo obrigatório' : null"
               placeholder="Selecione a categoria"
-              bgColor="#FFFFFF"
               [showErrorOnTouched]="true"
               (onChange)="form.get('faqCategory')?.setValue($event)">
             </app-input>

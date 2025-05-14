@@ -27,6 +27,14 @@ body {
   min-height: 80vh;
 }
 
+:root {
+  --mdc-outlined-text-field-outline-color: transparent;
+  --mdc-outlined-text-field-hover-outline-color: transparent;
+  --mdc-outlined-text-field-focus-outline-color: transparent;
+  --mdc-outlined-text-field-container-shape: 8px;
+  --mdc-outlined-text-field-container-color: var(--input-background);
+}
+
 /* Custom Material Theme */
 @include mat.core();
 
@@ -71,4 +79,26 @@ $custom-theme: mat.m2-define-light-theme((
 
 .modal-content {
   border: none;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #fff;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #0d6efd;
+  border-radius: 4px;
+
+  &:hover {
+    background: #0d6efd;
+  }
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #0d6efd #fff;
 }

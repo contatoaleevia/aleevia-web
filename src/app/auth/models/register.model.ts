@@ -6,6 +6,7 @@ export interface RegistrationData {
     email: string;
     corporateName: string;
     isCompany: boolean;
+    acceptTerms: boolean;
 }
 
 

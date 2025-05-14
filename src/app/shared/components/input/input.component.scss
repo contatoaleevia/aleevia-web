@@ -1,26 +1,54 @@
 @use '../../styles/variables' as vars;
 
 .form-control,
-.form-select {
-  border: vars.$border-width solid vars.$gray-400;
-  border-radius: vars.$border-radius;
+.form-select,
+textarea.form-control,
+mat-select {
+  border-radius: vars.$input-border-radius;
+  border: none;
+  background: vars.$input-background;
   padding: 0.75rem 1rem;
   font-size: vars.$font-size-base;
-  color: #94A3B8;
+  color: vars.$input-text-color;
   transition: vars.$transition-base;
+  font-family: vars.$font-family-base;
+  font-style: normal;
+  font-weight: vars.$font-weight-normal;
+  line-height: vars.$line-height-base;
+  letter-spacing: vars.$letter-spacing-base;
 
-  &:focus {
-    border-color: vars.$input-focus-border;
-    box-shadow: 0 0 0 vars.$focus-ring-width vars.$input-focus-shadow;
-    outline: 0;
+  &.is-invalid,
+  &.ng-invalid.ng-touched {
+    border: 1px solid vars.$input-error-color;
+    background: vars.$input-background;
+
+    &:focus {
+      border: 1px solid vars.$input-error-color;
+      outline: 0;
+      box-shadow: none !important;
+    }
   }
 
-  &:disabled, &[readonly] {
-    background-color: vars.$gray-200;
+  &:focus {
+    border: 1px solid vars.$input-active-border;
+    outline: 0;
+    background: vars.$input-background;
+    box-shadow: none !important;
+  }
+
+  &:disabled {
+    background-color: vars.$input-background;
     opacity: 1;
   }
 
+  &[readonly] {
+    background-color: vars.$input-background;
+    opacity: 1;
+    border: none;
+  }
+
   &::placeholder {
+    color: vars.$placeholder-color;
     opacity: 1;
   }
 }
@@ -32,46 +60,69 @@
   background-size: 16px 12px;
   appearance: none;
 
+  &.is-invalid,
+  &.ng-invalid.ng-touched {
+    border: 1px solid vars.$input-error-color;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ED0131' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+    box-shadow: none !important;
+  }
+
   &.form-select-outline {
-    border-radius: 2px;
-    border: none;
-    border-bottom: 1px solid var(--slate-200, #E2E8F0);
-    background-color: var(--base-white, #FFF);
-    padding: 8px 0;
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    color: #94A3B8;
-    background-position: right 0 center;
+    border-radius: vars.$input-border-radius;
+    border: 1px solid vars.$input-border-color;
+    background-color: vars.$input-background;
+    padding: 0.75rem 1rem;
+    font-family: vars.$font-family-base;
+    font-size: vars.$font-size-sm;
+    color: vars.$input-text-color;
+    background-position: right 1rem center;
+
+    &.is-invalid,
+    &.ng-invalid.ng-touched {
+      border: 1px solid vars.$input-error-color;
+      box-shadow: none !important;
+    }
 
     &:focus {
-      box-shadow: none;
-      border-color: #E2E8F0;
+      border: 1px solid vars.$input-active-border;
+      outline: 0;
+      background-color: vars.$input-background;
+      box-shadow: none !important;
     }
 
     &:disabled {
-      background-color: #f8f9fa;
+      background-color: vars.$input-background;
       cursor: not-allowed;
     }
 
+    &[readonly] {
+      background-color: vars.$input-background;
+      border: none;
+    }
+
     &::placeholder {
-      color: #94A3B8;
+      color: vars.$placeholder-color;
       opacity: 1;
     }
 
     option {
-      color: #94A3B8;
+      color: vars.$input-text-color;
     }
 
     option:first-child {
-      color: #94A3B8;
+      color: vars.$placeholder-color;
     }
   }
 }
 
 .form-label {
   margin-bottom: 0.5rem;
-  font-weight: vars.$font-weight-medium;
-  color: vars.$gray-900;
+  font-weight: vars.$font-weight-normal;
+  color: vars.$input-label-color;
+  font-family: vars.$font-family-base;
+  font-style: normal;
+  line-height: vars.$line-height-base;
+  letter-spacing: vars.$letter-spacing-base;
 }
 
 .mat-select-value {
@@ -100,7 +151,6 @@
   cursor: pointer;
 }
 
-// Remove default chip border and shadow
 .mat-select-value .mat-chip.mat-standard-chip {
   box-shadow: none;
   border: none;
@@ -140,8 +190,45 @@
     height: 26px;
     padding: 0 7px;
   }
+
   .custom-chip-remove {
     font-size: 15px;
     margin-left: 4px;
   }
+}
+
+::ng-deep .mat-mdc-form-field {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 0 !important;
+
+  .mat-mdc-form-field-infix,
+  .mat-mdc-text-field-wrapper {
+    padding: 0 !important;
+  }
+}
+
+.input-group {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #6c757d;
+  z-index: 10;
+  padding: 5px;
+
+  &:hover {
+    color: #0d6efd;
+  }
+}
+
+input[type="password"],
+input[type="text"] {
+  padding-right: 35px;
 }

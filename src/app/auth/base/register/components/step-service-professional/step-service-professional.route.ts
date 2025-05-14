@@ -2,6 +2,7 @@ import { Routes } from "@angular/router";
 import { RegisterComponent } from "./register/register.component";
 import { ViewNewComponent } from "./view-new/view-new.component";
 import { officeAttendanceResolver } from "@app/office-attendance/office-attendance.resolver";
+import { professionalResolver } from "@app/shared/resolvers/professional.resolver";
 
 export const stepServiceProfessionalRoute: Routes = [
   {
@@ -21,6 +22,9 @@ export const stepServiceProfessionalRoute: Routes = [
       {
         path: 'professionals',
         component: ViewNewComponent,
+        resolve: {
+          professionals: professionalResolver
+        },
         data: {
           title: 'Profissionais',
           subtitle: 'Adicione ou visualize os profissionais do espaço.'

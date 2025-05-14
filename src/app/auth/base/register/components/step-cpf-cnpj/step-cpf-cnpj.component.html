@@ -1,163 +1,12 @@
-<form
-  [formGroup]="form"
-  (ngSubmit)="onSubmit()"
-  class="mx-auto h-100 d-flex flex-column"
->
-  <ng-container *ngIf="context === 'clinic'; else individualMode">
-    <div>
-      <div class="mb-3">
-        <app-input
-          formControlName="cnpj"
-          label="CNPJ"
-          placeholder="12.345.678/0001-97"
-          [required]="true"
-          inputType="text"
-          mask="00.000.000/0000-00"
-          [readonly]="form.get('cnpj')!.disabled"
-        ></app-input>
-      </div>
-      <div class="mb-3">
-        <app-input
-          formControlName="phoneNumber"
-          label="Telefone"
-          [required]="true"
-          inputType="text"
-          mask="(00) 00000-0000"
-        ></app-input>
-      </div>
-      <div class="mb-3">
-        <app-input
-          formControlName="corporateName"
-          label="Razão Social"
-          placeholder="Ex: Aleevia"
-          [required]="true"
-          inputType="text"
-        ></app-input>
-      </div>
-
-      <h3 class="fw-bold mb-3 mt-4 fs-4">Dados do representante legal</h3>
-      <div class="mb-3">
-        <app-input
-          formControlName="name"
-          label="Nome do representante legal"
-          placeholder="Insira seu nome completo"
-          [required]="true"
-          inputType="text"
-        ></app-input>
-      </div>
-      <div class="mb-3">
-        <app-input
-          formControlName="cpf"
-          label="CPF (representante legal)"
-          placeholder="123.456.789-00"
-          [required]="true"
-          inputType="text"
-          mask="000.000.000-00"
-          [readonly]="form.get('cpf')!.disabled"
-        ></app-input>
-      </div>
-      <div class="mb-3">
-        <app-input
-          formControlName="email"
-          label="E-mail"
-          placeholder=""
-          [required]="true"
-          inputType="text"
-          type="email"
-        ></app-input>
-      </div>
-    </div>
-  </ng-container>
-
-  <ng-template #individualMode>
-    <div>
-      <div class="mb-3">
-        <app-input
-          formControlName="name"
-          label="Nome completo"
-          placeholder=""
-          [required]="true"
-          inputType="text"
-        ></app-input>
-      </div>
-
-      <div class="mb-3">
-        <app-input
-          formControlName="cpf"
-          [bgColor]="form.get('cpf')!.disabled ? '' : 'white'"
-          label="CPF"
-          [required]="true"
-          inputType="text"
-          mask="000.000.000-00"
-        ></app-input>
-      </div>
-
-      <div class="mb-3">
-        <app-input
-          formControlName="email"
-          label="E-mail"
-          placeholder=""
-          [required]="true"
-          inputType="text"
-          type="email"
-        ></app-input>
-      </div>
-
-      <div class="mb-3">
-        <app-input
-          formControlName="phoneNumber"
-          label="Telefone"
-          [required]="true"
-          inputType="text"
-          mask="(00) 00000-0000"
-        ></app-input>
-      </div>
-
-      <div class="form-check form-switch mb-3">
-        <input
-          class="form-check-input"
-          type="checkbox"
-          id="isCompany"
-          formControlName="isCompany"
-          [disabled]="form.get('cnpj')!.enabled"
-        />
-        <label class="form-check-label fw-semibold" for="isCompany"
-          >Sou pessoa jurídica</label
-        >
-      </div>
-
-      <ng-container *ngIf="form.get('isCompany')!.value">
-        <div class="d-flex flex-column justify-content-start p-0">
-          <div class="mb-3">
-            <app-input
-              formControlName="cnpj"
-              label="CNPJ"
-              [required]="true"
-              inputType="text"
-              mask="00.000.000/0000-00"
-              [readonly]="form.get('cnpj')!.disabled"
-            ></app-input>
-          </div>
-          <div class="mb-3">
-            <app-input
-              formControlName="corporateName"
-              label="Razão Social"
-              [required]="true"
-              inputType="text"
-            ></app-input>
-          </div>
-        </div>
-      </ng-container>
-    </div>
-  </ng-template>
-
+<ng-container *ngIf="context === REGISTRATION_TYPES.CLINIC; else individualMode">
+  <app-form-cnpj [form]="form"></app-form-cnpj>
   <div class="mt-2">
     <div class="form-check mb-4">
       <input
         class="form-check-input"
         type="checkbox"
         id="acceptTerms"
-        formControlName="acceptTerms"
+        [(ngModel)]="acceptTerms"
       />
       <label class="form-check-label" for="acceptTerms">
         Li e aceito os <a href="#" target="_blank">Termos de Uso</a> e
@@ -169,7 +18,7 @@
       <app-button
         type="primary"
         [fullWidth]="true"
-        [disabled]="form.invalid"
+        [disabled]="form.invalid || !acceptTerms"
         [isNext]="true"
         (click)="onSubmit()"
         class="btn-custom-next"
@@ -183,4 +32,39 @@
       <i class="bi bi-lock ms-1"></i>
     </p>
   </div>
-</form>
+</ng-container>
+<ng-template #individualMode>
+  <app-form-cpf [form]="form"></app-form-cpf>
+  <div class="mt-2">
+    <div class="form-check mb-4">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        id="acceptTerms"
+        [(ngModel)]="acceptTerms"
+      />
+      <label class="form-check-label" for="acceptTerms">
+        Li e aceito os <a href="#" target="_blank">Termos de Uso</a> e
+        <a href="#" target="_blank">Política de Privacidade</a>
+      </label>
+    </div>
+
+    <div class="d-flex justify-content-end">
+      <app-button
+        type="primary"
+        [fullWidth]="true"
+        [disabled]="form.invalid || !acceptTerms"
+        [isNext]="true"
+        (click)="onSubmit()"
+        class="btn-custom-next"
+      >
+        Continuar
+      </app-button>
+    </div>
+
+    <p class="text-center text-secondary mt-2 small">
+      Usamos seus dados para autenticação e melhorar sua experiência.
+      <i class="bi bi-lock ms-1"></i>
+    </p>
+  </div>
+</ng-template>

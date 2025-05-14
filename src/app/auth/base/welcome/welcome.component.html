@@ -24,9 +24,9 @@
     </p>
     <form [formGroup]="cpfCnpjForm" (ngSubmit)="onContinue()" class="w-100">
       <div class="mb-4">
-        <label for="cpfCnpj" class="form-label fw-medium">CPF/CNPJ</label>
         <app-input
           id="cpfCnpj"
+          label="CPF/CNPJ"
           placeholder="123.456.789-00"
           formControlName="cpfCnpj"
           [mask]="cpfCnpjMask"

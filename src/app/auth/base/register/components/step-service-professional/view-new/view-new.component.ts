@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ButtonComponent } from 'src/app/shared/components/button/button.component';
@@ -7,11 +7,10 @@ import { RegistrationType } from '@auth/base/register/constants/registration-typ
 import { OfficeAttendance } from '@app/shared/models/office-attendance.model';
 import { ViewOfficeAttendanceComponent } from '@shared/components/view-office-attendance/view-office-attendance.component';
 import { ViewProfessionalComponent } from '@shared/components/view-professional/view-professional.component';
-import { LoadingService } from '@app/core/services/loading.service';
 import { OfficeAttendanceService } from '@app/shared/services/office-attendance.service';
 import { OfficeService } from '@app/shared/services/office.service';
 import { OfficeProfessional } from '@app/shared/models/office.model';
-import { BehaviorSubject, Observable, finalize, map, switchMap } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-view-new',
@@ -27,7 +26,6 @@ import { BehaviorSubject, Observable, finalize, map, switchMap } from 'rxjs';
   styleUrl: './view-new.component.scss'
 })
 export class ViewNewComponent implements OnInit {
-  private readonly loadingService = inject(LoadingService);
   private readonly officeAttendanceService = inject(OfficeAttendanceService);
   private readonly officeService = inject(OfficeService);
   private readonly registrationContext = inject(RegistrationContextService);
@@ -59,32 +57,12 @@ export class ViewNewComponent implements OnInit {
     if (url.includes('professionals')) {
       this.contextSubject.next('professional');
       this.keyword = 'profissionais';
+      this.professionals$ = this.officeService.professionals$;
     } else {
       this.contextSubject.next('service');
       this.keyword = 'serviços';
-      this.services$ = this.officeAttendanceService.officeAttendanceByOfficeId$
+      this.services$ = this.officeAttendanceService.officeAttendanceByOfficeId$;
     }
-
-    this.context$.subscribe(context => {
-      if (context === 'professional') {
-        const storedProfessionals = JSON.parse(localStorage.getItem('professionalData') || '[]');
-        this.professionalsSubject.next(storedProfessionals);
-        this.getProfessionals();
-      }
-    });
-  }
-
-
-  getProfessionals() {
-    this.officeService.getProfessionals(this.officeID)
-      .subscribe({
-        next: (professionals: OfficeProfessional[]) => {
-          this.professionalsSubject.next(professionals);
-        },
-        error: (error: any) => {
-          console.error('Error saving office data:', error);
-        }
-      });
   }
 
   addNewService() {
@@ -116,7 +94,8 @@ export class ViewNewComponent implements OnInit {
   }
 
   goToNextStep() {
-    this.context$.subscribe(context => {
+    this.context$.pipe(
+    ).subscribe(context => {
       if (context === 'service') {
         this.router.navigate([`/auth/register/step/service-professional/professionals`]);
       } else {

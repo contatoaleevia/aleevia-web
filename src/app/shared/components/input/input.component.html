@@ -4,7 +4,7 @@
     <span *ngIf="required" class="text-danger">*</span>
   </label>
   <ng-content></ng-content>
-  
+
   <ng-container *ngIf="isRegularInput">
     <div class="input-group">
       <input
@@ -22,15 +22,14 @@
         (blur)="onBlur()"
         (input)="updateValue($event)"
       />
-      <button *ngIf="type === 'password'" type="button" class="btn btn-outline-secondary" (click)="togglePasswordVisibility()">
+      <span *ngIf="type === 'password'" class="password-toggle" (click)="togglePasswordVisibility()">
         <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
-      </button>
+      </span>
     </div>
   </ng-container>
-  
+
   <ng-container *ngIf="isSelectInput">
     <mat-form-field appearance="outline" style="width: 100%;" color="primary">
-      <mat-label>{{ placeholder || 'Selecione o tipo de serviço' }}</mat-label>
       <mat-select
         [id]="id"
         [value]="internalValue"
@@ -60,7 +59,7 @@
       </mat-select>
     </mat-form-field>
   </ng-container>
-  
+
   <ng-container *ngIf="isTextarea">
     <textarea
       [id]="id"
@@ -95,7 +94,7 @@
       </label>
     </div>
   </ng-container>
-  
+
   <div *ngIf="errorMessage && (!showErrorOnTouched || isTouched)" class="text-danger small mt-1">
     {{ errorMessage }}
   </div>

@@ -1,0 +1,64 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="mb-3">
+    <app-input
+      formControlName="cnpj"
+      label="CNPJ"
+      placeholder="12.345.678/0001-97"
+      [required]="true"
+      inputType="text"
+      mask="00.000.000/0000-00"
+      [readonly]="form.get('cnpj')!.disabled"
+    ></app-input>
+  </div>
+  <div class="mb-3">
+    <app-input
+      formControlName="phoneNumber"
+      label="Telefone"
+      [required]="true"
+      inputType="text"
+      mask="(00) 00000-0000"
+    ></app-input>
+  </div>
+  <div class="mb-3">
+    <app-input
+      formControlName="corporateName"
+      label="Razão Social"
+      placeholder="Ex: Aleevia"
+      [required]="true"
+      inputType="text"
+    ></app-input>
+  </div>
+
+  <h3 class="fw-bold mb-3 mt-4 fs-4">Dados do representante legal</h3>
+  <div class="mb-3">
+    <app-input
+      formControlName="name"
+      label="Nome do representante legal"
+      placeholder="Insira seu nome completo"
+      [required]="true"
+      inputType="text"
+    ></app-input>
+  </div>
+  <div class="mb-3">
+    <app-input
+      formControlName="cpf"
+      label="CPF (representante legal)"
+      placeholder="123.456.789-00"
+      [required]="true"
+      inputType="text"
+      mask="000.000.000-00"
+      [readonly]="form.get('cpf')!.disabled"
+    ></app-input>
+  </div>
+  <div class="mb-3">
+    <app-input
+      formControlName="email"
+      label="E-mail"
+      placeholder=""
+      [required]="true"
+      inputType="text"
+      type="email"
+    ></app-input>
+  </div>
+  <ng-content></ng-content>
+</form>

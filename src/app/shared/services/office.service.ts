@@ -52,6 +52,9 @@ export class OfficeService {
   }
 
   getProfessionals(officeId: string): Observable<OfficeProfessional[]> {
+    if (this.professionalsSubject.getValue().length > 0) {
+      return of(this.professionalsSubject.getValue());
+    }
     return this.apiService.get<OfficeProfessionalResponse>(`${this.routeUrl}/${officeId}/professionals`).pipe(
       map((response: OfficeProfessionalResponse) => response.professionals),
       tap((professionals: OfficeProfessional[]) => {

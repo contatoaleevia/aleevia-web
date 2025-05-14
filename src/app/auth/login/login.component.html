@@ -13,9 +13,9 @@
 
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="w-100">
     <div class="mb-4">
-      <label for="cpfCnpj" class="form-label fw-medium">CPF ou CNPJ</label>
       <app-input
         id="cpfCnpj"
+        label="CPF ou CNPJ"
         formControlName="cpfCnpj"
         placeholder="123.456.789-00"
         [mask]="cpfCnpjMask"
@@ -32,8 +32,7 @@
     </div>
 
     <div class="mb-3">
-      <div class="d-flex justify-content-between align-items-center mb-1">
-        <label for="password" class="form-label fw-medium mb-0">Senha</label>
+      <div class="d-flex justify-content-end align-items-center mb-1">
         <a
           (click)="forgotPassword()"
           class="text-decoration-none small text-secondary-60"
@@ -44,6 +43,7 @@
       </div>
       <app-input
         id="password"
+        label="Senha"
         type="password"
         formControlName="password"
         placeholder="••••••"

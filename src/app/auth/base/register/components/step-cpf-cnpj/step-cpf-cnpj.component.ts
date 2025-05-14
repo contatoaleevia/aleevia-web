@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
 import { InputComponent } from '@shared/components/input/input.component';
 import { ButtonComponent } from '@shared/components/button/button.component';
+import { FormCpfComponent } from '@shared/components/form-cpf/form-cpf.component';
+import { FormCnpjComponent } from '@shared/components/form-cnpj/form-cnpj.component';
 import { Router } from '@angular/router';
 import { RegistrationContextService } from '@auth/base/register/registration-context.service';
 import { RegistrationType, REGISTRATION_TYPES } from '@auth/base/register/constants/registration-types';
@@ -11,13 +13,15 @@ import { RegistrationData } from '@auth/models/register.model';
 @Component({
   selector: 'app-step-cpf-cnpj',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, InputComponent, ButtonComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, ButtonComponent, FormCpfComponent, FormCnpjComponent],
   templateUrl: './step-cpf-cnpj.component.html',
   styleUrl: './step-cpf-cnpj.component.scss'
 })
 export class StepCpfCnpjComponent implements OnInit {
+  REGISTRATION_TYPES = REGISTRATION_TYPES;
   form: FormGroup;
   context: RegistrationType = REGISTRATION_TYPES.INDIVIDUAL;
+  acceptTerms: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -37,8 +41,7 @@ export class StepCpfCnpjComponent implements OnInit {
       isCompany: [false],
       cnpj: [{ value: '', disabled: false }],
       phoneNumber: [''],
-      corporateName: [''],
-      acceptTerms: [false, Validators.requiredTrue]
+      corporateName: ['']
     });
   }
 
@@ -80,6 +83,7 @@ export class StepCpfCnpjComponent implements OnInit {
       const savedData = localStorage.getItem('registrationData');
       if (savedData) {
         const data: RegistrationData = JSON.parse(savedData);
+        Object.keys(this.form.controls).forEach(key => this.form.get(key)?.enable({ emitEvent: false }));
         this.form.patchValue(data);
       }
 
@@ -117,7 +121,8 @@ export class StepCpfCnpjComponent implements OnInit {
       phoneNumber: formData.phoneNumber,
       email: formData.email,
       corporateName: formData.corporateName,
-      isCompany: formData.isCompany
+      isCompany: formData.isCompany,
+      acceptTerms: this.acceptTerms
     };
   }
 

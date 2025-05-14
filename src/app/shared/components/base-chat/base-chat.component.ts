@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ChatService } from '@app/chat/services/chat.service';
 import { Message } from '@app/chat/models/chat.model';
 import { SoundService } from '@app/core/services/sound.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, finalize } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -102,7 +102,12 @@ export class BaseChatComponent implements OnInit {
     this.message = '';
     this.loading = true;
 
-    this.chatService.sendMessage(this.chatId, messageContent).subscribe({
+    this.chatService.sendMessage(this.chatId, messageContent).pipe(
+      finalize(() => {
+        this.loading = false;
+        this.soundService.playMessageSound();
+      })
+    ).subscribe({
       next: (messageData) => {
         const updated = this.chatService.messagesSubject.getValue().map(msg =>
           msg.isPlaceholder ? { ...messageData, isPlaceholder: false } : msg
@@ -125,9 +130,6 @@ export class BaseChatComponent implements OnInit {
         );
         this.chatService.messagesSubject.next(updated);
         this.messagesChanged = true;
-      },
-      complete: () => {
-        this.loading = false;
       }
     });
   }

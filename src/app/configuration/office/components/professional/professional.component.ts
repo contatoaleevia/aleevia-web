@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { ViewProfessionalComponent } from '@shared/components/view-professional/view-professional.component';
 import { LoadingService } from '@app/core/services/loading.service';
 import { finalize, Subject, takeUntil } from 'rxjs';
-import { Office, OfficeProfessional, OfficeProfessionalResponse } from '@app/shared/models/office.model';
+import { Office, OfficeProfessional } from '@app/shared/models/office.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CreateComponent } from './create/create.component';
 import { DeleteModalComponent, DeleteModalConfig } from '@app/shared/components/delete-modal/delete-modal.component';
 import { AlertService } from '@app/shared/services/alert.service';
 import { OfficeService } from '@app/shared/services/office.service';
+import { ProfessionalService } from '@app/shared/services/professional.service';
 
 @Component({
   selector: 'app-professional',
@@ -21,6 +22,7 @@ export class ProfessionalComponent implements OnInit {
   private readonly loadingService = inject(LoadingService);
   private readonly modalService = inject(NgbModal);
   private readonly officeService = inject(OfficeService);
+  private readonly professionalService = inject(ProfessionalService);
   private readonly alertService = inject(AlertService);
   private destroy$ = new Subject<void>();
 
@@ -47,6 +49,7 @@ export class ProfessionalComponent implements OnInit {
   }
 
   refreshProfessionalsFromServer(): void {
+    this.loadingService.loadingOn();
     this.officeService.getProfessionals(this.officeId).pipe(
       takeUntil(this.destroy$),
       finalize(() => this.loadingService.loadingOff())
@@ -75,6 +78,7 @@ export class ProfessionalComponent implements OnInit {
           console.log('Modal result:', result);
           if (result) {
             this.officeService.clearCache();
+            this.professionalService.clearCache();
             this.refreshProfessionalsFromServer();
           }
         },
@@ -108,6 +112,7 @@ export class ProfessionalComponent implements OnInit {
           console.log('Edit modal result:', result);
           if (result) {
             this.officeService.clearCache();
+            this.professionalService.clearCache();
             this.refreshProfessionalsFromServer();
           }
         },

@@ -30,7 +30,7 @@ export class InputComponent implements ControlValueAccessor, OnInit, OnChanges, 
   @Input() class: string = '';
   @Input() maxLength: number | null = null;
   @Input() value: string | boolean = '';
-  @Input() bgColor: string = 'white';
+  @Input() bgColor: string = '';
   @Input() options: any[] = [];
   @Input() optionLabel: string = 'name';
   @Input() optionValue: string = 'id';

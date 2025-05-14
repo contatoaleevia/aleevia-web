@@ -1,0 +1,80 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div>
+    <div class="mb-3">
+      <app-input
+        formControlName="name"
+        label="Nome completo"
+        placeholder=""
+        [required]="true"
+        inputType="text"
+      ></app-input>
+    </div>
+
+    <div class="mb-3">
+      <app-input
+        formControlName="cpf"
+        label="CPF"
+        [required]="true"
+        inputType="text"
+        mask="000.000.000-00"
+      ></app-input>
+    </div>
+
+    <div class="mb-3">
+      <app-input
+        formControlName="email"
+        label="E-mail"
+        placeholder=""
+        [required]="true"
+        inputType="text"
+        type="email"
+      ></app-input>
+    </div>
+
+    <div class="mb-3">
+      <app-input
+        formControlName="phoneNumber"
+        label="Telefone"
+        [required]="true"
+        inputType="text"
+        mask="(00) 00000-0000"
+      ></app-input>
+    </div>
+
+    <div class="form-check form-switch mb-3">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        id="isCompany"
+        formControlName="isCompany"
+      />
+      <label class="form-check-label fw-semibold" for="isCompany"
+        >Sou pessoa jurídica</label
+      >
+    </div>
+
+    <ng-container *ngIf="form.get('isCompany')!.value">
+      <div class="d-flex flex-column justify-content-start p-0">
+        <div class="mb-3">
+          <app-input
+            formControlName="cnpj"
+            label="CNPJ"
+            [required]="true"
+            inputType="text"
+            mask="00.000.000/0000-00"
+            [readonly]="form.get('cnpj')!.disabled"
+          ></app-input>
+        </div>
+        <div class="mb-3">
+          <app-input
+            formControlName="corporateName"
+            label="Razão Social"
+            [required]="true"
+            inputType="text"
+          ></app-input>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  <ng-content></ng-content>
+</form>
