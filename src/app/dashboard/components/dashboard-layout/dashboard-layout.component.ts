@@ -17,6 +17,7 @@ import { StatisticsCardComponent } from '../statistics-card/statistics-card.comp
 import { StatisticsCardData } from '../statistics-card/statistics-card.model';
 import { AuthService } from '@auth/services/auth.service';
 import { User } from '@shared/models/user.model';
+import { environment } from '@environments/environment';
 
 
 @Component({
@@ -49,6 +50,7 @@ export class DashboardLayoutComponent implements OnInit {
       {
         icon: 'bi bi-robot',
         label: 'Minha assistente virtual',
+        link: `${environment.appUrl}/faq`,
       },
       {
         icon: 'bi bi-person-plus',

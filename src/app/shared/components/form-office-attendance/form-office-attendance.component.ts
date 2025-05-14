@@ -38,8 +38,8 @@ export class FormOfficeAttendanceComponent implements OnInit {
       serviceTypeId: [null, Validators.required],
       title: ['', [Validators.required, Validators.maxLength(100)]],
       duration: ['', [Validators.required, Validators.pattern(/^\d{2}:\d{2}$/)]],
-      price: ['', [Validators.required, Validators.pattern(/^\d+(,\d{1,2})?$/)]],
-      description: ['', [Validators.required, Validators.maxLength(500)]]
+      price: ['', [Validators.required]],
+      description: ['', [Validators.maxLength(500)]]
     });
   }
 

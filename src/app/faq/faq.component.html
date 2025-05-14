@@ -99,7 +99,7 @@
                   {{ faq.question }}
                 </td>
                 <td class="text-secondary-table">
-                  {{ faq.faqCategory.categoryTypeName }}
+                  {{ faq.faqCategory ? faq.faqCategory.categoryTypeName : 'N/A' }}
                 </td>
                 <td class="text-secondary-table">
                   {{ faq.createdAt | date : "dd/MM/yyyy" }}

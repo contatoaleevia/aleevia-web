@@ -34,7 +34,8 @@
       placeholder="Digite o valor R$"
       inputType="text"
       formControlName="price"
-      [errorMessage]="form.get('price')?.touched && form.get('price')?.invalid ? 'Valor obrigatório. Ex: 100,00' : null"
+      currency
+      [errorMessage]="form.get('price')?.touched && form.get('price')?.invalid ? 'Valor obrigatório' : null"
     ></app-input>
   </div>
   <div class="mb-3">
@@ -43,7 +44,7 @@
       placeholder="Digite a descrição da sua clínica para seus clientes"
       inputType="textarea"
       formControlName="description"
-      [errorMessage]="form.get('description')?.touched && form.get('description')?.invalid ? 'Descrição obrigatória (máx. 500 caracteres)' : null"
+      [errorMessage]="form.get('description')?.invalid ? 'Descrição obrigatória (máx. 500 caracteres)' : null"
     ></app-input>
   </div>
 </app-form>

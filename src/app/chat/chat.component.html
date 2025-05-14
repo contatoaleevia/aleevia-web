@@ -1,4 +1,6 @@
-<div class="chat-main d-flex flex-column h-100 overflow-hidden justify-content-between bg-white">
+<div
+  class="chat-main d-flex flex-column h-100 overflow-hidden justify-content-between bg-white"
+>
   <div class="chat-header">
     <ng-container *ngIf="currentUser$ | async as currentUser">
       <app-chat-header [currentUser]="currentUser"></app-chat-header>
@@ -6,17 +8,20 @@
   </div>
 
   <div class="d-flex flex-column position-relative overflow-hidden">
-    <div class="welcome-section">
-      <h3 class="text-center mt-4">Como posso te ajudar?</h3>
+    <h3 class="text-center fs-4 mb-3">Como posso te ajudar?</h3>
+    <div
+      class="welcome-section"
+      *ngIf="showWelcomeSection && (faqs$ | async)!.length > 0"
+    >
       <div class="col-12 row-cols-1">
         <app-faq
           [faqs]="(faqs$ | async)!"
-          (questionClick)="sendMessage($event)"
+          (questionClick)="sendMessage($event); showWelcomeSection = false"
         ></app-faq>
       </div>
     </div>
 
-    <div class="messages-area">
+    <div class="messages-area" *ngIf="!showWelcomeSection">
       <app-messages [messages]="(messages$ | async)!"></app-messages>
     </div>
   </div>
@@ -24,7 +29,7 @@
   <div class="chat-footer">
     <app-chat-input
       [message]="message"
-      (sendMessage)="sendMessage($event)"
+      (sendMessage)="sendMessage($event); showWelcomeSection = false"
     ></app-chat-input>
   </div>
 </div>

@@ -11,6 +11,8 @@ import { LoadingService } from '@app/core/services/loading.service';
 import { OfficeAttendanceService } from '@app/shared/services/office-attendance.service';
 import { OfficeService } from '@app/shared/services/office.service';
 import { OfficeProfessional } from '@app/shared/models/office.model';
+import { BehaviorSubject, Observable, finalize, map, switchMap } from 'rxjs';
+
 @Component({
   selector: 'app-view-new',
   standalone: true,
@@ -32,10 +34,16 @@ export class ViewNewComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
+  private contextSubject = new BehaviorSubject<'service' | 'professional'>('service');
+  context$ = this.contextSubject.asObservable();
+
+  private servicesSubject = new BehaviorSubject<OfficeAttendance[]>([]);
+  services$ = this.servicesSubject.asObservable();
+
+  private professionalsSubject = new BehaviorSubject<OfficeProfessional[]>([]);
+  professionals$ = this.professionalsSubject.asObservable();
+
   registrationType: RegistrationType = this.registrationContext.getContext();
-  context: 'service' | 'professional' = 'service';
-  services: OfficeAttendance[] = [];
-  professionals: OfficeProfessional[] = [];
   showServiceForm = false;
   editingService: OfficeAttendance | null = null;
   editingProfessional: OfficeProfessional | null = null;
@@ -49,45 +57,34 @@ export class ViewNewComponent implements OnInit {
   getKeywords() {
     const url = this.route.snapshot.url.map(segment => segment.path).join('/');
     if (url.includes('professionals')) {
-      this.context = 'professional';
+      this.contextSubject.next('professional');
       this.keyword = 'profissionais';
     } else {
-      this.context = 'service';
+      this.contextSubject.next('service');
       this.keyword = 'serviços';
-      this.getServices();
+      this.services$ = this.officeAttendanceService.officeAttendanceByOfficeId$
     }
 
-    if (this.context === 'professional') {
-      this.professionals = JSON.parse(localStorage.getItem('professionalData') || '[]');
-      this.getProfessionals();
-    }
-  }
-
-  getServices() {
-    this.loadingService.loadingOn();
-    this.officeAttendanceService.get(this.officeID).subscribe({
-      next: (services) => {
-        this.services = services;
-      },
-      error: (error: any) => {
-        console.error('Error saving office data:', error);
-        this.loadingService.loadingOff();
-      },
-      complete: () => {
-        this.loadingService.loadingOff();
+    this.context$.subscribe(context => {
+      if (context === 'professional') {
+        const storedProfessionals = JSON.parse(localStorage.getItem('professionalData') || '[]');
+        this.professionalsSubject.next(storedProfessionals);
+        this.getProfessionals();
       }
     });
   }
+
 
   getProfessionals() {
-    this.officeService.getProfessionals(this.officeID).subscribe({
-      next: (professionals: any) => {
-        this.professionals = professionals.professionals;
-      },
-      error: (error: any) => {
-        console.error('Error saving office data:', error);
-      }
-    });
+    this.officeService.getProfessionals(this.officeID)
+      .subscribe({
+        next: (professionals: OfficeProfessional[]) => {
+          this.professionalsSubject.next(professionals);
+        },
+        error: (error: any) => {
+          console.error('Error saving office data:', error);
+        }
+      });
   }
 
   addNewService() {
@@ -99,7 +96,8 @@ export class ViewNewComponent implements OnInit {
   }
 
   deleteService(id: string) {
-    this.services = this.services.filter(s => s.id !== id);
+    const currentServices = this.servicesSubject.value;
+    this.servicesSubject.next(currentServices.filter(s => s.id !== id));
   }
 
   editService(service: OfficeAttendance) {
@@ -113,14 +111,17 @@ export class ViewNewComponent implements OnInit {
   }
 
   deleteProfessional(id: string) {
-    this.professionals = this.professionals.filter(p => p.id !== id);
+    const currentProfessionals = this.professionalsSubject.value;
+    this.professionalsSubject.next(currentProfessionals.filter(p => p.id !== id));
   }
 
   goToNextStep() {
-    if (this.context === 'service') {
-      this.router.navigate([`/auth/register/step/service-professional/professionals`]);
-    } else {
-      this.router.navigate([`/auth/register/step/congratulations`]);
-    }
+    this.context$.subscribe(context => {
+      if (context === 'service') {
+        this.router.navigate([`/auth/register/step/service-professional/professionals`]);
+      } else {
+        this.router.navigate([`/auth/register/step/congratulations`]);
+      }
+    });
   }
 }

@@ -1,25 +1,27 @@
 <div class="mx-auto">
-  <ng-container *ngIf="context === 'service'">
-    <app-view-office-attendance
-      [attendances]="services"
-      [enableAddNew]="true"
-      (addNew)="addNewService()"
-      (edit)="editService($event)"
-      (delete)="deleteService($event.id!)"
-    ></app-view-office-attendance>
-  </ng-container>
-  <ng-container *ngIf="context === 'professional'">
-    <app-view-professional
-      [professionals]="professionals"
-      [enableAddNew]="true"
-      (addNew)="addNewProfessional()"
-      (edit)="editProfessional($event)"
-      (delete)="deleteProfessional($event.id || '')"
-    ></app-view-professional>
+  <ng-container *ngIf="context$ | async as context">
+    <ng-container *ngIf="context === 'service'">
+      <app-view-office-attendance
+        [attendances]="(services$ | async) || []"
+        [enableAddNew]="true"
+        (addNew)="addNewService()"
+        (edit)="editService($event)"
+        (delete)="deleteService($event.id!)"
+      ></app-view-office-attendance>
+    </ng-container>
+    <ng-container *ngIf="context === 'professional'">
+      <app-view-professional
+        [professionals]="(professionals$ | async) || []"
+        [enableAddNew]="true"
+        (addNew)="addNewProfessional()"
+        (edit)="editProfessional($event)"
+        (delete)="deleteProfessional($event.id || '')"
+      ></app-view-professional>
+    </ng-container>
   </ng-container>
 
   <div class="d-flex justify-content-between align-items-center">
-    <a routerLink="/auth/register/step/congratulations" class="btn-skip-link"
+    <a (click)="goToNextStep()" class="btn-skip-link"
       >Pular etapa</a
     >
     <app-button

@@ -12,7 +12,7 @@ import { OfficeAttendanceComponent } from './office-attendance/office-attendance
 import { officeResolver } from './configuration/office/office.resolver';
 import { faqResolver } from './faq/faq.resolver';
 import { officeAttendanceResolver } from './office-attendance/office-attendance.resolver';
-
+import { ChatResolver } from './shared/components/base-chat/chat.resolver';
 
 export const routes: Routes = [
   {
@@ -31,7 +31,8 @@ export const routes: Routes = [
     resolve: {
       offices: officeResolver,
       faqs: faqResolver,
-      officeAttendance: officeAttendanceResolver
+      officeAttendance: officeAttendanceResolver,
+      chat: ChatResolver
     },
     children: [
       {
@@ -51,6 +52,7 @@ export const routes: Routes = [
     path: 'chat/:id',
     component: ChatComponent,
     resolve: {
+      chat: ChatResolver,
       faqs: faqResolver
     }
   },

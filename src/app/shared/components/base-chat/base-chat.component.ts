@@ -1,10 +1,11 @@
-import { Component, Input, Output, EventEmitter, OnInit, inject } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ChatService } from '@app/chat/services/chat.service';
 import { Message } from '@app/chat/models/chat.model';
 import { SoundService } from '@app/core/services/sound.service';
-import { Observable, of, Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-base-chat',
@@ -15,10 +16,9 @@ import { Observable, of, Subscription } from 'rxjs';
 export class BaseChatComponent implements OnInit {
   protected readonly chatService = inject(ChatService);
   protected readonly soundService = inject(SoundService);
+  protected readonly route = inject(ActivatedRoute);
 
   @Input() chatId: string = '';
-  @Input() showWelcomeSection: boolean = true;
-  @Output() welcomeSectionChange = new EventEmitter<boolean>();
 
   messages$: Observable<Message[]> = this.chatService.messages$;
   message: string = '';
@@ -29,39 +29,18 @@ export class BaseChatComponent implements OnInit {
   ngOnInit() {
     if (this.chatId) {
       this.loadExistingMessages();
-    } else {
-      this.createChat();
     }
-    this.messagesSub = this.messages$.subscribe(messages => {
-      if (messages && messages.length > 0) {
-        this.soundService.playMessageSound();
-      }
-    });
   }
 
   ngOnDestroy() {
     this.messagesSub?.unsubscribe();
   }
 
-  protected createChat() {
-    this.chatService.createChat().subscribe({
-      next: chatData => {
-        this.chatId = chatData.id;
-        this.loadExistingMessages();
-      },
-      error: error => {
-        console.error('Erro ao criar chat:', error);
-        this.chatId = 'local-' + Date.now().toString();
-        this.loadExistingMessages();
-      }
-    });
-  }
-
   protected loadExistingMessages() {
     if (this.chatId) {
       this.chatService.getChatHistory(this.chatId).subscribe({
         next: (messages) => {
-          if (!messages || messages.length === 0) {
+          if ((!messages || messages.length === 0)) {
             const welcomeMsg: Message = {
               content: { source: 'assistant', sourceId: 'system' },
               role: 'assistant',
@@ -72,17 +51,20 @@ export class BaseChatComponent implements OnInit {
             };
             this.chatService.messagesSubject.next([welcomeMsg]);
           }
+          this.soundService.playMessageSound();
         },
         error: () => {
-          const fallbackMsg: Message = {
-            content: { source: 'assistant', sourceId: 'system' },
-            role: 'assistant',
-            message: 'Olá! Sou sua assistente virtual. Como posso ajudar com sua clínica hoje?',
-            chat_id: this.chatId,
-            id: '1',
-            sent_at: new Date().toISOString()
-          };
-          this.chatService.messagesSubject.next([fallbackMsg]);
+          if (!this.route.snapshot.params['id']) {
+            const fallbackMsg: Message = {
+              content: { source: 'assistant', sourceId: 'system' },
+              role: 'assistant',
+              message: 'Não foi possível carregar a conversa. Tente novamente mais tarde.',
+              chat_id: this.chatId,
+              id: '1',
+              sent_at: new Date().toISOString()
+            };
+            this.chatService.messagesSubject.next([fallbackMsg]);
+          }
         }
       });
     }
@@ -91,10 +73,6 @@ export class BaseChatComponent implements OnInit {
   sendMessage(content?: string) {
     const messageContent = content || this.message;
     if (!messageContent?.trim() || !this.chatId) return;
-    if (this.showWelcomeSection) {
-      this.showWelcomeSection = false;
-      this.welcomeSectionChange.emit(false);
-    }
 
     const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
     const userId = currentUser?.id || 'local-user';

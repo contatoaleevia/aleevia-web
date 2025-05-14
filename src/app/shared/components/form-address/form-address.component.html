@@ -1,21 +1,26 @@
-<app-form [formGroup]="form" [submitButtonText]="submitButtonText" [isNextButton]="true" [showPreviousButton]="false" (formSubmit)="onSubmit()">
+<app-form
+  [formGroup]="form"
+  [submitButtonText]="submitButtonText"
+  [isNextButton]="true"
+  [showPreviousButton]="false"
+  (formSubmit)="onSubmit()"
+>
   <div>
     <div class="row mb-3">
-      <div class="col-md-6 mb-3 mb-md-0">
+      <div class="col-md-12 mb-3 mb-md-0">
         <app-input
           formControlName="name"
           label="Nomear endereço"
           placeholder="Digite o nome do espaço"
-
           inputType="text"
         ></app-input>
       </div>
-      <div class="col-md-6">
+
+      <div class="col-md-12 mt-3">
         <app-input
           formControlName="zipCode"
           label="CEP"
           placeholder="_____-__"
-
           inputType="text"
           mask="00000-000"
         ></app-input>
@@ -28,7 +33,6 @@
           formControlName="street"
           label="Logradouro"
           placeholder="Rua, avenida, praça..."
-
           inputType="text"
         ></app-input>
       </div>
@@ -37,7 +41,6 @@
           formControlName="neighborhood"
           label="Bairro"
           placeholder="Digite o seu bairro"
-
           inputType="text"
         ></app-input>
       </div>
@@ -49,7 +52,6 @@
           formControlName="number"
           label="Número"
           placeholder="Número do local"
-
           inputType="text"
         ></app-input>
       </div>
@@ -58,7 +60,6 @@
           formControlName="complement"
           label="Complemento"
           placeholder="Apto, bloco..."
-
           inputType="text"
         ></app-input>
       </div>
@@ -70,7 +71,6 @@
           formControlName="state"
           label="Estado"
           placeholder="Estado"
-
           inputType="text"
         ></app-input>
       </div>
@@ -79,7 +79,6 @@
           formControlName="city"
           label="Cidade"
           placeholder="Cidade"
-
           inputType="text"
         ></app-input>
       </div>

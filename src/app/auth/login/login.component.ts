@@ -23,30 +23,29 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   isLoading = false;
   errorMessage = '';
-  returnUrl: string = '/dashboard';
   cpfCnpjMask: string = '000.000.000-00||00.000.000/0000-00';
 
   ngOnInit(): void {
     this.initForm();
 
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
-
     const error = this.route.snapshot.queryParams['error'];
     if (error) {
       this.errorMessage = error;
     }
-
-    if (this.authService.isAuthenticated()) {
-      this.router.navigate([this.returnUrl]);
-    }
   }
 
   initForm(): void {
+    const cpfCnpj = localStorage.getItem('cpfCnpj') || '';
+
     this.loginForm = this.fb.group({
-      cpfCnpj: ['', [Validators.required]],
+      cpfCnpj: [cpfCnpj, [Validators.required]],
       password: ['', [Validators.required]],
       rememberMe: [false]
     });
+
+    if (localStorage.getItem('cpfCnpj')) {
+      this.loginForm.get('cpfCnpj')?.setValue(localStorage.getItem('cpfCnpj'));
+    }
   }
 
   onSubmit(): void {
@@ -70,7 +69,7 @@ export class LoginComponent implements OnInit {
       .pipe(finalize(() => this.isLoading = false))
       .subscribe({
         next: () => {
-          this.router.navigate([this.returnUrl]);
+          this.router.navigate(['/dashboard']);
         },
         error: (error) => {
           if (error.error && error.error.Errors && error.error.Errors.length > 0) {

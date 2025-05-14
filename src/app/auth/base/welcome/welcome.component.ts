@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { UserService } from '@shared/services/user.service';
 import { IsRegisteredResponse } from '@auth/models/register.model';
 import { LoadingService } from '@app/core/services/loading.service';
-import { finalize } from 'rxjs';
+import { finalize, tap } from 'rxjs';
 @Component({
   selector: 'app-welcome',
   standalone: true,
@@ -38,12 +38,14 @@ export class WelcomeComponent {
     this.loadingService.loadingOn();
     const formattedCpfCnpj = this.cpfCnpjForm.get('cpfCnpj')?.value.replace(/\./g, '').replace('/', '').replace('-', '');
     this.userService.isRegistered(formattedCpfCnpj).pipe(
-      finalize(() => this.loadingService.loadingOff())
+      finalize(() => this.loadingService.loadingOff()),
+      tap(() => {
+        localStorage.setItem('cpfCnpj', formattedCpfCnpj);
+      })
     ).subscribe((response: IsRegisteredResponse) => {
       if (response.isRegistered) {
         this.router.navigate(['/auth/login']);
       } else {
-        localStorage.setItem('cpfCnpj', formattedCpfCnpj);
         this.router.navigate(['/auth/register']);
       }
     });
